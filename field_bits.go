@@ -85,7 +85,7 @@ func (fb *FieldBits) FindVanishingBits() *FieldBits {
 	}
 
 	two_u := [2]uint64{twos[0] << 1 & twos[0], twos[1] << 1 & twos[1]}
-	two_r := [2]uint64{(twos[0] << 16) & twos[0], (twos[1]<<16 | r4>>48) & twos[1]}
+	two_r := [2]uint64{(twos[0] << 16) & twos[0], (twos[1]<<16 | twos[0]>>48) & twos[1]}
 
 	vanishing.m[0] |= two_u[0] | two_r[0]
 	vanishing.m[1] |= two_u[1] | two_r[1]

@@ -267,7 +267,7 @@ func (bf *BitField) MattulwanEditorUrl() string {
 func (bf *BitField) Normalize() *BitField {
 	ns := ""
 	table := map[rune]string{}
-	colors := []string{"b", "c", "d", "e"}
+	colors := []string{"b", "c", "d", "e", "f"}
 	for _, c := range bf.MattulwanEditorParam() {
 		if c == 'a' {
 			ns += "a"
