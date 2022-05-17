@@ -26,6 +26,17 @@ func (fb *FieldBits) bitChar(b int) string {
 	return "o"
 }
 
+func (fb *FieldBits) expand(mask *FieldBits) *FieldBits {
+	cfb := fb
+	for {
+		nfb := cfb.expand1(mask)
+		if nfb.Equals(cfb) {
+			return nfb
+		}
+		cfb = nfb
+	}
+}
+
 func (fb *FieldBits) expand1(mask *FieldBits) *FieldBits {
 	// 4 列目と 5 列目は変数をまたぐので個別に計算
 	r4 := fb.m[0] & 0xffff000000000000
@@ -33,6 +44,18 @@ func (fb *FieldBits) expand1(mask *FieldBits) *FieldBits {
 	m0 := fb.m[0] | fb.m[0]<<1 | fb.m[0]>>1 | fb.m[0]<<16 | fb.m[0]>>16 | r5<<48
 	m1 := fb.m[1] | fb.m[1]<<1 | fb.m[1]>>1 | fb.m[1]<<16 | fb.m[1]>>16 | r4>>48
 	return NewFieldBitsWithM([2]uint64{m0 & mask.m[0], m1 & mask.m[1]})
+}
+
+func (fb *FieldBits) AndNot(fb2 *FieldBits) {
+	fb.m[0] &= ^fb2.m[0]
+	fb.m[1] &= ^fb2.m[1]
+}
+
+func (fb *FieldBits) Clone() *FieldBits {
+	fieldBits := new(FieldBits)
+	fieldBits.m[0] = fb.m[0]
+	fieldBits.m[1] = fb.m[1]
+	return fieldBits
 }
 
 func (fb *FieldBits) ColBits(c int) uint64 {
@@ -98,6 +121,22 @@ func (fb *FieldBits) FindVanishingBits() *FieldBits {
 
 func (fb *FieldBits) IsEmpty() bool {
 	return fb.m[0] == 0 && fb.m[1] == 0
+}
+
+func (fb *FieldBits) IterateBitWithMasking(callback func(fb *FieldBits) *FieldBits) {
+	current := fb.Clone()
+	for current.IsEmpty() == false {
+		len := bits.Len64(current.m[0])
+		if len > 0 {
+			mask := callback(NewFieldBitsWithM([2]uint64{1 << (len - 1), 0}))
+			current.AndNot(mask)
+		}
+		len = bits.Len64(current.m[1])
+		if len > 0 {
+			mask := callback(NewFieldBitsWithM([2]uint64{0, 1 << (len - 1)}))
+			current.AndNot(mask)
+		}
+	}
 }
 
 func (fb *FieldBits) MaskField13() *FieldBits {
