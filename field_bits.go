@@ -119,6 +119,12 @@ func (fb *FieldBits) FindVanishingBits() *FieldBits {
 	return vanishing.expand1(fb)
 }
 
+func (fb *FieldBits) Onebit(x int, y int) uint64 {
+	idx := x >> 2
+	pos := x&3*16 + y
+	return fb.m[idx] & (1 << pos)
+}
+
 func (fb *FieldBits) IsEmpty() bool {
 	return fb.m[0] == 0 && fb.m[1] == 0
 }
@@ -153,7 +159,7 @@ func (fb *FieldBits) MaskField12() *FieldBits {
 	return mfb
 }
 
-func (fb *FieldBits) Onebit(x int, y int) {
+func (fb *FieldBits) SetOnebit(x int, y int) {
 	idx := x >> 2
 	pos := x&3*16 + y
 	fb.m[idx] |= 1 << pos
