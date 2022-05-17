@@ -260,6 +260,54 @@ func (bf *BitField) ExportImage(name string) {
 	png.Encode(outfile, out)
 }
 
+func (bf *BitField) ExportImageWithTransparent(name string, trans *FieldBits) {
+	fpuyo, _ := os.Open("images/puyos.png")
+	fpuyot, _ := os.Open("images/puyos_transparent.png")
+	defer fpuyo.Close()
+	defer fpuyot.Close()
+
+	puyo, _, _ := image.Decode(fpuyo)
+	puyot, _, _ := image.Decode(fpuyot)
+	var dpuyo image.Image
+	out := image.NewNRGBA(image.Rectangle{image.Pt(0, 0), image.Pt(32*8, 32*14)})
+
+	for y := 13; y >= 0; y-- {
+		draw.Draw(out, image.Rectangle{image.Pt(0, (13-y)*32), image.Pt(32, (14-y)*32)}, puyo, image.Pt(5*32, 0), draw.Src)
+		draw.Draw(out, image.Rectangle{image.Pt(32*7, (13-y)*32), image.Pt(32*8, (14-y)*32)}, puyo, image.Pt(5*32, 0), draw.Src)
+		for x := 0; x < 8; x++ {
+			// block
+			if (x == 0 || x == 7 || y == 0) && y != 13 {
+				draw.Draw(out, image.Rectangle{image.Pt(x*32, 13*32), image.Pt((x+1)*32, 14*32)}, puyo, image.Pt(5*32, 0), draw.Src)
+			} else { // background
+				draw.Draw(out, image.Rectangle{image.Pt(x*32, (13-y)*32), image.Pt((x+1)*32, (14-y)*32)}, puyo, image.Pt(5*32, 32), draw.Src)
+			}
+		}
+	}
+	for y := 13; y > 0; y-- {
+		for x := 0; x < 6; x++ {
+			c := bf.Color(x, y)
+			if c == Empty {
+				continue
+			}
+			if c == Ojama {
+				point := image.Pt((x+2)*32, (14-y)*32)
+				draw.Draw(out, image.Rectangle{image.Pt((x+1)*32, (13-y)*32), point}, puyo, image.Pt(5*32, 2*32), draw.Over)
+			} else {
+				if trans.Onebit(x, y) == 0 {
+					dpuyo = puyo
+				} else {
+					dpuyo = puyot
+				}
+				bf.drawPuyo(c, x, y, &dpuyo, out)
+			}
+		}
+	}
+
+	outfile, _ := os.Create(name)
+	defer outfile.Close()
+	png.Encode(outfile, out)
+}
+
 func (bf *BitField) FindVanishingBits() *FieldBits {
 	return bf.Bits(Green).FindVanishingBits().Or(bf.Bits(Red).FindVanishingBits()).Or(bf.Bits(Yellow).FindVanishingBits()).Or(bf.Bits(Blue).FindVanishingBits())
 }

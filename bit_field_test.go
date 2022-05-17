@@ -46,7 +46,7 @@ func TestDrop(t *testing.T) {
 	bf := NewBitField()
 	bf.SetColor(Red, 0, 13)
 	v := NewFieldBits()
-	v.Onebit(0, 12)
+	v.SetOnebit(0, 12)
 	bf.Drop(v)
 	c := bf.Color(0, 12)
 	if c != Red {

@@ -6,29 +6,29 @@ import (
 
 func TestAndNot(t *testing.T) {
 	fb := NewFieldBits()
-	fb.Onebit(0, 4)
-	fb.Onebit(0, 3)
-	fb.Onebit(0, 2)
-	fb.Onebit(1, 2)
+	fb.SetOnebit(0, 4)
+	fb.SetOnebit(0, 3)
+	fb.SetOnebit(0, 2)
+	fb.SetOnebit(1, 2)
 
-	fb.Onebit(4, 4)
-	fb.Onebit(4, 3)
-	fb.Onebit(4, 2)
-	fb.Onebit(5, 2)
+	fb.SetOnebit(4, 4)
+	fb.SetOnebit(4, 3)
+	fb.SetOnebit(4, 2)
+	fb.SetOnebit(5, 2)
 
 	fb2 := NewFieldBits()
-	fb2.Onebit(0, 4)
-	fb2.Onebit(0, 3)
-	fb2.Onebit(0, 2)
-	fb2.Onebit(1, 2)
+	fb2.SetOnebit(0, 4)
+	fb2.SetOnebit(0, 3)
+	fb2.SetOnebit(0, 2)
+	fb2.SetOnebit(1, 2)
 
 	fb.AndNot(fb2)
 
 	expect := NewFieldBits()
-	expect.Onebit(4, 4)
-	expect.Onebit(4, 3)
-	expect.Onebit(4, 2)
-	expect.Onebit(5, 2)
+	expect.SetOnebit(4, 4)
+	expect.SetOnebit(4, 3)
+	expect.SetOnebit(4, 2)
+	expect.SetOnebit(5, 2)
 
 	if fb.Equals(expect) == false {
 		t.Fatalf("AndNot() expected\n%s\n actual\n\n%s", fb.ToString(), expect.ToString())
@@ -37,14 +37,14 @@ func TestAndNot(t *testing.T) {
 
 func TestEquqls(t *testing.T) {
 	fb := NewFieldBits()
-	fb.Onebit(0, 1)
+	fb.SetOnebit(0, 1)
 	fb2 := NewFieldBits()
-	fb2.Onebit(0, 1)
+	fb2.SetOnebit(0, 1)
 	if fb.Equals(fb2) == false {
 		t.Fatal("Equals() fb and fb2 must be equal")
 	}
 	fb3 := NewFieldBits()
-	fb.Onebit(1, 1)
+	fb.SetOnebit(1, 1)
 	if fb.Equals(fb3) {
 		t.Fatal("Equals() fb and fb3 must not be equal")
 	}
@@ -54,10 +54,10 @@ func TestFindVanishingBits(t *testing.T) {
 	bf := NewBitFieldWithMattulwan("a54ea3eaebdece3bd2eb2dc3")
 	v := bf.Bits(Green).FindVanishingBits()
 	expect := NewFieldBits()
-	expect.Onebit(0, 4)
-	expect.Onebit(0, 3)
-	expect.Onebit(0, 2)
-	expect.Onebit(1, 2)
+	expect.SetOnebit(0, 4)
+	expect.SetOnebit(0, 3)
+	expect.SetOnebit(0, 2)
+	expect.SetOnebit(1, 2)
 	if v.Equals(expect) == false {
 		bf.ShowDebug()
 		t.Fatalf("FindVanishingBits must be \n%s\nbut\n\n%s", expect.ToString(), v.ToString())
@@ -66,10 +66,10 @@ func TestFindVanishingBits(t *testing.T) {
 	bf.Simulate1()
 	v = bf.Bits(Red).FindVanishingBits()
 	expect = NewFieldBits()
-	expect.Onebit(0, 1)
-	expect.Onebit(1, 1)
-	expect.Onebit(1, 2)
-	expect.Onebit(2, 2)
+	expect.SetOnebit(0, 1)
+	expect.SetOnebit(1, 1)
+	expect.SetOnebit(1, 2)
+	expect.SetOnebit(2, 2)
 	if v.Equals(expect) == false {
 		bf.ShowDebug()
 		t.Fatalf("FindVanishingBits must be \n%s\nbut\n\n%s", expect.ToString(), v.ToString())
@@ -78,10 +78,10 @@ func TestFindVanishingBits(t *testing.T) {
 	bf.Simulate1()
 	v = bf.Bits(Yellow).FindVanishingBits()
 	expect = NewFieldBits()
-	expect.Onebit(2, 1)
-	expect.Onebit(2, 2)
-	expect.Onebit(3, 2)
-	expect.Onebit(4, 2)
+	expect.SetOnebit(2, 1)
+	expect.SetOnebit(2, 2)
+	expect.SetOnebit(3, 2)
+	expect.SetOnebit(4, 2)
 	if v.Equals(expect) == false {
 		bf.ShowDebug()
 		t.Fatalf("FindVanishingBits must be \n%s\nbut\n\n%s", expect.ToString(), v.ToString())
@@ -90,10 +90,10 @@ func TestFindVanishingBits(t *testing.T) {
 	bf.Simulate1()
 	v = bf.Bits(Blue).FindVanishingBits()
 	expect = NewFieldBits()
-	expect.Onebit(3, 1)
-	expect.Onebit(4, 1)
-	expect.Onebit(4, 2)
-	expect.Onebit(5, 1)
+	expect.SetOnebit(3, 1)
+	expect.SetOnebit(4, 1)
+	expect.SetOnebit(4, 2)
+	expect.SetOnebit(5, 1)
 	if v.Equals(expect) == false {
 		bf.ShowDebug()
 		t.Fatalf("FindVanishingBits must be \n%s\nbut\n\n%s", expect.ToString(), v.ToString())
@@ -102,10 +102,10 @@ func TestFindVanishingBits(t *testing.T) {
 	bf.Simulate1()
 	v = bf.Bits(Green).FindVanishingBits()
 	expect = NewFieldBits()
-	expect.Onebit(3, 1)
-	expect.Onebit(4, 1)
-	expect.Onebit(5, 1)
-	expect.Onebit(5, 2)
+	expect.SetOnebit(3, 1)
+	expect.SetOnebit(4, 1)
+	expect.SetOnebit(5, 1)
+	expect.SetOnebit(5, 2)
 	if v.Equals(expect) == false {
 		bf.ShowDebug()
 		t.Fatalf("FindVanishingBits must be \n%s\nbut\n\n%s", expect.ToString(), v.ToString())
@@ -114,15 +114,15 @@ func TestFindVanishingBits(t *testing.T) {
 
 func TestIterateBitWithMasking(t *testing.T) {
 	fb := NewFieldBits()
-	fb.Onebit(0, 4)
-	fb.Onebit(0, 3)
-	fb.Onebit(0, 2)
-	fb.Onebit(1, 2)
+	fb.SetOnebit(0, 4)
+	fb.SetOnebit(0, 3)
+	fb.SetOnebit(0, 2)
+	fb.SetOnebit(1, 2)
 
-	fb.Onebit(4, 4)
-	fb.Onebit(4, 3)
-	fb.Onebit(4, 2)
-	fb.Onebit(5, 2)
+	fb.SetOnebit(4, 4)
+	fb.SetOnebit(4, 3)
+	fb.SetOnebit(4, 2)
+	fb.SetOnebit(5, 2)
 
 	cnt := 0
 	fb.IterateBitWithMasking(func(c *FieldBits) *FieldBits {
@@ -130,19 +130,19 @@ func TestIterateBitWithMasking(t *testing.T) {
 		v := c.FindVanishingBits()
 		if cnt == 0 {
 			e := NewFieldBits()
-			e.Onebit(0, 4)
-			e.Onebit(0, 3)
-			e.Onebit(0, 2)
-			e.Onebit(1, 2)
+			e.SetOnebit(0, 4)
+			e.SetOnebit(0, 3)
+			e.SetOnebit(0, 2)
+			e.SetOnebit(1, 2)
 			if v.Equals(e) == false {
 				t.Fatalf("IterateBitWithMasking() first expected\n%s\nactual\n\n%s", e.ToString(), v.ToString())
 			}
 		} else if cnt == 1 {
 			e := NewFieldBits()
-			e.Onebit(4, 4)
-			e.Onebit(4, 3)
-			e.Onebit(4, 2)
-			e.Onebit(5, 2)
+			e.SetOnebit(4, 4)
+			e.SetOnebit(4, 3)
+			e.SetOnebit(4, 2)
+			e.SetOnebit(5, 2)
 			if v.Equals(e) == false {
 				t.Fatalf("IterateBitWithMasking() second expected\n%s\nactual\n\n%s", e.ToString(), v.ToString())
 			}
