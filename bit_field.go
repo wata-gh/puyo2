@@ -195,7 +195,7 @@ func (bf *BitField) Drop(fb *FieldBits) {
 		for x := 0; x < 6; x++ {
 			idx := x >> 2
 			vc := bits.OnesCount64(fb.ColBits(x))
-			dropmask1[idx] |= bits.RotateLeft64((1<<vc)-1, 13-vc) << (x & 3 * 16)
+			dropmask1[idx] |= bits.RotateLeft64((1<<vc)-1, 14-vc) << (x & 3 * 16)
 		}
 		bf.m[i][0] = Deposit(r0, ^dropmask1[0])
 		bf.m[i][1] = Deposit(r1, ^dropmask1[1])
