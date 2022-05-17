@@ -206,6 +206,21 @@ func (bf *BitField) Equals(bf2 *BitField) bool {
 	return bf.m[0] == bf2.m[0] && bf.m[1] == bf2.m[1] && bf.m[2] == bf2.m[2]
 }
 
+func (bf *BitField) EqualChain(bf2 *BitField) bool {
+	cs := bf.ToChainShapesUInt64Array()
+	cs2 := bf2.ToChainShapesUInt64Array()
+	if len(cs) != len(cs2) {
+		return false
+	}
+	for i, v := range cs {
+		v2 := cs2[i]
+		if v[0] != v2[0] || v[1] != v2[1] {
+			return false
+		}
+	}
+	return true
+}
+
 func (bf *BitField) ExportImage(name string) {
 	fpuyo, _ := os.Open("images/puyos.png")
 	defer fpuyo.Close()
@@ -243,6 +258,10 @@ func (bf *BitField) ExportImage(name string) {
 	outfile, _ := os.Create(name)
 	defer outfile.Close()
 	png.Encode(outfile, out)
+}
+
+func (bf *BitField) FindVanishingBits() *FieldBits {
+	return bf.Bits(Green).FindVanishingBits().Or(bf.Bits(Red).FindVanishingBits()).Or(bf.Bits(Yellow).FindVanishingBits()).Or(bf.Bits(Blue).FindVanishingBits())
 }
 
 func (bf *BitField) IsEmpty() bool {
@@ -382,12 +401,37 @@ func (bf *BitField) SimulateWithNewBitField() *RensaResult {
 
 func (bf *BitField) Simulate1() bool {
 	// TODO お邪魔処理
-	v := bf.Bits(Green).FindVanishingBits().Or(bf.Bits(Red).FindVanishingBits()).Or(bf.Bits(Yellow).FindVanishingBits()).Or(bf.Bits(Blue).FindVanishingBits())
+	v := bf.FindVanishingBits()
 	if v.IsEmpty() {
 		return false
 	}
 	bf.Drop(v)
 	return true
+}
+
+func (bf *BitField) ToChainShapes() []*FieldBits {
+	cbf := bf.Clone()
+	shapes := make([]*FieldBits, 0)
+	v := cbf.FindVanishingBits()
+	shapes = append(shapes, v)
+	for cbf.Simulate1() {
+		v := cbf.FindVanishingBits()
+		if v.IsEmpty() == false {
+			shapes = append(shapes, v)
+		} else {
+			break
+		}
+	}
+	return shapes
+}
+
+func (bf *BitField) ToChainShapesUInt64Array() [][2]uint64 {
+	shapes := bf.ToChainShapes()
+	array := make([][2]uint64, 0, len(shapes))
+	for _, v := range shapes {
+		array = append(array, v.ToIntArray())
+	}
+	return array
 }
 
 func (bf *BitField) ToString() string {
