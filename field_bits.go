@@ -53,6 +53,10 @@ func (fb *FieldBits) ColBits(c int) uint64 {
 	panic(fmt.Sprintf("column number must be 0-5. passed %d", c))
 }
 
+func (fb *FieldBits) Equals(fb2 *FieldBits) bool {
+	return fb.m[0] == fb2.m[0] && fb.m[1] == fb2.m[1]
+}
+
 func (fb *FieldBits) FindVanishingBits() *FieldBits {
 	// 4 列目と 5 列目は変数をまたぐので個別に計算
 	r4 := fb.m[0] & 0xffff000000000000
