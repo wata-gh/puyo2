@@ -398,33 +398,28 @@ func (bf *BitField) SimulateDetail() *RensaResult {
 		numColors := 0
 		numErased := 0
 		longBonusCoef := 0
-		gvb := bf.Bits(Green).FindVanishingBits()
-		if !gvb.IsEmpty() {
-			numColors++
-			popCount := gvb.PopCount()
-			numErased += popCount
-			longBonusCoef += LongBonus(popCount)
-		}
-		rvb := bf.Bits(Red).FindVanishingBits()
-		if !rvb.IsEmpty() {
-			numColors++
-			popCount := rvb.PopCount()
-			numErased += popCount
-			longBonusCoef += LongBonus(popCount)
-		}
-		yvb := bf.Bits(Yellow).FindVanishingBits()
-		if !yvb.IsEmpty() {
-			numColors++
-			popCount := yvb.PopCount()
-			numErased += popCount
-			longBonusCoef += LongBonus(popCount)
-		}
-		bvb := bf.Bits(Blue).FindVanishingBits()
-		if !bvb.IsEmpty() {
-			numColors++
-			popCount := bvb.PopCount()
-			numErased += popCount
-			longBonusCoef += LongBonus(popCount)
+		vanished := NewFieldBits()
+
+		for _, color := range []Color{Red, Blue, Yellow, Green} {
+			vb := bf.Bits(color).FindVanishingBits()
+			if vb.IsEmpty() == false {
+				numColors++
+				popCount := vb.PopCount()
+				numErased += popCount
+				vanished = vanished.Or(vb)
+
+				popcount := vb.PopCount()
+				if popcount <= 7 {
+					longBonusCoef += LongBonus(popCount)
+					continue
+				}
+
+				vb.IterateBitWithMasking(func(c *FieldBits) *FieldBits {
+					v := c.expand(vb)
+					longBonusCoef += LongBonus(c.PopCount())
+					return v
+				})
+			}
 		}
 
 		if numColors == 0 {
@@ -437,7 +432,7 @@ func (bf *BitField) SimulateDetail() *RensaResult {
 		colorBonusCoef := ColorBonus(numColors)
 		coef := CalcRensaBonusCoef(RensaBonus(result.Chains), longBonusCoef, colorBonusCoef)
 		result.AddScore(10 * numErased * coef)
-		bf.Drop(gvb.Or(rvb).Or(yvb).Or(bvb))
+		bf.Drop(vanished)
 	}
 	result.SetBitField(bf)
 	return result
