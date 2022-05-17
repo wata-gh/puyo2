@@ -126,8 +126,7 @@ func TestIterateBitWithMasking(t *testing.T) {
 
 	cnt := 0
 	fb.IterateBitWithMasking(func(c *FieldBits) *FieldBits {
-		c = c.expand(fb)
-		v := c.FindVanishingBits()
+		v := c.expand(fb)
 		if cnt == 0 {
 			e := NewFieldBits()
 			e.SetOnebit(0, 4)

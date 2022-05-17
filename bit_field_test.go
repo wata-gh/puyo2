@@ -80,7 +80,7 @@ func TestSimulateDetail(t *testing.T) {
 	}
 	if result.Score != 4_840 {
 		bf.ShowDebug()
-		t.Fatalf("result.Chains must be 4,840 %v", result)
+		t.Fatalf("result.Score must be 4,840 %v", result)
 	}
 	if result.BitField.IsEmpty() == false {
 		bf.ShowDebug()
@@ -93,6 +93,46 @@ func TestSimulateDetail(t *testing.T) {
 	if result.Chains != 19 {
 		bf.ShowDebug()
 		t.Fatalf("result.Chains must be 19 %d", result.Chains)
+	}
+	if result.Score != 175_080 {
+		bf.ShowDebug()
+		t.Fatalf("result.Score must be 175,080 %v", result)
+	}
+	if result.BitField.IsEmpty() == false {
+		bf.ShowDebug()
+		t.Fatalf("result.BitField.IsEmpty() must be true %t", result.BitField.IsEmpty())
+	}
+
+	// 2 連鎖トリプル（3 色）
+	bf = NewBitFieldWithMattulwan("a34ca5dca4dca4dca4bda4eba4eba3e2b")
+	result = bf.SimulateDetail()
+	if result.Chains != 2 {
+		bf.ShowDebug()
+		t.Fatalf("result.Chains must be 2 %d", result.Chains)
+	}
+	if result.Score != 1_720 {
+		bf.ShowDebug()
+		t.Fatalf("result.Score must be 1,720 %v", result)
+	}
+	if result.BitField.IsEmpty() == false {
+		bf.ShowDebug()
+		t.Fatalf("result.BitField.IsEmpty() must be true %t", result.BitField.IsEmpty())
+	}
+
+	// 2 連鎖トリプル（2 色）
+	bf = NewBitFieldWithMattulwan("a34ba5dba4dba4dba4bda4eba4eba3e2b")
+	result = bf.SimulateDetail()
+	if result.Chains != 2 {
+		bf.ShowDebug()
+		t.Fatalf("result.Chains must be 2 %d", result.Chains)
+	}
+	if result.Score != 1_360 {
+		bf.ShowDebug()
+		t.Fatalf("result.Score must be 1,360 %v", result)
+	}
+	if result.BitField.IsEmpty() == false {
+		bf.ShowDebug()
+		t.Fatalf("result.BitField.IsEmpty() must be true %t", result.BitField.IsEmpty())
 	}
 }
 
