@@ -2,6 +2,21 @@ package puyo2
 
 import "testing"
 
+func TestEquqls(t *testing.T) {
+	fb := NewFieldBits()
+	fb.Onebit(0, 1)
+	fb2 := NewFieldBits()
+	fb2.Onebit(0, 1)
+	if fb.Equals(fb2) == false {
+		t.Fatal("Equals() fb and fb2 must be equal")
+	}
+	fb3 := NewFieldBits()
+	fb.Onebit(1, 1)
+	if fb.Equals(fb3) {
+		t.Fatal("Equals() fb and fb3 must not be equal")
+	}
+}
+
 func TestFindVanishingBits(t *testing.T) {
 	bf := NewBitFieldWithMattulwan("a54ea3eaebdece3bd2eb2dc3")
 	v := bf.Bits(Green).FindVanishingBits()
