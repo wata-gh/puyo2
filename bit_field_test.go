@@ -134,6 +134,18 @@ func TestSimulateDetail(t *testing.T) {
 		bf.ShowDebug()
 		t.Fatalf("result.BitField.IsEmpty() must be true %t", result.BitField.IsEmpty())
 	}
+
+	// おじゃまあり
+	bf = NewBitFieldWithMattulwan("ga2g2c2a2g2dca2dgegae2bcgae2dcgaed2egcbeb2gdbedbcgbde2dg2c2edbgedcdcgd2c3ge2c")
+	result = bf.SimulateDetail()
+	if result.Chains != 9 {
+		bf.ShowDebug()
+		t.Fatalf("result.Chains must be 9 %d", result.Chains)
+	}
+	if result.Score != 42_540 {
+		bf.ShowDebug()
+		t.Fatalf("result.Score must be 42,540 %v", result)
+	}
 }
 
 func TestSimulate(t *testing.T) {
@@ -155,5 +167,13 @@ func TestSimulate(t *testing.T) {
 	if result.Chains != 19 {
 		bf.ShowDebug()
 		t.Fatalf("result.Chains must be 19 %d", result.Chains)
+	}
+
+	// おじゃまあり
+	bf = NewBitFieldWithMattulwan("ga2g2c2a2g2dca2dgegae2bcgae2dcgaed2egcbeb2gdbedbcgbde2dg2c2edbgedcdcgd2c3ge2c")
+	result = bf.Simulate()
+	if result.Chains != 9 {
+		bf.ShowDebug()
+		t.Fatalf("result.Chains must be 9 %d", result.Chains)
 	}
 }
