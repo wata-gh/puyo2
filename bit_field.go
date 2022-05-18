@@ -25,6 +25,7 @@ func NewBitFieldWithMattulwan(field string) *BitField {
 		x := i % 6
 		y := 13 - i/6
 		switch c {
+		case 'a':
 		case 'b':
 			bf.SetColor(Red, x, y)
 		case 'c':
@@ -35,6 +36,8 @@ func NewBitFieldWithMattulwan(field string) *BitField {
 			bf.SetColor(Green, x, y)
 		case 'g':
 			bf.SetColor(Ojama, x, y)
+		default:
+			panic("only supports puyo color a,b,c,d,e,g")
 		}
 	}
 	return bf
@@ -309,7 +312,9 @@ func (bf *BitField) ExportImageWithTransparent(name string, trans *FieldBits) {
 }
 
 func (bf *BitField) FindVanishingBits() *FieldBits {
-	return bf.Bits(Green).FindVanishingBits().Or(bf.Bits(Red).FindVanishingBits()).Or(bf.Bits(Yellow).FindVanishingBits()).Or(bf.Bits(Blue).FindVanishingBits())
+	v := bf.Bits(Green).FindVanishingBits().Or(bf.Bits(Red).FindVanishingBits()).Or(bf.Bits(Yellow).FindVanishingBits()).Or(bf.Bits(Blue).FindVanishingBits())
+	o := v.expand1(bf.Bits(Ojama))
+	return v.Or(o)
 }
 
 func (bf *BitField) IsEmpty() bool {
@@ -426,8 +431,7 @@ func (bf *BitField) SimulateDetail() *RensaResult {
 			break
 		}
 
-		// TODO 同色でマルチの場合の判定
-		// 参考： https://github.com/puyoai/puyoai/blob/575068dffab021cd42b0178699d480a743ca4e1f/src/core/bit_field_inl.h#L122-L127
+		vanished = vanished.Or(vanished.expand1(bf.Bits(Ojama)))
 		result.AddChain()
 		colorBonusCoef := ColorBonus(numColors)
 		coef := CalcRensaBonusCoef(RensaBonus(result.Chains), longBonusCoef, colorBonusCoef)
@@ -443,7 +447,6 @@ func (bf *BitField) SimulateWithNewBitField() *RensaResult {
 }
 
 func (bf *BitField) Simulate1() bool {
-	// TODO お邪魔処理
 	v := bf.FindVanishingBits()
 	if v.IsEmpty() {
 		return false
