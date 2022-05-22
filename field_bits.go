@@ -154,8 +154,8 @@ func (fb *FieldBits) MaskField13() *FieldBits {
 
 func (fb *FieldBits) MaskField12() *FieldBits {
 	mfb := new(FieldBits)
-	mfb.m[0] = fb.m[0] & 0x9FFE9FFE9FFE9FFE
-	mfb.m[1] = fb.m[1] & 0x9FFE9FFE9FFE9FFE
+	mfb.m[0] = fb.m[0] & 0x1FFE1FFE1FFE1FFE
+	mfb.m[1] = fb.m[1] & 0x1FFE1FFE1FFE1FFE
 	return mfb
 }
 
