@@ -312,7 +312,7 @@ func (bf *BitField) ExportImageWithTransparent(name string, trans *FieldBits) {
 }
 
 func (bf *BitField) FindVanishingBits() *FieldBits {
-	v := bf.Bits(Green).FindVanishingBits().Or(bf.Bits(Red).FindVanishingBits()).Or(bf.Bits(Yellow).FindVanishingBits()).Or(bf.Bits(Blue).FindVanishingBits())
+	v := bf.Bits(Green).MaskField12().FindVanishingBits().Or(bf.Bits(Red).MaskField12().FindVanishingBits()).Or(bf.Bits(Yellow).MaskField12().FindVanishingBits()).Or(bf.Bits(Blue).MaskField12().FindVanishingBits())
 	o := v.expand1(bf.Bits(Ojama))
 	return v.Or(o)
 }
@@ -322,7 +322,7 @@ func (bf *BitField) IsEmpty() bool {
 }
 
 func (bf *BitField) MattulwanEditorParam() string {
-	table := map[string]string{"R": "b", "B": "c", "Y": "d", "G": "e", ".": "a"}
+	table := map[string]string{"R": "b", "B": "c", "Y": "d", "G": "e", ".": "a", "O": "g"}
 	var s string
 	for y := 13; y > 0; y-- {
 		for x := 0; x < 6; x++ {
