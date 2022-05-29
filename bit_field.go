@@ -132,7 +132,7 @@ func (bf *BitField) drawPuyo(c Color, x int, y int, puyo *image.Image, out *imag
 		iy = 384
 	} else if u && d == false && l && r {
 		iy = 416
-	} else if u && d == false && l && r {
+	} else if u == false && d && l && r {
 		iy = 448
 	} else {
 		iy = 480
@@ -243,6 +243,33 @@ func (bf *BitField) ExportImage(name string) {
 			}
 		}
 	}
+	for y := 13; y > 0; y-- {
+		for x := 0; x < 6; x++ {
+			c := bf.Color(x, y)
+			if c == Empty {
+				continue
+			}
+			if c == Ojama {
+				point := image.Pt((x+2)*32, (14-y)*32)
+				draw.Draw(out, image.Rectangle{image.Pt((x+1)*32, (13-y)*32), point}, puyo, image.Pt(5*32, 2*32), draw.Over)
+			} else {
+				bf.drawPuyo(c, x, y, &puyo, out)
+			}
+		}
+	}
+
+	outfile, _ := os.Create(name)
+	defer outfile.Close()
+	png.Encode(outfile, out)
+}
+
+func (bf *BitField) ExportOnlyPuyoImage(name string) {
+	fpuyo, _ := os.Open("images/puyos.png")
+	defer fpuyo.Close()
+
+	puyo, _, _ := image.Decode(fpuyo)
+	out := image.NewNRGBA(image.Rectangle{image.Pt(0, 0), image.Pt(32*8, 32*14)})
+
 	for y := 13; y > 0; y-- {
 		for x := 0; x < 6; x++ {
 			c := bf.Color(x, y)
@@ -435,6 +462,7 @@ func (bf *BitField) SimulateDetail() *RensaResult {
 		result.AddChain()
 		colorBonusCoef := ColorBonus(numColors)
 		coef := CalcRensaBonusCoef(RensaBonus(result.Chains), longBonusCoef, colorBonusCoef)
+		result.AddErased(numErased)
 		result.AddScore(10 * numErased * coef)
 		bf.Drop(vanished)
 	}

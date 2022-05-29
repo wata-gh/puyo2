@@ -4,6 +4,7 @@ type RensaResult struct {
 	Chains   int
 	Score    int
 	Frames   int
+	Erased   int
 	Quick    bool
 	BitField *BitField
 }
@@ -24,6 +25,10 @@ func NewRensaResultWithResult(chains int, score int, frames int, quick bool, bf 
 
 func (rr *RensaResult) AddChain() {
 	rr.Chains += 1
+}
+
+func (rr *RensaResult) AddErased(erased int) {
+	rr.Erased += erased
 }
 
 func (rr *RensaResult) AddScore(score int) {
