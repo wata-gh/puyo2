@@ -116,7 +116,8 @@ func (bf *BitField) ExportImage(name string) {
 	png.Encode(outfile, out)
 }
 
-func (bf *BitField) ExportSimulateImage(path string) {
+func (obf *BitField) ExportSimulateImage(path string) {
+	bf := obf.Clone()
 	idx := 1
 	bf.ExportImage(fmt.Sprintf("%s/%d.png", path, idx))
 	for {
@@ -129,7 +130,36 @@ func (bf *BitField) ExportSimulateImage(path string) {
 		bf.Drop(v)
 		idx++
 		bf.ExportImage(fmt.Sprintf("%s/%d.png", path, idx))
-		bf.ShowDebug()
+	}
+}
+
+func (obf *BitField) ExportHandsSimulateImage(hands []Hand, path string) {
+	os.Mkdir(path, 0755)
+	bf := obf.Clone()
+	idx := 1
+	bf.ExportImage(fmt.Sprintf("%s/%d.png", path, idx))
+	for _, hand := range hands {
+		if bf.placePuyo(hand.PuyoSet, hand.Position) == false {
+			bf.ShowDebug()
+			fmt.Printf("hand %v\n", hand)
+			panic("can not place puyo.")
+		}
+		idx++
+		bf.ExportImage(fmt.Sprintf("%s/%d.png", path, idx))
+		bf.Drop(bf.Bits(Empty).MaskField12())
+		idx++
+		bf.ExportImage(fmt.Sprintf("%s/%d.png", path, idx))
+		for {
+			v := bf.FindVanishingBits()
+			if v.IsEmpty() {
+				break
+			}
+			idx++
+			bf.ExportImageWithVanish(fmt.Sprintf("%s/%d.png", path, idx), v)
+			bf.Drop(v)
+			idx++
+			bf.ExportImage(fmt.Sprintf("%s/%d.png", path, idx))
+		}
 	}
 }
 
