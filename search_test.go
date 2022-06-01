@@ -133,29 +133,6 @@ func TestSearchWithPuyoSets(t *testing.T) {
 		if sr.Depth == len(puyoSets) && sr.RensaResult.Chains == 3 {
 			solved = true
 			fmt.Println(sr.BeforeSimulate.MattulwanEditorUrl())
-			dbf := NewBitFieldWithMattulwan("a62gacbagecb2ae2g3")
-			idx := 0
-			dbf.ExportImage(fmt.Sprintf("a62gacbagecb2ae2g3_%d.png", idx))
-			fmt.Println(sr.Hands)
-			for _, hand := range sr.Hands {
-				dbf.placePuyo(hand.PuyoSet, hand.Position)
-				idx++
-				dbf.ExportImage(fmt.Sprintf("a62gacbagecb2ae2g3_%d.png", idx))
-				dbf.Drop(dbf.Bits(Empty).MaskField12())
-				idx++
-				dbf.ExportImage(fmt.Sprintf("a62gacbagecb2ae2g3_%d.png", idx))
-				for {
-					v := dbf.FindVanishingBits()
-					if v.IsEmpty() {
-						break
-					}
-					idx++
-					dbf.ExportImageWithVanish(fmt.Sprintf("a62gacbagecb2ae2g3_%d.png", idx), v)
-					dbf.Drop(v)
-					idx++
-					dbf.ExportImage(fmt.Sprintf("a62gacbagecb2ae2g3_%d.png", idx))
-				}
-			}
 		}
 		return true
 	}, 1)
@@ -221,7 +198,7 @@ func TestSearchWithPuyoSets(t *testing.T) {
 	hands = []Hand{}
 	solved = false
 	bf.SearchWithPuyoSets(puyoSets, hands, func(sr *SearchResult) bool {
-		if sr.Depth == len(puyoSets) && sr.RensaResult.BitField.Bits(Blue).IsEmpty() {
+		if sr.RensaResult.BitField.Bits(Blue).IsEmpty() {
 			solved = true
 			fmt.Println(sr.BeforeSimulate.MattulwanEditorUrl())
 		}

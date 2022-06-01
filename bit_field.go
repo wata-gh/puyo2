@@ -250,7 +250,7 @@ func (bf *BitField) SimulateDetail() *RensaResult {
 		vanished := NewFieldBits()
 
 		for _, color := range []Color{Red, Blue, Yellow, Green} {
-			vb := bf.Bits(color).FindVanishingBits()
+			vb := bf.Bits(color).MaskField12().FindVanishingBits()
 			if vb.IsEmpty() == false {
 				numColors++
 				popCount := vb.PopCount()
