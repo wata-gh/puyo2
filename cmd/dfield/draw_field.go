@@ -5,6 +5,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"strconv"
 	"strings"
 
 	"github.com/wata-gh/puyo2"
@@ -19,16 +20,42 @@ type Options struct {
 	Simulate bool
 }
 
-func parseHands(handsStr string) []puyo2.Hand {
+func letter2Color(puyo string) puyo2.Color {
+	switch puyo {
+	case "r":
+		return puyo2.Red
+	case "g":
+		return puyo2.Green
+	case "y":
+		return puyo2.Yellow
+	case "b":
+		return puyo2.Blue
+	}
+	panic("letter must be one of r,g,y,b")
+}
+
+func parseSimpleHands(handsStr string) []puyo2.Hand {
 	var hands []puyo2.Hand
-	hands = append(hands, puyo2.Hand{PuyoSet: puyo2.PuyoSet{Axis: puyo2.Green, Child: puyo2.Green}, Position: [2]int{1, 0}})
-	hands = append(hands, puyo2.Hand{PuyoSet: puyo2.PuyoSet{Axis: puyo2.Red, Child: puyo2.Red}, Position: [2]int{1, 0}})
+	data := strings.Split(handsStr, "")
+	for i := 0; i < len(data); i += 4 {
+		axis := letter2Color(data[i])
+		child := letter2Color(data[i+1])
+		row, err := strconv.Atoi(data[i+2])
+		if err != nil {
+			panic(err)
+		}
+		dir, err := strconv.Atoi(data[i+3])
+		if err != nil {
+			panic(err)
+		}
+		hands = append(hands, puyo2.Hand{PuyoSet: puyo2.PuyoSet{Axis: axis, Child: child}, Position: [2]int{row, dir}})
+	}
 	return hands
 }
 
 func exp_hands(param string, handsStr string, path string) {
 	bf := puyo2.NewBitFieldWithMattulwan(param)
-	hands := parseHands(handsStr)
+	hands := parseSimpleHands(handsStr)
 	bf.ExportHandsSimulateImage(hands, path)
 }
 
