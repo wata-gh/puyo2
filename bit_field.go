@@ -51,6 +51,7 @@ func NewBitFieldWithMattulwanC(field string) *BitField {
 
 	expandField := ExpandMattulwanParam(field)
 	bf.table = map[Color]Color{
+		Empty:  Empty,
 		Red:    Empty,
 		Blue:   Empty,
 		Green:  Empty,

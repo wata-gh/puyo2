@@ -231,6 +231,8 @@ func (bf *BitField) ExportImageWithVanish(name string, vanish *FieldBits) {
 					pos = 7
 				case Yellow:
 					pos = 8
+				case Purple:
+					pos = 9
 				}
 				draw.Draw(out, image.Rectangle{image.Pt((x+1)*32, (13-y)*32), point}, puyo, image.Pt(5*32, pos*32), draw.Over)
 			}
