@@ -11,4 +11,5 @@ const (
 	Blue
 	Yellow
 	Green
+	Purple
 )

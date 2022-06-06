@@ -81,6 +81,8 @@ func (bf *BitField) drawPuyo(c Color, x int, y int, puyo *image.Image, out *imag
 		ix = 32
 	case Yellow:
 		ix = 96
+	case Purple:
+		ix = 128
 	case Empty:
 		return
 	}
