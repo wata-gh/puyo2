@@ -184,9 +184,10 @@ func TestSimulate(t *testing.T) {
 // }
 
 func TestNewBitFieldWithMattulwanC(t *testing.T) {
-	bf := NewBitFieldWithMattulwanC("a60bcdafab2cd2ac2df3")
+	bf := NewBitFieldWithMattulwanC("a54ba5bedafab2ed2ae2df3")
 	purple := bf.Color(3, 1)
 	if purple != Purple {
 		t.Fatalf("must be purple, but -> %v", purple)
 	}
+	// bf.ExportSimulateImage("simulate_images2")
 }
