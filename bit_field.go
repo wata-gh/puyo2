@@ -264,6 +264,19 @@ func (bf *BitField) FindVanishingBits() *FieldBits {
 	return v.Or(o)
 }
 
+func (bf *BitField) FlipHorizontal() {
+	m := [3][2]uint64{{0, 0}, {0, 0}, {0, 0}}
+	for i := 0; i < 3; i++ {
+		m[i][1] = (bf.m[i][0] & 0xffff) << 16              // 1 -> 6
+		m[i][1] |= (bf.m[i][0] & 0xffff0000) >> 16         // 2 -> 5
+		m[i][0] = (bf.m[i][0] & 0xffff00000000) << 16      // 3 -> 4
+		m[i][0] |= (bf.m[i][0] & 0xffff000000000000) >> 16 // 4 -> 3
+		m[i][0] |= (bf.m[i][1] & 0xffff) << 16             // 5 -> 2
+		m[i][0] |= (bf.m[i][1] & 0xffff0000) >> 16         // 6 -> 1
+	}
+	bf.m = m
+}
+
 func (bf *BitField) IsEmpty() bool {
 	return bf.m[0][0] == 0 && bf.m[1][0] == 0 && bf.m[2][0] == 0 && bf.m[0][1] == 0 && bf.m[1][1] == 0 && bf.m[2][1] == 0
 }
@@ -438,6 +451,62 @@ func (bf *BitField) ToString() string {
 		s += fmt.Sprintln()
 	}
 	return s
+}
+
+func (bf *BitField) TrimLeft() {
+	mv := 0
+	if bf.m[2][0]&0xffff == 0 { // row 1
+		mv++
+		if bf.m[2][0]&0xffff0000 == 0 { // row 2
+			mv++
+			if bf.m[2][0]&0xffff00000000 == 0 { // row 3
+				mv++
+				if bf.m[2][0]&0xffff000000000000 == 0 { // row 4
+					mv++
+					if bf.m[2][1]&0xffff == 0 { // row 5
+						mv++
+						if bf.m[2][1]&0xffff0000 == 0 { // row 6
+							// all clear
+							return
+						}
+					}
+				}
+			}
+		}
+	} else {
+		return
+	}
+
+	switch mv {
+	case 1:
+		for i := 0; i < 3; i++ {
+			bf.m[i][0] >>= 16
+			bf.m[i][0] |= (bf.m[i][1] << 48) & 0xffff000000000000
+			bf.m[i][1] >>= 16
+		}
+	case 2:
+		for i := 0; i < 3; i++ {
+			bf.m[i][0] >>= 32
+			bf.m[i][0] |= ((bf.m[i][1] << 32) & 0xffffffff00000000)
+			bf.m[i][1] = 0
+		}
+	case 3:
+		for i := 0; i < 3; i++ {
+			bf.m[i][0] >>= 48
+			bf.m[i][0] |= (bf.m[i][1] << 16) & 0x0000ffffffff0000
+			bf.m[i][1] = 0
+		}
+	case 4:
+		for i := 0; i < 3; i++ {
+			bf.m[i][0] = bf.m[i][1]
+			bf.m[i][1] = 0
+		}
+	case 5:
+		for i := 0; i < 3; i++ {
+			bf.m[i][0] = bf.m[i][1] >> 16
+			bf.m[i][1] = 0
+		}
+	}
 }
 
 func (bf *BitField) ShowDebug() {
