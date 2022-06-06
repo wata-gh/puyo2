@@ -177,3 +177,16 @@ func TestSimulate(t *testing.T) {
 		t.Fatalf("result.Chains must be 9 %d", result.Chains)
 	}
 }
+
+// func TestExportSimulateImage(t *testing.T) {
+// 	bf := NewBitFieldWithMattulwan("a54ea3eaebdece3bd2eb2dc3")
+// 	bf.ExportSimulateImage("simulate_images")
+// }
+
+func TestNewBitFieldWithMattulwanC(t *testing.T) {
+	bf := NewBitFieldWithMattulwanC("a60bcdafab2cd2ac2df3")
+	purple := bf.Color(3, 1)
+	if purple != Purple {
+		t.Fatalf("must be purple, but -> %v", purple)
+	}
+}

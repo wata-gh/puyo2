@@ -6,11 +6,18 @@ import (
 )
 
 type BitField struct {
-	m [3][2]uint64
+	m     [3][2]uint64
+	table map[Color]Color
 }
 
 func NewBitField() *BitField {
 	bitField := new(BitField)
+	return bitField
+}
+
+func NewBitFieldWithTable(table map[Color]Color) *BitField {
+	bitField := new(BitField)
+	bitField.table = table
 	return bitField
 }
 
@@ -34,6 +41,87 @@ func NewBitFieldWithMattulwan(field string) *BitField {
 			bf.SetColor(Ojama, x, y)
 		default:
 			panic("only supports puyo color a,b,c,d,e,g")
+		}
+	}
+	return bf
+}
+
+func NewBitFieldWithMattulwanC(field string) *BitField {
+	bf := new(BitField)
+
+	expandField := ExpandMattulwanParam(field)
+	bf.table = map[Color]Color{
+		Red:    Empty,
+		Blue:   Empty,
+		Green:  Empty,
+		Yellow: Empty,
+		Purple: Empty,
+	}
+	colorCnt := 0
+	for _, c := range expandField {
+		switch c {
+		case 'a':
+		case 'b':
+			if bf.table[Red] == Empty {
+				bf.table[Red] = Red
+				colorCnt++
+			}
+		case 'c':
+			if bf.table[Blue] == Empty {
+				bf.table[Blue] = Blue
+				colorCnt++
+			}
+		case 'd':
+			if bf.table[Yellow] == Empty {
+				bf.table[Yellow] = Yellow
+				colorCnt++
+			}
+		case 'e':
+			if bf.table[Green] == Empty {
+				bf.table[Green] = Green
+				colorCnt++
+			}
+		case 'f':
+			if bf.table[Purple] == Empty {
+				bf.table[Purple] = Purple
+				colorCnt++
+			}
+		}
+		if colorCnt == 4 {
+			break
+		}
+	}
+
+	// contains purple
+	if bf.table[Purple] == Purple {
+		for _, c := range []Color{Red, Blue, Yellow, Green} {
+			if bf.table[c] == Empty {
+				bf.table[c] = Purple
+				bf.table[Purple] = c
+				break
+			}
+		}
+	}
+
+	rune2ColorTable := map[rune]Color{
+		'a': Empty,
+		'b': Red,
+		'c': Blue,
+		'd': Yellow,
+		'e': Green,
+		'f': Purple,
+		'g': Ojama,
+	}
+	for i, c := range expandField {
+		x := i % 6
+		y := 13 - i/6
+		puyo, ok := rune2ColorTable[c]
+		if ok == false {
+			fmt.Printf("%c %v\n", c, puyo)
+			panic("only supports puyo color a,b,c,d,e,f,g")
+		}
+		if puyo != Empty {
+			bf.SetColor(puyo, x, y)
 		}
 	}
 	return bf
@@ -79,9 +167,22 @@ func (bf *BitField) colorChar(c Color) string {
 		return "Y"
 	case Green:
 		return "G"
+	case Purple:
+		return "P"
 	default:
 		return "U"
 	}
+}
+
+func (bf *BitField) converColor(puyo Color) Color {
+	if bf.table != nil {
+		c, ok := bf.table[puyo]
+		if ok == false {
+			panic(fmt.Sprintf("conver table is not nil, but can not convert color. %v %v", puyo, bf.table))
+		}
+		return c
+	}
+	return puyo
 }
 
 func (bf *BitField) Bits(c Color) *FieldBits {
@@ -111,6 +212,7 @@ func (bf *BitField) Clone() *BitField {
 	bitField.m[0] = bf.m[0]
 	bitField.m[1] = bf.m[1]
 	bitField.m[2] = bf.m[2]
+	bitField.table = bf.table
 	return bitField
 }
 
@@ -118,7 +220,7 @@ func (bf *BitField) Color(x int, y int) Color {
 	idx := x >> 2
 	pos := x&3*16 + y
 	c := ((bf.m[0][idx] >> pos) & 1) + ((bf.m[1][idx] >> pos) & 1 << 1) + ((bf.m[2][idx] >> pos) & 1 << 2)
-	return Color(c)
+	return bf.converColor(Color(c))
 }
 
 func (bf *BitField) Drop(fb *FieldBits) {
@@ -166,7 +268,7 @@ func (bf *BitField) IsEmpty() bool {
 }
 
 func (bf *BitField) MattulwanEditorParam() string {
-	table := map[string]string{"R": "b", "B": "c", "Y": "d", "G": "e", ".": "a", "O": "g"}
+	table := map[string]string{"R": "b", "B": "c", "Y": "d", "G": "e", "P": "f", ".": "a", "O": "g"}
 	var s string
 	for y := 13; y > 0; y-- {
 		for x := 0; x < 6; x++ {
@@ -203,7 +305,7 @@ func (bf *BitField) Normalize() *BitField {
 }
 
 func (bf *BitField) SetColor(c Color, x int, y int) {
-	b := bf.colorBits(c)
+	b := bf.colorBits(bf.converColor(c))
 	pos := x&3*16 + y
 	idx := x >> 2
 	for i := 0; i < len(bf.m); i++ {
