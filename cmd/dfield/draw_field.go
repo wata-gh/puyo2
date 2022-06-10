@@ -11,7 +11,7 @@ import (
 	"github.com/wata-gh/puyo2"
 )
 
-type Options struct {
+type options struct {
 	Trans    string
 	Out      string
 	Dir      string
@@ -53,13 +53,13 @@ func parseSimpleHands(handsStr string) []puyo2.Hand {
 	return hands
 }
 
-func exp_hands(param string, handsStr string, path string) {
+func expHands(param string, handsStr string, path string) {
 	bf := puyo2.NewBitFieldWithMattulwan(param)
 	hands := parseSimpleHands(handsStr)
 	bf.ExportHandsSimulateImage(hands, path)
 }
 
-func exp_simulate(param string, path string) {
+func expSimulate(param string, path string) {
 	bf := puyo2.NewBitFieldWithMattulwan(param)
 	bf.ExportSimulateImage(path)
 }
@@ -76,11 +76,17 @@ func exp(param string, trans string, out string, nobg bool) {
 	fmt.Println(bf.MattulwanEditorUrl())
 }
 
-func run(param *string, opt *Options) {
+func run(param *string, opt *options) {
+	if opt.Dir != "" {
+		err := os.Mkdir(opt.Dir, 0755)
+		if err != nil {
+			panic(err)
+		}
+	}
 	if opt.Simulate {
-		exp_simulate(*param, opt.Dir)
+		expSimulate(*param, opt.Dir)
 	} else if opt.Hands != "" {
-		exp_hands(*param, opt.Hands, opt.Dir)
+		expHands(*param, opt.Hands, opt.Dir)
 	} else {
 		path := opt.Out
 		if opt.Out == "" {
@@ -95,7 +101,7 @@ func run(param *string, opt *Options) {
 
 func main() {
 	param := flag.String("param", "a78", "puyofu")
-	var opt Options
+	var opt options
 	flag.StringVar(&opt.Trans, "trans", "a78", "transparent field")
 	flag.StringVar(&opt.Out, "out", "", "output file path")
 	flag.StringVar(&opt.Dir, "dir", "", "output directory path")
