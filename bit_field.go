@@ -21,6 +21,12 @@ func NewBitFieldWithTable(table map[Color]Color) *BitField {
 	return bitField
 }
 
+func NewBitFieldWithM(m [3][2]uint64) *BitField {
+	bitField := new(BitField)
+	bitField.m = m
+	return bitField
+}
+
 func NewBitFieldWithMattulwan(field string) *BitField {
 	bf := new(BitField)
 
@@ -264,7 +270,7 @@ func (bf *BitField) FindVanishingBits() *FieldBits {
 	return v.Or(o)
 }
 
-func (bf *BitField) FlipHorizontal() {
+func (bf *BitField) FlipHorizontal() *BitField {
 	m := [3][2]uint64{{0, 0}, {0, 0}, {0, 0}}
 	for i := 0; i < 3; i++ {
 		m[i][1] = (bf.m[i][0] & 0xffff) << 16              // 1 -> 6
@@ -275,6 +281,7 @@ func (bf *BitField) FlipHorizontal() {
 		m[i][0] |= (bf.m[i][1] & 0xffff0000) >> 16         // 6 -> 1
 	}
 	bf.m = m
+	return bf
 }
 
 func (bf *BitField) IsEmpty() bool {
@@ -453,7 +460,7 @@ func (bf *BitField) ToString() string {
 	return s
 }
 
-func (bf *BitField) TrimLeft() {
+func (bf *BitField) TrimLeft() *BitField {
 	mv := 0
 	if bf.m[2][0]&0xffff == 0 { // row 1
 		mv++
@@ -467,14 +474,14 @@ func (bf *BitField) TrimLeft() {
 						mv++
 						if bf.m[2][1]&0xffff0000 == 0 { // row 6
 							// all clear
-							return
+							return bf
 						}
 					}
 				}
 			}
 		}
 	} else {
-		return
+		return bf
 	}
 
 	switch mv {
@@ -507,6 +514,7 @@ func (bf *BitField) TrimLeft() {
 			bf.m[i][1] = 0
 		}
 	}
+	return bf
 }
 
 func (bf *BitField) ShowDebug() {
