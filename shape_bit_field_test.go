@@ -76,6 +76,7 @@ func TestShapeBitFieldSimulate(t *testing.T) {
 	}
 }
 
+/*
 func TestShapeBitFieldExport(t *testing.T) {
 	sbf := NewShapeBitField()
 	shape := NewFieldBits()
@@ -116,3 +117,4 @@ func TestShapeBitFieldExport(t *testing.T) {
 
 	sbf.ExportImage("gray.png")
 }
+*/
