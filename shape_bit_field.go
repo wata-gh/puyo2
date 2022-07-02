@@ -77,6 +77,7 @@ func (sbf *ShapeBitField) Simulate() *ShapeRensaResult {
 			chainShapes = append(chainShapes, sbf.originalShapes[n])
 		}
 		sbf.ChainOrderedShapes = append(sbf.ChainOrderedShapes, chainShapes)
+		result.AddChain()
 	}
 	result.SetShapeBitField(sbf)
 	return result
