@@ -31,7 +31,7 @@ func letter2Color(puyo string) puyo2.Color {
 	case "b":
 		return puyo2.Blue
 	}
-	panic("letter must be one of r,g,y,b")
+	panic("letter must be one of r,g,y,b,p")
 }
 
 func parseSimpleHands(handsStr string) []puyo2.Hand {
