@@ -3,6 +3,7 @@ package puyo2
 import (
 	"fmt"
 	"math/bits"
+	"strings"
 )
 
 type ShapeBitField struct {
@@ -84,23 +85,24 @@ func (sbf *ShapeBitField) Simulate() *ShapeRensaResult {
 }
 
 func (sbf *ShapeBitField) ShowDebug() {
-	var s string
+	var b strings.Builder
+	b.Grow(165)
 	for y := 14; y >= 0; y-- {
-		s += fmt.Sprintf("%02d: ", y)
+		fmt.Fprintf(&b, "%02d: ", y)
 		for x := 0; x < 6; x++ {
 			e := true
 			for i, shape := range sbf.Shapes {
 				if shape.Onebit(x, y) > 0 {
-					s += fmt.Sprint(i)
+					fmt.Fprint(&b, i)
 					e = false
 					break
 				}
 			}
 			if e {
-				s += "."
+				fmt.Fprint(&b, ".")
 			}
 		}
-		s += fmt.Sprintln()
+		fmt.Fprintln(&b)
 	}
-	fmt.Println(s)
+	fmt.Print(b.String())
 }
