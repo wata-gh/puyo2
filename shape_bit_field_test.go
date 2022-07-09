@@ -20,7 +20,7 @@ func TestShapeBitField(t *testing.T) {
 	shape.SetOnebit(3, 1)
 	sbf.AddShape(shape)
 
-	//sbf.ShowDebug()
+	// sbf.ShowDebug()
 
 	// sbf.Simulate1()
 	result := sbf.Simulate()
