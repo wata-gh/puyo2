@@ -3,6 +3,7 @@ package puyo2
 import (
 	"fmt"
 	"math/bits"
+	"strings"
 )
 
 type ShapeBitField struct {
@@ -16,9 +17,54 @@ func NewShapeBitField() *ShapeBitField {
 	return shapeBitField
 }
 
+func NewShapeBitFieldWithFieldString(param string) *ShapeBitField {
+	shapeBitField := new(ShapeBitField)
+
+	max := 0
+	for _, c := range param {
+		if c == 'a' {
+			continue
+		}
+		n := int(c) - int('0')
+		if n > max {
+			max = n
+		}
+	}
+	shapes := make([]*FieldBits, max)
+	for i := 0; i < max; i++ {
+		shapes[i] = NewFieldBits()
+		shapeBitField.AddShape(shapes[i])
+	}
+	for i, c := range param {
+		if c == 'a' {
+			continue
+		}
+		n := int(c) - int('0')
+		x := i % 6
+		y := 14 - i/6
+
+		shapes[n-1].SetOnebit(x, y)
+	}
+
+	return shapeBitField
+}
+
 func (sbf *ShapeBitField) AddShape(shape *FieldBits) {
 	sbf.Shapes = append(sbf.Shapes, shape)
 	sbf.originalShapes = append(sbf.originalShapes, shape.Clone())
+}
+
+func (bf *ShapeBitField) Clone() *ShapeBitField {
+	shapeBitField := new(ShapeBitField)
+	shapeBitField.Shapes = make([]*FieldBits, len(bf.Shapes))
+	for i, shape := range bf.Shapes {
+		shapeBitField.Shapes[i] = shape.Clone()
+	}
+	shapeBitField.originalShapes = make([]*FieldBits, len(bf.originalShapes))
+	for i, originalShape := range bf.originalShapes {
+		shapeBitField.originalShapes[i] = originalShape.Clone()
+	}
+	return shapeBitField
 }
 
 func (sbf *ShapeBitField) Drop(fb *FieldBits) {
@@ -81,6 +127,46 @@ func (sbf *ShapeBitField) Simulate() *ShapeRensaResult {
 	}
 	result.SetShapeBitField(sbf)
 	return result
+}
+
+func (sbf *ShapeBitField) FieldString() string {
+	var b strings.Builder
+	for y := 14; y > 0; y-- {
+		for x := 0; x < 6; x++ {
+			e := true
+			for i, shape := range sbf.Shapes {
+				if shape.Onebit(x, y) > 0 {
+					fmt.Fprint(&b, i+1)
+					e = false
+					break
+				}
+			}
+			if e {
+				fmt.Fprint(&b, "a")
+			}
+		}
+	}
+	return b.String()
+}
+
+func (sbf *ShapeBitField) ChainOrderedFieldString() string {
+	var b strings.Builder
+	for y := 14; y > 0; y-- {
+		for x := 0; x < 6; x++ {
+			e := true
+			for i, shape := range sbf.ChainOrderedShapes {
+				if shape[0].Onebit(x, y) > 0 {
+					fmt.Fprint(&b, i+1)
+					e = false
+					break
+				}
+			}
+			if e {
+				fmt.Fprint(&b, "a")
+			}
+		}
+	}
+	return b.String()
 }
 
 func (sbf *ShapeBitField) ShowDebug() {

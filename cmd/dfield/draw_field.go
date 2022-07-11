@@ -12,12 +12,13 @@ import (
 )
 
 type options struct {
-	Trans    string
-	Out      string
-	Dir      string
-	Hands    string
-	NoBG     bool
-	Simulate bool
+	Trans     string
+	Out       string
+	Dir       string
+	Hands     string
+	NoBG      bool
+	Simulate  bool
+	ShapeOnly bool
 }
 
 func letter2Color(puyo string) puyo2.Color {
@@ -76,12 +77,15 @@ func exp(param string, trans string, out string, nobg bool) {
 	fmt.Println(bf.MattulwanEditorUrl())
 }
 
+func expShape(param string, out string) {
+	sbf := puyo2.NewShapeBitFieldWithFieldString(param)
+	sbf.ShowDebug()
+	sbf.ExportImage(out)
+}
+
 func run(param *string, opt *options) {
 	if opt.Dir != "" {
-		err := os.Mkdir(opt.Dir, 0755)
-		if err != nil {
-			panic(err)
-		}
+		os.Mkdir(opt.Dir, 0755)
 	}
 	if opt.Simulate {
 		expSimulate(*param, opt.Dir)
@@ -95,7 +99,11 @@ func run(param *string, opt *options) {
 		if opt.Dir != "" {
 			path = opt.Dir + "/" + path
 		}
-		exp(*param, opt.Trans, path, opt.NoBG)
+		if opt.ShapeOnly {
+			expShape(*param, path)
+		} else {
+			exp(*param, opt.Trans, path, opt.NoBG)
+		}
 	}
 }
 
@@ -108,6 +116,7 @@ func main() {
 	flag.StringVar(&opt.Hands, "hands", "", "hands")
 	flag.BoolVar(&opt.NoBG, "nobg", false, "don't draw background")
 	flag.BoolVar(&opt.Simulate, "simulate", false, "simulate")
+	flag.BoolVar(&opt.ShapeOnly, "shape-only", false, "use shape only")
 	flag.Parse()
 
 	if *param != "a78" {
