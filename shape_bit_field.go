@@ -33,7 +33,6 @@ func NewShapeBitFieldWithFieldString(param string) *ShapeBitField {
 	shapes := make([]*FieldBits, max)
 	for i := 0; i < max; i++ {
 		shapes[i] = NewFieldBits()
-		shapeBitField.AddShape(shapes[i])
 	}
 	for i, c := range param {
 		if c == 'a' {
@@ -44,6 +43,10 @@ func NewShapeBitFieldWithFieldString(param string) *ShapeBitField {
 		y := 14 - i/6
 
 		shapes[n-1].SetOnebit(x, y)
+	}
+
+	for _, shape := range shapes {
+		shapeBitField.AddShape(shape)
 	}
 
 	return shapeBitField
@@ -93,8 +96,42 @@ func (sbf *ShapeBitField) FindVanishingFieldBitsNum() []int {
 	return vfbn
 }
 
+func (sbf *ShapeBitField) IsEmpty() bool {
+	for _, shape := range sbf.Shapes {
+		if shape.IsEmpty() == false {
+			return false
+		}
+	}
+	return true
+}
+
+func (sbf *ShapeBitField) OriginalOverallShape() *FieldBits {
+	fb := NewFieldBits()
+	for _, shape := range sbf.originalShapes {
+		fb = fb.Or(shape)
+	}
+	return fb
+}
+
+func (sbf *ShapeBitField) OverallShape() *FieldBits {
+	fb := NewFieldBits()
+	for _, shape := range sbf.Shapes {
+		fb = fb.Or(shape)
+	}
+	return fb
+}
+
 func (sbf *ShapeBitField) ShapeCount() int {
 	return len(sbf.Shapes)
+}
+
+func (sbf *ShapeBitField) ShapeNum(x int, y int) int {
+	for i, shape := range sbf.Shapes {
+		if shape.Onebit(x, y) > 0 {
+			return i
+		}
+	}
+	return -1
 }
 
 func (sbf *ShapeBitField) Simulate1() []int {
@@ -108,6 +145,12 @@ func (sbf *ShapeBitField) Simulate1() []int {
 		return []int{}
 	}
 	sbf.Drop(v)
+
+	chainShapes := []*FieldBits{}
+	for _, n := range vfbn {
+		chainShapes = append(chainShapes, sbf.originalShapes[n])
+	}
+	sbf.ChainOrderedShapes = append(sbf.ChainOrderedShapes, chainShapes)
 	return vfbn
 }
 
@@ -118,11 +161,6 @@ func (sbf *ShapeBitField) Simulate() *ShapeRensaResult {
 		if len(vfbn) == 0 {
 			break
 		}
-		chainShapes := []*FieldBits{}
-		for _, n := range vfbn {
-			chainShapes = append(chainShapes, sbf.originalShapes[n])
-		}
-		sbf.ChainOrderedShapes = append(sbf.ChainOrderedShapes, chainShapes)
 		result.AddChain()
 	}
 	result.SetShapeBitField(sbf)
