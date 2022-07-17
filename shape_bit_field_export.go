@@ -129,3 +129,28 @@ func (sbf *ShapeBitField) ExportChainImage(name string) {
 	defer outfile.Close()
 	png.Encode(outfile, out)
 }
+
+func (sbf *ShapeBitField) ExportShapeImage(n int, name string) {
+	ffield, _ := os.Open("images/puyos.png")
+	fpuyo, _ := os.Open("images/puyos_gray.png")
+	defer ffield.Close()
+	defer fpuyo.Close()
+
+	field, _, _ := image.Decode(ffield)
+	puyo, _, _ := image.Decode(fpuyo)
+	out := image.NewNRGBA(image.Rectangle{image.Pt(0, 0), image.Pt(32*8, 32*14)})
+	sbf.drawField(&field, out)
+
+	shape := sbf.Shapes[n]
+	for y := 13; y > 0; y-- {
+		for x := 0; x < 6; x++ {
+			if shape.Onebit(x, y) > 0 {
+				sbf.drawPuyo(shape, n, x, y, &puyo, out)
+			}
+		}
+	}
+
+	outfile, _ := os.Create(name)
+	defer outfile.Close()
+	png.Encode(outfile, out)
+}
