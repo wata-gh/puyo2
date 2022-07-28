@@ -4,6 +4,29 @@ import (
 	"testing"
 )
 
+func TestAnd(t *testing.T) {
+	fb := NewFieldBits()
+	fb.SetOnebit(0, 4)
+	fb.SetOnebit(0, 3)
+	fb.SetOnebit(0, 2)
+	fb.SetOnebit(1, 2)
+
+	fb2 := NewFieldBits()
+	fb2.SetOnebit(0, 4)
+	fb2.SetOnebit(0, 2)
+	fb2.SetOnebit(2, 2)
+
+	result := fb.And(fb2)
+
+	expect := NewFieldBits()
+	expect.SetOnebit(0, 4)
+	expect.SetOnebit(0, 2)
+
+	if result.Equals(expect) == false {
+		t.Fatalf("And() expected\n%s\n actual\n\n%s", result.ToString(), expect.ToString())
+	}
+}
+
 func TestAndNot(t *testing.T) {
 	fb := NewFieldBits()
 	fb.SetOnebit(0, 4)
