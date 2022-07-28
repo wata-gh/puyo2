@@ -46,6 +46,10 @@ func (fb *FieldBits) expand1(mask *FieldBits) *FieldBits {
 	return NewFieldBitsWithM([2]uint64{m0 & mask.m[0], m1 & mask.m[1]})
 }
 
+func (fb *FieldBits) And(fb2 *FieldBits) *FieldBits {
+	return NewFieldBitsWithM([2]uint64{fb.m[0] & fb2.m[0], fb.m[1] & fb2.m[1]})
+}
+
 func (fb *FieldBits) AndNot(fb2 *FieldBits) {
 	fb.m[0] &= ^fb2.m[0]
 	fb.m[1] &= ^fb2.m[1]
