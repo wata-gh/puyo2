@@ -387,7 +387,7 @@ func (bf *BitField) SimulateDetail() *RensaResult {
 				}
 
 				vb.IterateBitWithMasking(func(c *FieldBits) *FieldBits {
-					v := c.expand(vb)
+					v := c.Expand(vb)
 					longBonusCoef += LongBonus(c.PopCount())
 					return v
 				})

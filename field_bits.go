@@ -26,7 +26,7 @@ func (fb *FieldBits) bitChar(b int) string {
 	return "o"
 }
 
-func (fb *FieldBits) expand(mask *FieldBits) *FieldBits {
+func (fb *FieldBits) Expand(mask *FieldBits) *FieldBits {
 	cfb := fb
 	for {
 		nfb := cfb.expand1(mask)
