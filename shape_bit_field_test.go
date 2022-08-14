@@ -4,6 +4,143 @@ import (
 	"testing"
 )
 
+func TestInsertShape2(t *testing.T) {
+	sbf := NewShapeBitField()
+	shape := NewFieldBits()
+	shape.SetOnebit(0, 1)
+	shape.SetOnebit(0, 2)
+	shape.SetOnebit(1, 1)
+	shape.SetOnebit(2, 1)
+	sbf.AddShape(shape)
+
+	insert := NewFieldBits()
+	insert.SetOnebit(0, 1)
+	insert.SetOnebit(0, 2)
+	insert.SetOnebit(1, 1)
+	insert.SetOnebit(2, 1)
+	sbf.InsertShape(insert)
+	sbf.ShowDebug()
+
+	insert = NewFieldBits()
+	insert.SetOnebit(0, 2)
+	insert.SetOnebit(0, 3)
+	insert.SetOnebit(1, 2)
+	insert.SetOnebit(1, 3)
+	sbf.InsertShape(insert)
+	sbf.ShowDebug()
+
+	insert = NewFieldBits()
+	insert.SetOnebit(1, 3)
+	insert.SetOnebit(1, 4)
+	insert.SetOnebit(1, 5)
+	insert.SetOnebit(2, 4)
+	sbf.InsertShape(insert)
+	sbf.ShowDebug()
+}
+
+func TestInsertShape(t *testing.T) {
+	sbf := NewShapeBitField()
+	shape := NewFieldBits()
+	shape.SetOnebit(0, 1)
+	shape.SetOnebit(0, 2)
+	shape.SetOnebit(0, 3)
+	shape.SetOnebit(1, 1)
+	sbf.AddShape(shape)
+
+	insert := NewFieldBits()
+	insert.SetOnebit(0, 2)
+	insert.SetOnebit(0, 3)
+	insert.SetOnebit(1, 2)
+	insert.SetOnebit(2, 2)
+	sbf.InsertShape(insert)
+
+	if sbf.Shapes[0].m[0] != 131122 || sbf.Shapes[0].m[1] != 0 {
+		t.Fatalf("shape must be %d %d", 131122, 0)
+	}
+
+	sbf = NewShapeBitField()
+	shape = NewFieldBits()
+	shape.SetOnebit(0, 1)
+	shape.SetOnebit(0, 2)
+	shape.SetOnebit(1, 1)
+	shape.SetOnebit(2, 1)
+	sbf.AddShape(shape)
+
+	insert = NewFieldBits()
+	insert.SetOnebit(0, 1)
+	insert.SetOnebit(0, 2)
+	insert.SetOnebit(1, 1)
+	insert.SetOnebit(2, 1)
+
+	sbf.InsertShape(insert)
+	if sbf.Shapes[0].m[0] != 17180131352 || sbf.Shapes[0].m[1] != 0 {
+		t.Fatalf("shape must be %d %d", 17180131352, 0)
+	}
+
+	insert = NewFieldBits()
+	insert.SetOnebit(0, 1)
+	insert.SetOnebit(0, 2)
+	insert.SetOnebit(1, 1)
+	insert.SetOnebit(2, 1)
+
+	sbf.InsertShape(insert)
+	if sbf.Shapes[0].m[0] != 34360262752 || sbf.Shapes[0].m[1] != 0 {
+		t.Fatalf("shape must be %d %d", 34360262752, 0)
+	}
+
+	insert = NewFieldBits()
+	insert.SetOnebit(0, 1)
+	insert.SetOnebit(1, 1)
+	insert.SetOnebit(1, 2)
+	insert.SetOnebit(2, 1)
+
+	sbf.InsertShape(insert)
+	if sbf.Shapes[0].m[0] != 68721574080 || sbf.Shapes[0].m[1] != 0 {
+		t.Fatalf("shape must be %d %d", 68721574080, 0)
+	}
+
+	sbf = NewShapeBitField()
+	shape = NewFieldBits()
+	shape.SetOnebit(3, 1)
+	shape.SetOnebit(3, 2)
+	shape.SetOnebit(4, 1)
+	shape.SetOnebit(5, 1)
+	sbf.AddShape(shape)
+
+	insert = NewFieldBits()
+	insert.SetOnebit(3, 1)
+	insert.SetOnebit(3, 2)
+	insert.SetOnebit(4, 1)
+	insert.SetOnebit(5, 1)
+
+	sbf.InsertShape(insert)
+	if sbf.Shapes[0].m[0] != 6755399441055744 || sbf.Shapes[0].m[1] != 262148 {
+		t.Fatalf("shape must be %d %d", 6755399441055744, 262148)
+	}
+
+	insert = NewFieldBits()
+	insert.SetOnebit(3, 1)
+	insert.SetOnebit(3, 2)
+	insert.SetOnebit(4, 1)
+	insert.SetOnebit(5, 1)
+
+	sbf.InsertShape(insert)
+	if sbf.Shapes[0].m[0] != 27021597764222976 || sbf.Shapes[0].m[1] != 524296 {
+		t.Fatalf("shape must be %d %d", 27021597764222976, 524296)
+	}
+
+	insert = NewFieldBits()
+	insert.SetOnebit(3, 1)
+	insert.SetOnebit(4, 1)
+	insert.SetOnebit(4, 2)
+	insert.SetOnebit(5, 1)
+
+	sbf.InsertShape(insert)
+	if sbf.Shapes[0].m[0] != 54043195528445952 || sbf.Shapes[0].m[1] != 1048608 {
+		t.Fatalf("shape must be %d %d", 54043195528445952, 1048608)
+	}
+}
+
 func TestShapeBitField(t *testing.T) {
 	sbf := NewShapeBitField()
 	shape := NewFieldBits()

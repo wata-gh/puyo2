@@ -4,6 +4,19 @@ import (
 	"testing"
 )
 
+func TestFastLift(t *testing.T) {
+	fb := NewFieldBits()
+	fb.SetOnebit(0, 1)
+	fb.SetOnebit(0, 2)
+	fb.SetOnebit(1, 1)
+	fb.SetOnebit(2, 1)
+	fb.ShowDebug()
+	fb = fb.FastLift(18)
+	fb.ShowDebug()
+	fb = fb.FastLift(-16)
+	fb.ShowDebug()
+}
+
 func TestAnd(t *testing.T) {
 	fb := NewFieldBits()
 	fb.SetOnebit(0, 4)

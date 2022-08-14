@@ -84,6 +84,23 @@ func (fb *FieldBits) Equals(fb2 *FieldBits) bool {
 	return fb.m[0] == fb2.m[0] && fb.m[1] == fb2.m[1]
 }
 
+func (fb *FieldBits) FastLift(y int) *FieldBits {
+	m0 := uint64(0)
+	switch int(y / 16) {
+	case 1:
+		m0 = fb.m[0] >> 48
+	case 2:
+		m0 = fb.m[0] >> 32
+	case 3:
+		m0 = fb.m[0] >> 16
+	case 4:
+		m0 = fb.m[0]
+	case 5:
+		m0 = fb.m[0] << 16
+	}
+	return NewFieldBitsWithM([2]uint64{fb.m[0] << y, (fb.m[1] << y) | m0})
+}
+
 func (fb *FieldBits) FindVanishingBits() *FieldBits {
 	// 4 列目と 5 列目は変数をまたぐので個別に計算
 	r4 := fb.m[0] & 0xffff000000000000
