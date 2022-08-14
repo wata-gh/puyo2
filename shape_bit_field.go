@@ -40,7 +40,7 @@ func NewShapeBitFieldWithFieldString(param string) *ShapeBitField {
 		}
 		n := int(c) - int('0')
 		x := i % 6
-		y := 14 - i/6
+		y := 13 - i/6
 
 		shapes[n-1].SetOnebit(x, y)
 	}
@@ -167,9 +167,77 @@ func (sbf *ShapeBitField) Simulate() *ShapeRensaResult {
 	return result
 }
 
+func (sbf *ShapeBitField) shiftCol(insertShape *FieldBits, shiftTarget *FieldBits, colNum int) {
+	for i, shape := range sbf.Shapes {
+		and := shape.And(shiftTarget)
+
+		shiftBits := 0
+		colBits := and.ColBits(colNum)
+		if colBits == 0 {
+			continue
+		}
+
+		shiftBits = bits.OnesCount(uint(insertShape.ColBits(colNum)))
+		shiftCol := colBits << shiftBits
+		if colNum < 4 {
+			shift := NewFieldBitsWithM([2]uint64{shiftCol, 0})
+			unTarget := NewFieldBitsWithM([2]uint64{^(shiftTarget.m[0] | 1<<(colNum*16)), 0})
+			unTarget.m[0] = unTarget.ColBits(colNum)
+			unTarget = unTarget.And(shape)
+			switch colNum {
+			case 0:
+				shape.m[0] &= ^uint64(0xffff)
+			case 1:
+				shape.m[0] &= ^uint64(0xffff0000)
+			case 2:
+				shape.m[0] &= ^uint64(0xffff00000000)
+			case 3:
+				shape.m[0] &= ^uint64(0xffff000000000000)
+			}
+
+			shape = shape.Or(shift)
+			shape = shape.Or(unTarget)
+		} else {
+			shift := NewFieldBitsWithM([2]uint64{0, shiftCol})
+			unTarget := NewFieldBitsWithM([2]uint64{0, ^(shiftTarget.m[1] | 1<<((colNum-4)*16))})
+			unTarget.m[1] = unTarget.ColBits(colNum)
+			unTarget = unTarget.And(shape)
+			switch colNum {
+			case 4:
+				shape.m[1] &= ^uint64(0xffff)
+			case 5:
+				shape.m[1] &= ^uint64(0xffff0000)
+			}
+
+			shape = shape.Or(shift)
+			shape = shape.Or(unTarget)
+
+		}
+		sbf.Shapes[i] = shape
+		sbf.originalShapes[i] = shape.Clone()
+	}
+}
+
+func (sbf *ShapeBitField) InsertShape(fb *FieldBits) {
+	overall := sbf.OverallShape()
+	and := overall.And(fb)
+	for x := 0; x < 6; x++ {
+		col := and.ColBits(x)
+		if col == 0 {
+			continue
+		}
+		shiftTarget := fb.Clone()
+		for y := bits.Len64(col >> (x * 16)); y < 16; y++ {
+			shiftTarget.SetOnebit(x, y)
+		}
+		sbf.shiftCol(fb, shiftTarget, x)
+	}
+	sbf.AddShape(fb)
+}
+
 func (sbf *ShapeBitField) FieldString() string {
 	var b strings.Builder
-	for y := 14; y > 0; y-- {
+	for y := 13; y > 0; y-- {
 		for x := 0; x < 6; x++ {
 			e := true
 			for i, shape := range sbf.Shapes {
@@ -189,7 +257,7 @@ func (sbf *ShapeBitField) FieldString() string {
 
 func (sbf *ShapeBitField) ChainOrderedFieldString() string {
 	var b strings.Builder
-	for y := 14; y > 0; y-- {
+	for y := 13; y > 0; y-- {
 		for x := 0; x < 6; x++ {
 			e := true
 			for i, shape := range sbf.ChainOrderedShapes {
@@ -228,4 +296,30 @@ func (sbf *ShapeBitField) ShowDebug() {
 		fmt.Fprintln(&b)
 	}
 	fmt.Print(b.String())
+}
+
+func (sbf *ShapeBitField) ToChainShapes() []*FieldBits {
+	csbf := sbf.Clone()
+	shapes := make([]*FieldBits, 0)
+	vfbn := csbf.FindVanishingFieldBitsNum()
+	shapes = append(shapes, sbf.Shapes[vfbn[0]])
+	for {
+		csbf.Simulate1()
+		vfbn := csbf.FindVanishingFieldBitsNum()
+		if len(vfbn) != 0 {
+			shapes = append(shapes, csbf.Shapes[vfbn[0]].Clone())
+		} else {
+			break
+		}
+	}
+	return shapes
+}
+
+func (sbf *ShapeBitField) ToChainShapesUInt64Array() [][2]uint64 {
+	shapes := sbf.ToChainShapes()
+	array := make([][2]uint64, 0, len(shapes))
+	for _, v := range shapes {
+		array = append(array, v.ToIntArray())
+	}
+	return array
 }
