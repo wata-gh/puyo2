@@ -90,11 +90,32 @@ func (bf *BitField) drawPuyo(c Color, x int, y int, puyo *image.Image, out *imag
 	draw.Draw(out, image.Rectangle{image.Pt((x+1)*32, (13-y)*32), point}, *puyo, image.Pt(ix, iy), draw.Over)
 }
 
-func (bf *BitField) ExportImage(name string) {
-	fpuyo, _ := os.Open("images/puyos.png")
+func (bf *BitField) loadPuyoImage() image.Image {
+	puyo2Config := os.Getenv("PUYO2_CONFIG")
+	path := "images/puyos.png"
+	if puyo2Config != "" {
+		path = fmt.Sprintf("%s/puyos.png", puyo2Config)
+	}
+	fpuyo, _ := os.Open(path)
 	defer fpuyo.Close()
-
 	puyo, _, _ := image.Decode(fpuyo)
+	return puyo
+}
+
+func (bf *BitField) loadTranparentPuyoImage() image.Image {
+	puyo2Config := os.Getenv("PUYO2_CONFIG")
+	path := "images/puyos_transparent.png"
+	if puyo2Config != "" {
+		path = fmt.Sprintf("%s/puyos_transparent.png", puyo2Config)
+	}
+	fpuyo, _ := os.Open(path)
+	defer fpuyo.Close()
+	puyo, _, _ := image.Decode(fpuyo)
+	return puyo
+}
+
+func (bf *BitField) ExportImage(name string) {
+	puyo := bf.loadPuyoImage()
 	out := image.NewNRGBA(image.Rectangle{image.Pt(0, 0), image.Pt(32*8, 32*14)})
 	bf.drawField(&puyo, out)
 
@@ -166,10 +187,7 @@ func (obf *BitField) ExportHandsSimulateImage(hands []Hand, path string) {
 }
 
 func (bf *BitField) ExportOnlyPuyoImage(name string) {
-	fpuyo, _ := os.Open("images/puyos.png")
-	defer fpuyo.Close()
-
-	puyo, _, _ := image.Decode(fpuyo)
+	puyo := bf.loadPuyoImage()
 	out := image.NewNRGBA(image.Rectangle{image.Pt(0, 0), image.Pt(32*8, 32*14)})
 
 	for y := 13; y > 0; y-- {
@@ -193,16 +211,7 @@ func (bf *BitField) ExportOnlyPuyoImage(name string) {
 }
 
 func (bf *BitField) ExportImageWithVanish(name string, vanish *FieldBits) {
-	fpuyo, err := os.Open("images/puyos.png")
-	if err != nil {
-		panic(err)
-	}
-	defer fpuyo.Close()
-
-	puyo, _, err := image.Decode(fpuyo)
-	if err != nil {
-		panic(err)
-	}
+	puyo := bf.loadPuyoImage()
 	out := image.NewNRGBA(image.Rectangle{image.Pt(0, 0), image.Pt(32*8, 32*14)})
 	bf.drawField(&puyo, out)
 
@@ -245,13 +254,8 @@ func (bf *BitField) ExportImageWithVanish(name string, vanish *FieldBits) {
 }
 
 func (bf *BitField) ExportImageWithTransparent(name string, trans *FieldBits) {
-	fpuyo, _ := os.Open("images/puyos.png")
-	fpuyot, _ := os.Open("images/puyos_transparent.png")
-	defer fpuyo.Close()
-	defer fpuyot.Close()
-
-	puyo, _, _ := image.Decode(fpuyo)
-	puyot, _, _ := image.Decode(fpuyot)
+	puyo := bf.loadPuyoImage()
+	puyot := bf.loadTranparentPuyoImage()
 	var dpuyo image.Image
 	out := image.NewNRGBA(image.Rectangle{image.Pt(0, 0), image.Pt(32*8, 32*14)})
 	bf.drawField(&puyo, out)

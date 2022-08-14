@@ -1,6 +1,7 @@
 package puyo2
 
 import (
+	"fmt"
 	"image"
 	"image/draw"
 	"image/png"
@@ -76,14 +77,33 @@ func (sbf *ShapeBitField) drawPuyo(fb *FieldBits, n int, x int, y int, puyo *ima
 	draw.Draw(out, image.Rectangle{image.Pt((x+1)*32, (13-y)*32), point}, *puyo, image.Pt(ix, iy), draw.Over)
 }
 
-func (sbf *ShapeBitField) ExportImage(name string) {
-	ffield, _ := os.Open("images/puyos.png")
-	fpuyo, _ := os.Open("images/puyos_gray.png")
-	defer ffield.Close()
+func (bf *ShapeBitField) loadPuyoImage() image.Image {
+	puyo2Config := os.Getenv("PUYO2_CONFIG")
+	path := "images/puyos.png"
+	if puyo2Config != "" {
+		path = fmt.Sprintf("%s/puyos.png", puyo2Config)
+	}
+	fpuyo, _ := os.Open(path)
 	defer fpuyo.Close()
-
-	field, _, _ := image.Decode(ffield)
 	puyo, _, _ := image.Decode(fpuyo)
+	return puyo
+}
+
+func (bf *ShapeBitField) loadShapePuyoImage() image.Image {
+	puyo2Config := os.Getenv("PUYO2_CONFIG")
+	path := "images/puyos_shape.png"
+	if puyo2Config != "" {
+		path = fmt.Sprintf("%s/puyos_shape.png", puyo2Config)
+	}
+	fpuyo, _ := os.Open(path)
+	defer fpuyo.Close()
+	puyo, _, _ := image.Decode(fpuyo)
+	return puyo
+}
+
+func (sbf *ShapeBitField) ExportImage(name string) {
+	field := sbf.loadPuyoImage()
+	puyo := sbf.loadShapePuyoImage()
 	out := image.NewNRGBA(image.Rectangle{image.Pt(0, 0), image.Pt(32*8, 32*14)})
 	sbf.drawField(&field, out)
 
@@ -103,13 +123,8 @@ func (sbf *ShapeBitField) ExportImage(name string) {
 }
 
 func (sbf *ShapeBitField) ExportChainImage(name string) {
-	ffield, _ := os.Open("images/puyos.png")
-	fpuyo, _ := os.Open("images/puyos_gray.png")
-	defer ffield.Close()
-	defer fpuyo.Close()
-
-	field, _, _ := image.Decode(ffield)
-	puyo, _, _ := image.Decode(fpuyo)
+	field := sbf.loadPuyoImage()
+	puyo := sbf.loadShapePuyoImage()
 	out := image.NewNRGBA(image.Rectangle{image.Pt(0, 0), image.Pt(32*8, 32*14)})
 	sbf.drawField(&field, out)
 
@@ -131,13 +146,8 @@ func (sbf *ShapeBitField) ExportChainImage(name string) {
 }
 
 func (sbf *ShapeBitField) ExportShapeImage(n int, name string) {
-	ffield, _ := os.Open("images/puyos.png")
-	fpuyo, _ := os.Open("images/puyos_gray.png")
-	defer ffield.Close()
-	defer fpuyo.Close()
-
-	field, _, _ := image.Decode(ffield)
-	puyo, _, _ := image.Decode(fpuyo)
+	field := sbf.loadPuyoImage()
+	puyo := sbf.loadShapePuyoImage()
 	out := image.NewNRGBA(image.Rectangle{image.Pt(0, 0), image.Pt(32*8, 32*14)})
 	sbf.drawField(&field, out)
 

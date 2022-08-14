@@ -83,12 +83,22 @@ func expShape(param string, out string) {
 	sbf.ExportImage(out)
 }
 
+func expShapeSimulate(param string, out string) {
+	sbf := puyo2.NewShapeBitFieldWithFieldString(param)
+	sbf.ShowDebug()
+	sbf.ExportChainImage(out)
+}
+
 func run(param *string, opt *options) {
 	if opt.Dir != "" {
 		os.Mkdir(opt.Dir, 0755)
 	}
 	if opt.Simulate {
-		expSimulate(*param, opt.Dir)
+		if opt.ShapeOnly {
+			expShapeSimulate(*param, opt.Dir)
+		} else {
+			expSimulate(*param, opt.Dir)
+		}
 	} else if opt.Hands != "" {
 		expHands(*param, opt.Hands, opt.Dir)
 	} else {
