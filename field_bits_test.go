@@ -10,11 +10,24 @@ func TestFastLift(t *testing.T) {
 	fb.SetOnebit(0, 2)
 	fb.SetOnebit(1, 1)
 	fb.SetOnebit(2, 1)
-	fb.ShowDebug()
-	fb = fb.FastLift(18)
-	fb.ShowDebug()
-	fb = fb.FastLift(-16)
-	fb.ShowDebug()
+	lift1 := fb.FastLift(1)
+	expect1 := NewFieldBits()
+	expect1.SetOnebit(0, 2)
+	expect1.SetOnebit(0, 3)
+	expect1.SetOnebit(1, 2)
+	expect1.SetOnebit(2, 2)
+	if lift1.Equals(expect1) == false {
+		t.Fatalf("lift shape must be\n%s\nbut\n%s", lift1.ToString(), expect1.ToString())
+	}
+	lift2 := fb.FastLift(18)
+	expect2 := NewFieldBits()
+	expect2.SetOnebit(1, 3)
+	expect2.SetOnebit(1, 4)
+	expect2.SetOnebit(2, 3)
+	expect2.SetOnebit(3, 3)
+	if lift2.Equals(expect2) == false {
+		t.Fatalf("lift shape must be\n%s\nbut\n%s", lift2.ToString(), expect2.ToString())
+	}
 }
 
 func TestAnd(t *testing.T) {
