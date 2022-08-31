@@ -4,6 +4,26 @@ import (
 	"testing"
 )
 
+func TestFillChainableColor(t *testing.T) {
+	sbf := NewShapeBitFieldWithFieldString("aaaaaaaaaaaaaaaaaaaaaaaa23aaaa11aaaa13aaaa12aaaa52aaaa42aaaa33aaaa445aaa455aaa")
+	bf := sbf.FillChainableColor()
+	if bf.MattulwanEditorParam() != "aaaaaaaaaaaaaaaaaaaaaaaacdaaaabbaaaabdaaaabcaaaaecaaaabcaaaaddaaaabbeaaabeeaaa" {
+		t.Fatalf("mattulwan editor param must be\aaaaaaaaaaaaaaaaaaaaaaaacdaaaabbaaaabdaaaabcaaaaecaaaabcaaaaddaaaabbeaaabeeaaa but\n%s", bf.MattulwanEditorParam())
+	}
+
+	sbf = NewShapeBitFieldWithFieldString("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa5aaaaa32aaaa12aaaa11aaaa212aaa334aaa355aaa4454aa")
+	bf = sbf.FillChainableColor()
+	if bf.MattulwanEditorParam() != "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaaaadcaaaabcaaaabbaaaacbcaaaddbaaadccaaabbcbaa" {
+		t.Fatalf("mattulwan editor param must be\aaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaaaadcaaaabcaaaabbaaaacbcaaaddbaaadccaaabbcbaa but\n%s", bf.MattulwanEditorParam())
+	}
+
+	sbf = NewShapeBitFieldWithFieldString("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa2aaaa513aaaa4aaaa")
+	bf = sbf.FillChainableColor()
+	if bf != nil {
+		t.Fatalf("BitField must be nil but %v", bf)
+	}
+}
+
 func TestInsertShape2(t *testing.T) {
 	sbf := NewShapeBitField()
 	shape := NewFieldBits()
