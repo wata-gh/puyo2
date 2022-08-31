@@ -1,8 +1,10 @@
 package puyo2
 
 import (
+	"errors"
 	"fmt"
 	"math/bits"
+	"os"
 	"strings"
 )
 
@@ -83,6 +85,105 @@ func (sbf *ShapeBitField) Drop(fb *FieldBits) {
 		shape.m[0] = Deposit(r0, ^dropmask1[0])
 		shape.m[1] = Deposit(r1, ^dropmask1[1])
 	}
+}
+
+func (sbf *ShapeBitField) fillAdjacentColor(colors []Color, num int) ([]Color, error) {
+	palet := []Color{Blue, Green, Yellow}
+	for i, shape := range sbf.Shapes {
+		if i == num {
+			continue
+		}
+		ex := sbf.Shapes[num].Expand(shape)
+		if ex.IsEmpty() == false {
+			if len(palet) == 0 {
+				return nil, errors.New("can't fill adjacent color.")
+			}
+			pick := palet[0]
+			palet = palet[1:]
+			colors[i] = pick
+		}
+	}
+	return colors, nil
+}
+
+func (sbf *ShapeBitField) findPossibilities(colors []Color, num int) []Color {
+	palet := map[Color]struct{}{}
+	order := []Color{Red, Blue, Yellow, Green}
+	for _, c := range order {
+		palet[c] = struct{}{}
+	}
+	for i, shape := range sbf.Shapes {
+		if i == num {
+			continue
+		}
+		ex := sbf.Shapes[num].Expand(shape)
+		if ex.IsEmpty() == false {
+			delete(palet, colors[i])
+		}
+	}
+	possibilities := []Color{}
+	for _, c := range order {
+		if _, ok := palet[c]; ok {
+			possibilities = append(possibilities, c)
+		}
+	}
+	return possibilities
+}
+
+func (sbf *ShapeBitField) findColor(targets []Color, idx int) *BitField {
+	if idx == sbf.ShapeCount() {
+		sbfArray := sbf.ToChainShapesUInt64Array()
+
+		bf := NewBitField()
+		for i, shape := range sbf.Shapes {
+			for x := 0; x < 6; x++ {
+				for y := 0; y < 14; y++ {
+					if shape.Onebit(x, y) > 0 {
+						bf.SetColor(targets[i], x, y)
+					}
+				}
+			}
+		}
+		cbf := bf.Clone()
+		result := cbf.Simulate()
+		if result.Chains == sbf.ShapeCount() {
+			sameChain := true
+			for i, array := range bf.ToChainShapesUInt64Array() {
+				if sbfArray[i][0] != array[0] || sbfArray[i][1] != array[1] {
+					sameChain = false
+					break
+				}
+			}
+			if sameChain {
+				return bf
+			} else {
+				fmt.Fprintf(os.Stderr, "Whats!!!!!!!!! %s", bf.MattulwanEditorParam())
+				return nil
+			}
+		}
+		return nil
+	}
+
+	colors := sbf.findPossibilities(targets, idx)
+	for _, c := range colors {
+		targets[idx] = c
+		bf := sbf.findColor(targets, idx+1)
+		if bf != nil {
+			return bf
+		}
+	}
+	return nil
+}
+
+func (sbf *ShapeBitField) FillChainableColor() *BitField {
+	colors := make([]Color, sbf.ShapeCount())
+	colors[0] = Red
+	_, err := sbf.fillAdjacentColor(colors, 0)
+	if err != nil {
+		return nil
+	}
+	targets := make([]Color, sbf.ShapeCount())
+	return sbf.findColor(targets, 0)
 }
 
 func (sbf *ShapeBitField) FindVanishingFieldBitsNum() []int {
@@ -302,6 +403,9 @@ func (sbf *ShapeBitField) ToChainShapes() []*FieldBits {
 	csbf := sbf.Clone()
 	shapes := make([]*FieldBits, 0)
 	vfbn := csbf.FindVanishingFieldBitsNum()
+	if len(vfbn) == 0 {
+		return shapes
+	}
 	shapes = append(shapes, sbf.Shapes[vfbn[0]])
 	for {
 		csbf.Simulate1()
