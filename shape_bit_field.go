@@ -1,7 +1,6 @@
 package puyo2
 
 import (
-	"errors"
 	"fmt"
 	"math/bits"
 	"os"
@@ -87,26 +86,10 @@ func (sbf *ShapeBitField) Drop(fb *FieldBits) {
 	}
 }
 
-func (sbf *ShapeBitField) fillAdjacentColor(colors []Color, num int) ([]Color, error) {
-	palet := []Color{Blue, Green, Yellow}
-	for i, shape := range sbf.Shapes {
-		if i == num {
-			continue
-		}
-		ex := sbf.Shapes[num].Expand(shape)
-		if ex.IsEmpty() == false {
-			if len(palet) == 0 {
-				return nil, errors.New("can't fill adjacent color.")
-			}
-			pick := palet[0]
-			palet = palet[1:]
-			colors[i] = pick
-		}
-	}
-	return colors, nil
-}
-
 func (sbf *ShapeBitField) findPossibilities(colors []Color, num int) []Color {
+	if colors[num] != Empty {
+		return []Color{colors[num]}
+	}
 	palet := map[Color]struct{}{}
 	order := []Color{Red, Blue, Yellow, Green}
 	for _, c := range order {
@@ -117,7 +100,7 @@ func (sbf *ShapeBitField) findPossibilities(colors []Color, num int) []Color {
 			continue
 		}
 		ex := sbf.Shapes[num].Expand(shape)
-		if ex.IsEmpty() == false {
+		if ex.IsEmpty() == false && ex.FindVanishingBits().IsEmpty() == false {
 			delete(palet, colors[i])
 		}
 	}
@@ -133,13 +116,17 @@ func (sbf *ShapeBitField) findPossibilities(colors []Color, num int) []Color {
 func (sbf *ShapeBitField) findColor(targets []Color, idx int) *BitField {
 	if idx == sbf.ShapeCount() {
 		sbfArray := sbf.ToChainShapesUInt64Array()
+		overall := sbf.OverallShape()
 
 		bf := NewBitField()
-		for i, shape := range sbf.Shapes {
-			for x := 0; x < 6; x++ {
-				for y := 0; y < 14; y++ {
-					if shape.Onebit(x, y) > 0 {
-						bf.SetColor(targets[i], x, y)
+		for x := 0; x < 6; x++ {
+			for y := 0; y < 14; y++ {
+				if overall.Onebit(x, y) > 0 {
+					for i, shape := range sbf.Shapes {
+						if shape.Onebit(x, y) > 0 {
+							bf.SetColor(targets[i], x, y)
+							break
+						}
 					}
 				}
 			}
@@ -166,8 +153,10 @@ func (sbf *ShapeBitField) findColor(targets []Color, idx int) *BitField {
 
 	colors := sbf.findPossibilities(targets, idx)
 	for _, c := range colors {
-		targets[idx] = c
-		bf := sbf.findColor(targets, idx+1)
+		newTargets := make([]Color, len(targets))
+		copy(newTargets, targets)
+		newTargets[idx] = c
+		bf := sbf.findColor(newTargets, idx+1)
 		if bf != nil {
 			return bf
 		}
@@ -176,13 +165,8 @@ func (sbf *ShapeBitField) findColor(targets []Color, idx int) *BitField {
 }
 
 func (sbf *ShapeBitField) FillChainableColor() *BitField {
-	colors := make([]Color, sbf.ShapeCount())
-	colors[0] = Red
-	_, err := sbf.fillAdjacentColor(colors, 0)
-	if err != nil {
-		return nil
-	}
 	targets := make([]Color, sbf.ShapeCount())
+	targets[0] = Red
 	return sbf.findColor(targets, 0)
 }
 
