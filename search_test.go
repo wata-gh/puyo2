@@ -5,6 +5,156 @@ import (
 	"testing"
 )
 
+func TestPlacePuyoWall2(t *testing.T) {
+	bf := NewBitFieldWithMattulwan("a6ba5bdba3g60")
+	bf.SetColor(Red, 0, 11)
+	bf.SetColor(Red, 0, 12)
+	bf.SetColor(Green, 0, 13)
+	bf.SetColor(Yellow, 0, 14)
+	bf.SetColor(Red, 1, 11)
+
+	bf.ShowDebug()
+	bf.Simulate()
+	bf.ShowDebug()
+}
+
+func TestPlacePuyoWall(t *testing.T) {
+	positions := [][2]int{
+		{0, 0}, {0, 1}, {0, 2},
+		{1, 0}, {1, 1}, {1, 2}, {1, 3},
+		{2, 0}, {2, 1}, {2, 2}, {2, 3},
+		{3, 0}, {3, 1}, {3, 2}, {3, 3},
+		{4, 0}, {4, 1}, {4, 2}, {4, 3},
+		{5, 0}, {5, 2}, {5, 3},
+	}
+
+	// all 11th row must be able to place puyos anywhere.
+	// 14: ......
+	// 13: ......
+	// 12: ......
+	// 11: RBYGRB
+	// 10: YGRBYG
+	bf := NewBitFieldWithMattulwan("a12bcdebcdebcdebcdebcdebcdebcdebcdebcdebcdebcdebcdebcdebcdebcdebcdebc")
+	for _, pos := range positions {
+		suc, _ := bf.Clone().placePuyo(PuyoSet{Red, Blue}, pos)
+		if suc == false {
+			t.Fatalf("11 rows 12 rows must be able to place puyos.")
+		}
+	}
+
+	// all 11th row with 12th wall must be able to place puyos.
+	// 14: ......
+	// 13: ......
+	// 12: ...B..
+	// 11: RBYGRB
+	// 10: YGRBYG
+	bf = NewBitFieldWithMattulwan("a9ca2bcdebcdebcdebcdebcdebcdebcdebcdebcdebcdebcdebcdebcdebcdebcdebcdebc")
+	suc, _ := bf.Clone().placePuyo(PuyoSet{Red, Blue}, [2]int{5, 0})
+	if suc == false {
+		t.Fatalf("11 rows with 12th wall must be able to place puyos over wall puyos.")
+	}
+	suc, _ = bf.Clone().placePuyo(PuyoSet{Red, Blue}, [2]int{4, 1})
+	if suc == false {
+		t.Fatalf("11 rows with 12th wall must be able to place puyos over wall puyos.")
+	}
+
+	// all 11th row with 13th wall must not be able to place puyos over wall.
+	// 14: ......
+	// 13: ...B..
+	// 12: ...B..
+	// 11: RBYGRB
+	// 10: YGRBYG
+	bf = NewBitFieldWithMattulwan("a3ca5ca2bcdebcdebcdebcdebcdebcdebcdebcdebcdebcdebcdebcdebcdebcdebcdebcdebc")
+	suc, _ = bf.Clone().placePuyo(PuyoSet{Red, Blue}, [2]int{5, 0})
+	if suc {
+		t.Fatalf("11 rows with 13th wall must not be able to place puyos over wall.")
+	}
+	suc, _ = bf.Clone().placePuyo(PuyoSet{Red, Blue}, [2]int{0, 0})
+	if suc == false {
+		t.Fatalf("11 rows with 13th wall that does not affect to place must be placeable.")
+	}
+
+	// all 10th row with 12th wall must not be able to place puyos over wall.
+	// 14: ......
+	// 13: ......
+	// 12: ...B..
+	// 11: ...G..
+	// 10: YGRBYG
+	bf = NewBitFieldWithMattulwan("a9ca5ea2debcdebcdebcdebcdebcdebcdebcdebcdebcdebcdebcdebcdebcdebcdebc")
+	suc, _ = bf.Clone().placePuyo(PuyoSet{Red, Blue}, [2]int{5, 0})
+	if suc {
+		t.Fatalf("10 rows with 12th wall must not be able to place puyos over wall.")
+	}
+	suc, _ = bf.Clone().placePuyo(PuyoSet{Red, Blue}, [2]int{0, 0})
+	if suc == false {
+		t.Fatalf("10 rows with 12th wall that does not affect to place must be placeable.")
+	}
+
+	// one 11th row with 12th wall must be able to place puyos over wall.
+	// 14: ......
+	// 13: ......
+	// 12: ...B..
+	// 11: R..G..
+	// 10: YGRBYG
+	bf = NewBitFieldWithMattulwan("a9ca2ba2ea2debcdebcdebcdebcdebcdebcdebcdebcdebcdebcdebcdebcdebcdebcdebc")
+	suc, _ = bf.Clone().placePuyo(PuyoSet{Red, Blue}, [2]int{5, 0})
+	if suc == false {
+		t.Fatalf("one 11 rows with 12th wall must be able to place puyos over wall.")
+	}
+	suc, _ = bf.Clone().placePuyo(PuyoSet{Red, Blue}, [2]int{0, 0})
+	if suc == false {
+		t.Fatalf("one 11 rows with 12th wall that does not affect to place must be placeable.")
+	}
+
+	// one 11th row over the wall with 12th wall must not be able to place puyos over wall.
+	// 14: ......
+	// 13: ......
+	// 12: .B....
+	// 11: RG....
+	// 10: YGRBYG
+	bf = NewBitFieldWithMattulwan("a7ea4bca4debcdebcdebcdebcdebcdebcdebcdebcdebcdebcdebcdebcdebcdebcdebc")
+	suc, _ = bf.Clone().placePuyo(PuyoSet{Red, Blue}, [2]int{5, 0})
+	if suc == false {
+		t.Fatalf("one 11th row over the wall with 12th wall must not be able to place puyos over wall.")
+	}
+	suc, _ = bf.Clone().placePuyo(PuyoSet{Red, Blue}, [2]int{0, 0})
+	if suc {
+		t.Fatalf("one 11 row over the wall with 12th wall that does not affect to place must be placeable.")
+	}
+
+	// one 11th row over the wall with 12th wall must not be able to place puyos over wall.
+	// 14: ......
+	// 13: ......
+	// 12: ...B..
+	// 11: ...G.B
+	// 10: YGRBYG
+	bf = NewBitFieldWithMattulwan("a9ca5eacdebcdebcdebcdebcdebcdebcdebcdebcdebcdebcdebcdebcdebcdebcdebc")
+	suc, _ = bf.Clone().placePuyo(PuyoSet{Red, Blue}, [2]int{0, 0})
+	if suc == false {
+		t.Fatalf("one 11th row over the wall with 12th wall must not be able to place puyos over wall.")
+	}
+	suc, _ = bf.Clone().placePuyo(PuyoSet{Red, Blue}, [2]int{5, 0})
+	if suc {
+		t.Fatalf("one 11 row over the wall with 12th wall that does not affect to place must be placeable.")
+	}
+
+	// hasama-chomu 12th wall must be able to place puyos over wall.
+	// 14: ......
+	// 13: ......
+	// 12: .G.B..
+	// 11: .B.G..
+	// 10: YGRBYG
+	bf = NewBitFieldWithMattulwan("a7eaca3caea2debcdebcdebcdebcdebcdebcdebcdebcdebcdebcdebcdebcdebcdebcdebc")
+	suc, _ = bf.Clone().placePuyo(PuyoSet{Red, Blue}, [2]int{0, 0})
+	if suc == false {
+		t.Fatalf("hasama-chomu 12th wall must be able to place puyos over wall.")
+	}
+	suc, _ = bf.Clone().placePuyo(PuyoSet{Red, Blue}, [2]int{5, 0})
+	if suc == false {
+		t.Fatalf("hasama-chomu 12th wall must be able to place puyos over wall.")
+	}
+}
+
 func TestPlacePuyo(t *testing.T) {
 	bf := NewBitField()
 	bf.placePuyo(PuyoSet{Red, Green}, [2]int{0, 0})
@@ -69,10 +219,10 @@ func TestSearchPosition(t *testing.T) {
 					fmt.Println(sr2.BeforeSimulate.MattulwanEditorUrl())
 				}
 				return true
-			})
+			}, 0)
 		}
 		return true
-	})
+	}, 0)
 	if solved == false {
 		t.Fatal("can not solve a62gacbagecb2ae2g3")
 	}
@@ -87,7 +237,7 @@ func TestSearchPosition(t *testing.T) {
 			return false
 		}
 		return true
-	})
+	}, 0)
 	if callCount != 3 {
 		t.Fatalf("call count must be 3 but %d", callCount)
 	}
@@ -108,7 +258,7 @@ func TestSearchWithPuyoSetsStop(t *testing.T) {
 		}
 		callCount++
 		return true
-	}, 0)
+	}, 0, 0)
 
 	if callCount != 3 {
 		t.Fatalf("SearchWithPuyoSets callCount must be 3 but %d", callCount)
@@ -135,7 +285,7 @@ func TestSearchWithPuyoSets(t *testing.T) {
 			fmt.Println(sr.BeforeSimulate.MattulwanEditorUrl())
 		}
 		return true
-	}, 1)
+	}, 1, 0)
 	if solved == false {
 		t.Fatal("can not solve a62gacbagecb2ae2g3")
 	}
@@ -159,7 +309,7 @@ func TestSearchWithPuyoSets(t *testing.T) {
 			fmt.Println(sr.BeforeSimulate.MattulwanEditorUrl())
 		}
 		return true
-	}, 1)
+	}, 1, 0)
 	if solved == false {
 		t.Fatal("can not solve a46ea5ea5ea5ga5ea4eba")
 	}
@@ -183,7 +333,7 @@ func TestSearchWithPuyoSets(t *testing.T) {
 			fmt.Println(sr.BeforeSimulate.MattulwanEditorUrl())
 		}
 		return true
-	}, 1)
+	}, 1, 0)
 	if solved == false {
 		t.Fatal("can not solve a52ca2gbc2a2c2g2a2cgbga2g2b2a")
 	}
@@ -203,7 +353,7 @@ func TestSearchWithPuyoSets(t *testing.T) {
 			fmt.Println(sr.BeforeSimulate.MattulwanEditorUrl())
 		}
 		return true
-	}, 1)
+	}, 1, 0)
 	if solved == false {
 		t.Fatal("can not solve a16ca5ga4cgca3g3a3g3a3g3cacg4ag5cg16")
 	}

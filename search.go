@@ -1,10 +1,17 @@
 package puyo2
 
+import (
+	"math/bits"
+)
+
+const ()
+
 type SearchResult struct {
 	RensaResult    *RensaResult
 	BeforeSimulate *BitField
 	Depth          int
 	Position       [2]int
+	PositionNum    int
 	Hands          []Hand
 }
 
@@ -18,42 +25,142 @@ type Hand struct {
 	Position [2]int
 }
 
-func (bf *BitField) placePuyo(puyoSet PuyoSet, pos [2]int) bool {
+func (bf *BitField) placePuyo(puyoSet PuyoSet, pos [2]int) (bool, bool) {
 	// TODO check invalid placement and return false.
 	ax := pos[0]
 	cx := pos[0]
-	ay := 12
-	cy := 13
+
+	empty := bf.Bits(Empty)
+
+	heights := map[int]int{}
+	for i := 0; i < 6; i++ {
+		heights[i] = 16 - bits.OnesCount64(empty.ColBits(i))
+	}
+
+	y := heights[ax] + 1
+	ay := y
+	cy := y + 1
 	switch pos[1] {
 	case 0:
 	case 1:
-		ay = 13
-		cy = 13
 		cx += 1
+		cy = heights[cx] + 1
 	case 2:
-		ay = 13
-		cy = 12
+		ay = cy
+		cy = y
 	case 3:
-		ay = 13
-		cy = 13
 		cx -= 1
+		cy = heights[cx] + 1
+	}
+
+	x := 0
+	if ax != 2 || cx != 2 {
+		if ax > 2 || cx > 2 {
+			if ax > cx {
+				x = ax
+			} else {
+				x = cx
+			}
+		} else if ax < 2 || cx < 2 {
+			if ax < cx {
+				x = ax
+			} else {
+				x = cx
+			}
+		}
+	}
+	if x != 2 {
+		// right side
+		if x > 2 {
+			for i := 3; i < x; i++ {
+				// height 13 wall
+				if heights[i] >= 13 {
+					return false, false
+				}
+				if heights[i] == 12 {
+					hasStep := heights[1] == 12 && heights[3] == 12 // hasama-chomu
+					if hasStep == false {
+						for j := i - 1; j >= 0; j-- {
+							if heights[j] >= 12 {
+								break
+							}
+							if heights[j] == 11 {
+								hasStep = true
+							}
+						}
+					}
+					if hasStep == false {
+						return false, false
+					}
+				}
+			}
+		} else { // left side
+			for i := 1; i >= x; i-- {
+				// height 13 wall
+				if heights[i] >= 13 {
+					return false, false
+				}
+				if heights[i] == 12 {
+					hasStep := heights[1] == 12 && heights[3] == 12 // hasama-chomu
+					if hasStep == false {
+						for j := i + 1; j < len(heights); j++ {
+							if heights[j] >= 12 {
+								break
+							}
+							if heights[j] == 11 {
+								hasStep = true
+								break
+							}
+						}
+					}
+					if hasStep == false {
+						return false, false
+					}
+				}
+			}
+		}
+	}
+
+	if ay > 13 {
+		return false, false
+	}
+	// can't place puyo if 14th is used.
+	if cy == 14 {
+		if bf.Color(cx, cy) != Empty {
+			return false, false
+		}
 	}
 	bf.SetColor(puyoSet.Axis, ax, ay)
 	bf.SetColor(puyoSet.Child, cx, cy)
-	return true
+	return true, ax != cx && ay != cy
 }
 
-func (obf *BitField) SearchWithPuyoSets(puyoSets []PuyoSet, hands []Hand, callback func(sr *SearchResult) bool, depth int) bool {
+func samePuyoSet(puyoSet1 PuyoSet, puyoSet2 PuyoSet) bool {
+	if puyoSet1.Axis == puyoSet2.Axis && puyoSet1.Child == puyoSet2.Child {
+		return true
+	}
+	if puyoSet1.Axis == puyoSet2.Child && puyoSet1.Child == puyoSet2.Axis {
+		return true
+	}
+	return false
+}
+
+func (obf *BitField) SearchWithPuyoSets(puyoSets []PuyoSet, hands []Hand, callback func(sr *SearchResult) bool, depth int, posOffset int) bool {
 	if len(puyoSets) == 0 {
 		return true
 	}
 	return obf.SearchPosition(puyoSets[0], hands, func(sr *SearchResult) bool {
 		sr.Depth = depth
-		if callback(sr) {
-			return sr.RensaResult.BitField.SearchWithPuyoSets(puyoSets[1:], sr.Hands, callback, depth+1)
+		if sr.RensaResult.Chains != 0 {
+			callback(sr)
+			return true
 		}
-		return false
-	})
+		posOffset := 0
+		if len(puyoSets) > 1 && samePuyoSet(puyoSets[0], puyoSets[1]) {
+			posOffset = sr.PositionNum
+		}
+		return sr.RensaResult.BitField.SearchWithPuyoSets(puyoSets[1:], sr.Hands, callback, depth+1, posOffset)
+	}, posOffset)
 }
 
 func (obf *BitField) SearchAllWithHandDepth(maxDepth int, callback func(sr *SearchResult) bool) {
@@ -75,7 +182,7 @@ func (obf *BitField) SearchAllWithHandDepth(maxDepth int, callback func(sr *Sear
 			obf.SearchPosition(puyoSet, hands, func(sr *SearchResult) bool {
 				sr.Depth = depth
 				return callback(sr)
-			})
+			}, 0)
 		}
 	}
 }
@@ -95,11 +202,31 @@ func (obf *BitField) SearchAll1(callback func(sr *SearchResult) bool) {
 	}
 	hands := []Hand{}
 	for _, puyoSet := range puyoSets {
-		obf.SearchPosition(puyoSet, hands, callback)
+		obf.SearchPosition(puyoSet, hands, callback, 0)
 	}
 }
 
-func (obf *BitField) SearchPosition(puyoSet PuyoSet, hands []Hand, callback func(sr *SearchResult) bool) bool {
+func overlap(pos1 [2]int, pos2 [2]int) bool {
+	if pos1[0] == pos2[0] {
+		return true
+	}
+	if (pos1[1] == 1) && ((pos2[0] == (pos1[0] + 1)) || (pos2[1] == 3 && pos2[0] == (pos1[0]+2))) {
+		return true
+	}
+	if (pos1[1] == 3) && ((pos2[0] == (pos1[0] - 1)) || (pos2[1] == 1 && pos2[0] == (pos1[0]-2))) {
+		return true
+	}
+
+	if (pos2[1] == 1) && ((pos1[0] == (pos2[0] + 1)) || (pos1[1] == 3 && pos1[0] == (pos2[0]+2))) {
+		return true
+	}
+	if (pos2[1] == 3) && ((pos1[0] == (pos2[0] - 1)) || (pos1[1] == 1 && pos1[0] == (pos2[0]-2))) {
+		return true
+	}
+	return false
+}
+
+func (obf *BitField) SearchPosition(puyoSet PuyoSet, hands []Hand, callback func(sr *SearchResult) bool, posOffset int) bool {
 	// axis=x child=y
 	// 0:  1:    2:  3:
 	// y   x y   x   y x
@@ -112,10 +239,30 @@ func (obf *BitField) SearchPosition(puyoSet PuyoSet, hands []Hand, callback func
 		{4, 0}, {4, 1}, {4, 2}, {4, 3},
 		{5, 0}, {5, 2}, {5, 3},
 	}
+	if puyoSet.Axis == puyoSet.Child {
+		positions = [][2]int{
+			{0, 0}, {0, 1},
+			{1, 0}, {1, 1},
+			{2, 0}, {2, 1},
+			{3, 0}, {3, 1},
+			{4, 0}, {4, 1},
+			{5, 0},
+		}
+	}
 
-	for _, pos := range positions {
+	// if there is a puyo at the x, you can't place puyos.
+	if obf.Color(2, 12) != Empty {
+		return true
+	}
+
+	for i, pos := range positions {
+		if overlap(pos, positions[posOffset]) == false && i < posOffset {
+			continue
+		}
 		bf := obf.Clone()
-		if bf.placePuyo(puyoSet, pos) == false {
+		placed, chigiri := bf.placePuyo(puyoSet, pos)
+		if placed == false || chigiri {
+			// fmt.Fprintf(os.Stderr, "placed: %v, chigiri: %v\n", placed, chigiri)
 			continue
 		}
 		newHands := make([]Hand, len(hands))
@@ -125,13 +272,12 @@ func (obf *BitField) SearchPosition(puyoSet PuyoSet, hands []Hand, callback func
 		hand.PuyoSet = puyoSet
 		newHands = append(newHands, *hand)
 
-		v := bf.Bits(Empty).MaskField12()
-		bf.Drop(v)
 		// result := bf.SimulateWithNewBitField()
 		result := bf.Clone().SimulateDetail() // for erased puyo count
 		searchResult := new(SearchResult)
 		searchResult.BeforeSimulate = bf
 		searchResult.Position = pos
+		searchResult.PositionNum = i
 		searchResult.RensaResult = result
 		searchResult.Hands = newHands
 		if callback(searchResult) == false {
