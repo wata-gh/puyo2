@@ -31,6 +31,8 @@ func letter2Color(puyo string) puyo2.Color {
 		return puyo2.Yellow
 	case "b":
 		return puyo2.Blue
+	case "p":
+		return puyo2.Purple
 	}
 	panic("letter must be one of r,g,y,b,p")
 }
@@ -55,18 +57,18 @@ func parseSimpleHands(handsStr string) []puyo2.Hand {
 }
 
 func expHands(param string, handsStr string, path string) {
-	bf := puyo2.NewBitFieldWithMattulwan(param)
+	bf := puyo2.NewBitFieldWithMattulwanC(param)
 	hands := parseSimpleHands(handsStr)
 	bf.ExportHandsSimulateImage(hands, path)
 }
 
 func expSimulate(param string, path string) {
-	bf := puyo2.NewBitFieldWithMattulwan(param)
+	bf := puyo2.NewBitFieldWithMattulwanC(param)
 	bf.ExportSimulateImage(path)
 }
 
 func exp(param string, trans string, out string, nobg bool) {
-	bf := puyo2.NewBitFieldWithMattulwan(param)
+	bf := puyo2.NewBitFieldWithMattulwanC(param)
 	bf.ShowDebug()
 	tbf := puyo2.NewBitFieldWithMattulwan(trans).Bits(puyo2.Red)
 	if nobg {

@@ -8,6 +8,35 @@ import (
 	"os"
 )
 
+func (bf *BitField) drawHand(hand *Hand, puyo *image.Image, out *image.NRGBA) {
+	ix := bf.puyoImagePosX(hand.PuyoSet.Axis)
+	rect := image.Rectangle{
+		Min: image.Pt((hand.Position[0]+1)*32, 32),
+		Max: image.Pt((hand.Position[0]+2)*32, 64),
+	}
+	draw.Draw(out, rect, *puyo, image.Pt(ix, 0), draw.Over)
+
+	xoffset := 0
+	yoffset := -32
+	switch hand.Position[1] {
+	case 0:
+	case 1:
+		yoffset = 0
+		xoffset = 32
+	case 2:
+		yoffset = 32
+	case 3:
+		yoffset = 0
+		xoffset = -32
+	}
+	rect.Min.X += xoffset
+	rect.Min.Y += yoffset
+	rect.Max.X = rect.Min.X + 32
+	rect.Max.Y = rect.Min.Y + 32
+	ix = bf.puyoImagePosX(hand.PuyoSet.Child)
+	draw.Draw(out, rect, *puyo, image.Pt(ix, 0), draw.Over)
+}
+
 func (bf *BitField) drawField(puyo *image.Image, out *image.NRGBA) {
 	for y := 13; y >= 0; y-- {
 		draw.Draw(out, image.Rectangle{image.Pt(0, (13-y)*32), image.Pt(32, (14-y)*32)}, *puyo, image.Pt(5*32, 0), draw.Src)
@@ -20,6 +49,84 @@ func (bf *BitField) drawField(puyo *image.Image, out *image.NRGBA) {
 				draw.Draw(out, image.Rectangle{image.Pt(x*32, (13-y)*32), image.Pt((x+1)*32, (14-y)*32)}, *puyo, image.Pt(5*32, 32), draw.Src)
 			}
 		}
+	}
+}
+
+func (bf *BitField) drawFieldAndPuyo(puyo *image.Image) *image.NRGBA {
+	out := image.NewNRGBA(image.Rectangle{image.Pt(0, 0), image.Pt(32*8, 32*14)})
+	bf.drawField(puyo, out)
+
+	for y := 13; y > 0; y-- {
+		for x := 0; x < 6; x++ {
+			c := bf.Color(x, y)
+			if c == Empty {
+				continue
+			}
+			if c == Ojama {
+				point := image.Pt((x+2)*32, (14-y)*32)
+				draw.Draw(out, image.Rectangle{image.Pt((x+1)*32, (13-y)*32), point}, *puyo, image.Pt(5*32, 2*32), draw.Over)
+			} else {
+				bf.drawPuyo(c, x, y, puyo, out)
+			}
+		}
+	}
+
+	return out
+}
+
+func (bf *BitField) drawFieldAndPuyoWithVanish(puyo *image.Image, vanish *FieldBits) *image.NRGBA {
+	out := image.NewNRGBA(image.Rectangle{image.Pt(0, 0), image.Pt(32*8, 32*14)})
+	bf.drawField(puyo, out)
+
+	for y := 13; y > 0; y-- {
+		for x := 0; x < 6; x++ {
+			c := bf.Color(x, y)
+			if c == Empty {
+				continue
+			}
+			if vanish.Onebit(x, y) == 0 {
+				if c == Ojama {
+					point := image.Pt((x+2)*32, (14-y)*32)
+					draw.Draw(out, image.Rectangle{image.Pt((x+1)*32, (13-y)*32), point}, *puyo, image.Pt(5*32, 2*32), draw.Over)
+				} else {
+					bf.drawPuyo(c, x, y, puyo, out)
+				}
+			} else { // vanishing puyo
+				point := image.Pt((x+2)*32, (14-y)*32)
+				pos := 10
+				switch c {
+				case Red:
+					pos = 5
+				case Green:
+					pos = 6
+				case Blue:
+					pos = 7
+				case Yellow:
+					pos = 8
+				case Purple:
+					pos = 9
+				}
+				draw.Draw(out, image.Rectangle{image.Pt((x+1)*32, (13-y)*32), point}, *puyo, image.Pt(5*32, pos*32), draw.Over)
+			}
+		}
+	}
+	return out
+}
+
+func (bf *BitField) puyoImagePosX(c Color) int {
+	switch c {
+	case Red:
+		return 0
+	case Green:
+		return 32
+	case Blue:
+		return 64
+	case Yellow:
+		return 96
+	case Purple:
+		return 128
+	default:
+		return 160
 	}
 }
 
@@ -116,23 +223,23 @@ func (bf *BitField) loadTranparentPuyoImage() image.Image {
 
 func (bf *BitField) ExportImage(name string) {
 	puyo := bf.loadPuyoImage()
-	out := image.NewNRGBA(image.Rectangle{image.Pt(0, 0), image.Pt(32*8, 32*14)})
-	bf.drawField(&puyo, out)
+	outfile, _ := os.Create(name)
+	defer outfile.Close()
+	png.Encode(outfile, bf.drawFieldAndPuyo(&puyo))
+}
 
-	for y := 13; y > 0; y-- {
-		for x := 0; x < 6; x++ {
-			c := bf.Color(x, y)
-			if c == Empty {
-				continue
-			}
-			if c == Ojama {
-				point := image.Pt((x+2)*32, (14-y)*32)
-				draw.Draw(out, image.Rectangle{image.Pt((x+1)*32, (13-y)*32), point}, puyo, image.Pt(5*32, 2*32), draw.Over)
-			} else {
-				bf.drawPuyo(c, x, y, &puyo, out)
-			}
-		}
+func (bf *BitField) ExportHandImage(name string, hand *Hand) {
+	puyo := bf.loadPuyoImage()
+	out := image.NewNRGBA(image.Rectangle{image.Pt(0, 0), image.Pt(32*8, 32*17)})
+	fieldAndPuyo := bf.drawFieldAndPuyo(&puyo)
+	if hand != nil {
+		bf.drawHand(hand, &puyo, out)
 	}
+
+	rect := fieldAndPuyo.Rect
+	rect.Min.Y += 32 * 3
+	rect.Max.Y += 32 * 3
+	draw.Draw(out, rect, fieldAndPuyo, image.Pt(0, 0), draw.Over)
 
 	outfile, _ := os.Create(name)
 	defer outfile.Close()
@@ -160,28 +267,32 @@ func (obf *BitField) ExportHandsSimulateImage(hands []Hand, path string) {
 	os.Mkdir(path, 0755)
 	bf := obf.Clone()
 	idx := 1
-	bf.ExportImage(fmt.Sprintf("%s/%d.png", path, idx))
+	bf.ExportHandImage(fmt.Sprintf("%s/%d.png", path, idx), nil)
+	beforeDrop := bf.MattulwanEditorParam()
+	bf.Drop(bf.Bits(Empty).MaskField12())
+	if beforeDrop != bf.MattulwanEditorParam() {
+		idx++
+		bf.ExportHandImage(fmt.Sprintf("%s/%d.png", path, idx), nil)
+	}
 	for _, hand := range hands {
-		if bf.placePuyo(hand.PuyoSet, hand.Position) == false {
+		idx++
+		bf.ExportHandImage(fmt.Sprintf("%s/%d.png", path, idx), &hand)
+		placed, _ := bf.placePuyo(hand.PuyoSet, hand.Position)
+		if placed == false {
 			bf.ShowDebug()
 			fmt.Printf("hand %v\n", hand)
 			panic("can not place puyo.")
 		}
-		idx++
-		bf.ExportImage(fmt.Sprintf("%s/%d.png", path, idx))
-		bf.Drop(bf.Bits(Empty).MaskField12())
-		idx++
-		bf.ExportImage(fmt.Sprintf("%s/%d.png", path, idx))
 		for {
 			v := bf.FindVanishingBits()
 			if v.IsEmpty() {
 				break
 			}
 			idx++
-			bf.ExportImageWithVanish(fmt.Sprintf("%s/%d.png", path, idx), v)
+			bf.ExportHandImageWithVanish(fmt.Sprintf("%s/%d.png", path, idx), v, nil)
 			bf.Drop(v)
 			idx++
-			bf.ExportImage(fmt.Sprintf("%s/%d.png", path, idx))
+			bf.ExportHandImage(fmt.Sprintf("%s/%d.png", path, idx), nil)
 		}
 	}
 }
@@ -212,41 +323,25 @@ func (bf *BitField) ExportOnlyPuyoImage(name string) {
 
 func (bf *BitField) ExportImageWithVanish(name string, vanish *FieldBits) {
 	puyo := bf.loadPuyoImage()
-	out := image.NewNRGBA(image.Rectangle{image.Pt(0, 0), image.Pt(32*8, 32*14)})
-	bf.drawField(&puyo, out)
+	out := bf.drawFieldAndPuyoWithVanish(&puyo, vanish)
 
-	for y := 13; y > 0; y-- {
-		for x := 0; x < 6; x++ {
-			c := bf.Color(x, y)
-			if c == Empty {
-				continue
-			}
-			if vanish.Onebit(x, y) == 0 {
-				if c == Ojama {
-					point := image.Pt((x+2)*32, (14-y)*32)
-					draw.Draw(out, image.Rectangle{image.Pt((x+1)*32, (13-y)*32), point}, puyo, image.Pt(5*32, 2*32), draw.Over)
-				} else {
-					bf.drawPuyo(c, x, y, &puyo, out)
-				}
-			} else { // vanishing puyo
-				point := image.Pt((x+2)*32, (14-y)*32)
-				pos := 10
-				switch c {
-				case Red:
-					pos = 5
-				case Green:
-					pos = 6
-				case Blue:
-					pos = 7
-				case Yellow:
-					pos = 8
-				case Purple:
-					pos = 9
-				}
-				draw.Draw(out, image.Rectangle{image.Pt((x+1)*32, (13-y)*32), point}, puyo, image.Pt(5*32, pos*32), draw.Over)
-			}
-		}
+	outfile, _ := os.Create(name)
+	defer outfile.Close()
+	png.Encode(outfile, out)
+}
+
+func (bf *BitField) ExportHandImageWithVanish(name string, vanish *FieldBits, hand *Hand) {
+	puyo := bf.loadPuyoImage()
+	fieldAndPuyo := bf.drawFieldAndPuyoWithVanish(&puyo, vanish)
+	out := image.NewNRGBA(image.Rectangle{image.Pt(0, 0), image.Pt(32*8, 32*17)})
+	if hand != nil {
+		bf.drawHand(hand, &puyo, out)
 	}
+
+	rect := fieldAndPuyo.Rect
+	rect.Min.Y += 32 * 3
+	rect.Max.Y += 32 * 3
+	draw.Draw(out, rect, fieldAndPuyo, image.Pt(0, 0), draw.Over)
 
 	outfile, _ := os.Create(name)
 	defer outfile.Close()
@@ -266,15 +361,15 @@ func (bf *BitField) ExportImageWithTransparent(name string, trans *FieldBits) {
 			if c == Empty {
 				continue
 			}
+			if trans.Onebit(x, y) == 0 {
+				dpuyo = puyo
+			} else {
+				dpuyo = puyot
+			}
 			if c == Ojama {
 				point := image.Pt((x+2)*32, (14-y)*32)
-				draw.Draw(out, image.Rectangle{image.Pt((x+1)*32, (13-y)*32), point}, puyo, image.Pt(5*32, 2*32), draw.Over)
+				draw.Draw(out, image.Rectangle{image.Pt((x+1)*32, (13-y)*32), point}, dpuyo, image.Pt(5*32, 2*32), draw.Over)
 			} else {
-				if trans.Onebit(x, y) == 0 {
-					dpuyo = puyo
-				} else {
-					dpuyo = puyot
-				}
 				bf.drawPuyo(c, x, y, &dpuyo, out)
 			}
 		}

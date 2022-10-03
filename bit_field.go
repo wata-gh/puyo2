@@ -63,6 +63,7 @@ func NewBitFieldWithMattulwanC(field string) *BitField {
 		Green:  Empty,
 		Yellow: Empty,
 		Purple: Empty,
+		Ojama:  Ojama,
 	}
 	colorCnt := 0
 	for _, c := range expandField {
@@ -446,6 +447,15 @@ func (bf *BitField) ToChainShapesUInt64Array() [][2]uint64 {
 		array = append(array, v.ToIntArray())
 	}
 	return array
+}
+
+func (bf *BitField) ToShapeBitField() *ShapeBitField {
+	sbf := NewShapeBitField()
+	for _, ary := range bf.ToChainShapesUInt64Array() {
+		shape := NewFieldBitsWithM(ary)
+		sbf.AddShape(shape)
+	}
+	return sbf
 }
 
 func (bf *BitField) ToString() string {

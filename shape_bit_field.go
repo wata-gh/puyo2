@@ -341,12 +341,21 @@ func (sbf *ShapeBitField) FieldString() string {
 }
 
 func (sbf *ShapeBitField) ChainOrderedFieldString() string {
+	shapes := []*FieldBits{}
+	for _, shape := range sbf.ChainOrderedShapes {
+		shapes = append(shapes, shape[0])
+	}
+	for i, shape := range sbf.Shapes {
+		if shape.IsEmpty() == false {
+			shapes = append(shapes, sbf.originalShapes[i])
+		}
+	}
 	var b strings.Builder
 	for y := 13; y > 0; y-- {
 		for x := 0; x < 6; x++ {
 			e := true
-			for i, shape := range sbf.ChainOrderedShapes {
-				if shape[0].Onebit(x, y) > 0 {
+			for i, shape := range shapes {
+				if shape.Onebit(x, y) > 0 {
 					fmt.Fprint(&b, i+1)
 					e = false
 					break
