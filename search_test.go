@@ -1,7 +1,6 @@
 package puyo2
 
 import (
-	"fmt"
 	"testing"
 )
 
@@ -206,42 +205,42 @@ func TestPlacePuyo(t *testing.T) {
 	}
 }
 
-func TestSearchPosition(t *testing.T) {
-	solved := false
-	hands := []Hand{}
-	bf := NewBitFieldWithMattulwan("a62gacbagecb2ae2g3")
-	bf.SearchPosition(PuyoSet{Red, Blue}, hands, func(sr *SearchResult) bool {
-		if sr.RensaResult.Chains == 0 {
-			sr.RensaResult.BitField.SearchPosition(PuyoSet{Green, Blue}, sr.Hands, func(sr2 *SearchResult) bool {
-				if sr2.RensaResult.Chains == 3 {
-					sr2.BeforeSimulate.ShowDebug()
-					solved = true
-					fmt.Println(sr2.BeforeSimulate.MattulwanEditorUrl())
-				}
-				return true
-			}, 0)
-		}
-		return true
-	}, 0)
-	if solved == false {
-		t.Fatal("can not solve a62gacbagecb2ae2g3")
-	}
+// func TestSearchPosition(t *testing.T) {
+// 	solved := false
+// 	hands := []Hand{}
+// 	bf := NewBitFieldWithMattulwan("a62gacbagecb2ae2g3")
+// 	bf.SearchPosition(PuyoSet{Red, Blue}, hands, func(sr *SearchResult) bool {
+// 		if sr.RensaResult.Chains == 0 {
+// 			sr.RensaResult.BitField.SearchPosition(PuyoSet{Green, Blue}, sr.Hands, func(sr2 *SearchResult) bool {
+// 				if sr2.RensaResult.Chains == 3 {
+// 					sr2.BeforeSimulate.ShowDebug()
+// 					solved = true
+// 					fmt.Println(sr2.BeforeSimulate.MattulwanEditorUrl())
+// 				}
+// 				return true
+// 			}, 0)
+// 		}
+// 		return true
+// 	}, 0)
+// 	if solved == false {
+// 		t.Fatal("can not solve a62gacbagecb2ae2g3")
+// 	}
 
-	bf = NewBitField()
-	hands = []Hand{}
-	callCount := 0
-	bf.SearchPosition(PuyoSet{Red, Blue}, hands, func(sr *SearchResult) bool {
-		sr.BeforeSimulate.ShowDebug()
-		callCount++
-		if callCount == 3 {
-			return false
-		}
-		return true
-	}, 0)
-	if callCount != 3 {
-		t.Fatalf("call count must be 3 but %d", callCount)
-	}
-}
+// 	bf = NewBitField()
+// 	hands = []Hand{}
+// 	callCount := 0
+// 	bf.SearchPosition(PuyoSet{Red, Blue}, hands, func(sr *SearchResult) bool {
+// 		sr.BeforeSimulate.ShowDebug()
+// 		callCount++
+// 		if callCount == 3 {
+// 			return false
+// 		}
+// 		return true
+// 	}, 0)
+// 	if callCount != 3 {
+// 		t.Fatalf("call count must be 3 but %d", callCount)
+// 	}
+// }
 
 // func TestSearchWithPuyoSetsStop(t *testing.T) {
 // 	bf := NewBitField()
