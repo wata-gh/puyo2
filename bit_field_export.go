@@ -15,7 +15,6 @@ func (bf *BitField) drawHand(hand *Hand, puyo *image.Image, out *image.NRGBA) {
 		Max: image.Pt((hand.Position[0]+2)*32, 64),
 	}
 	draw.Draw(out, rect, *puyo, image.Pt(ix, 0), draw.Over)
-	// draw.Draw(out, image.Rectangle{image.Pt((hand.Position[0]+1)*32, 32), point}, *puyo, image.Pt(ix, 0), draw.Over)
 
 	xoffset := 0
 	yoffset := -32
