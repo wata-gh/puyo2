@@ -1,0 +1,101 @@
+package puyo2
+
+type SearchCondition struct {
+	EnableChigiri    bool
+	ChigiriableCount int
+	PuyoSets         []PuyoSet
+	BitField         *BitField
+	FoundCallback    func(sr *SearchResult)
+	EachHandCallback func(sr *SearchResult) bool
+}
+
+func NewSearchCondition() *SearchCondition {
+	cond := new(SearchCondition)
+	cond.EnableChigiri = true
+	return cond
+}
+
+func NewSearchConditionWithBFAndPuyoSets(bf *BitField, puyoSets []PuyoSet) *SearchCondition {
+	cond := new(SearchCondition)
+	cond.EnableChigiri = true
+	cond.BitField = bf
+	cond.PuyoSets = puyoSets
+	return cond
+}
+
+func (cond *SearchCondition) SearchWithPuyoSetsV2() {
+	cond.searchWithPuyoSetsV2([]Hand{}, nil)
+}
+
+func (cond *SearchCondition) searchWithPuyoSetsV2(hands []Hand, searchResult *SearchResult) {
+	if len(cond.PuyoSets) == 0 {
+		cond.FoundCallback(searchResult)
+		return
+	}
+	cond.SearchPositionV2(hands)
+}
+
+func (cond *SearchCondition) SearchPositionV2(hands []Hand) {
+	puyoSet := cond.PuyoSets[0]
+	// axis=x child=y
+	// 0:  1:    2:  3:
+	// y   x y   x   y x
+	// x         y
+	positions := [][2]int{
+		{0, 0}, {0, 1}, {0, 2},
+		{1, 0}, {1, 1}, {1, 2}, {1, 3},
+		{2, 0}, {2, 1}, {2, 2}, {2, 3},
+		{3, 0}, {3, 1}, {3, 2}, {3, 3},
+		{4, 0}, {4, 1}, {4, 2}, {4, 3},
+		{5, 0}, {5, 2}, {5, 3},
+	}
+	if puyoSet.Axis == puyoSet.Child {
+		positions = [][2]int{
+			{0, 0}, {0, 1},
+			{1, 0}, {1, 1},
+			{2, 0}, {2, 1},
+			{3, 0}, {3, 1},
+			{4, 0}, {4, 1},
+			{5, 0},
+		}
+	}
+
+	// if there is a puyo at the x, you can't place puyos.
+	if cond.BitField.Color(2, 12) != Empty {
+		return
+	}
+
+	for i, pos := range positions {
+		bf := cond.BitField.Clone()
+		placed, chigiri := bf.placePuyo(puyoSet, pos)
+		if placed == false || cond.EnableChigiri == false && chigiri {
+			continue
+		}
+		newHands := make([]Hand, len(hands))
+		copy(newHands, hands)
+		hand := new(Hand)
+		hand.Position = pos
+		hand.PuyoSet = puyoSet
+		newHands = append(newHands, *hand)
+
+		result := bf.Clone().SimulateDetail() // for erased puyo count
+		searchResult := new(SearchResult)
+		searchResult.BeforeSimulate = bf
+		searchResult.Position = pos
+		searchResult.PositionNum = i
+		searchResult.RensaResult = result
+		searchResult.Hands = newHands
+		searchResult.Depth = len(newHands)
+
+		if cond.EachHandCallback == nil || cond.EachHandCallback(searchResult) {
+			newCond := new(SearchCondition)
+			newCond.PuyoSets = cond.PuyoSets[1:]
+			newCond.EnableChigiri = cond.EnableChigiri
+			newCond.ChigiriableCount = cond.ChigiriableCount
+			newCond.BitField = result.BitField
+			newCond.FoundCallback = cond.FoundCallback
+			newCond.EachHandCallback = cond.EachHandCallback
+			newCond.searchWithPuyoSetsV2(newHands, searchResult)
+		}
+	}
+}
