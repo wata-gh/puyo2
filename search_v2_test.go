@@ -132,61 +132,61 @@ func TestSearchWithPuyoSets(t *testing.T) {
 		t.Fatal("can not solve a16ca5ga4cgca3g3a3g3a3g3cacg4ag5cg16")
 	}
 
-	solved = false
-	puyoSets = []PuyoSet{
-		{Blue, Red},
-		{Blue, Red},
-		{Yellow, Red},
-		{Blue, Red},
-		{Blue, Red},
-		{Yellow, Red},
-	}
-	cond = NewSearchConditionWithBFAndPuyoSets(NewBitFieldWithMattulwan("a60cabacabadadacacaba"), puyoSets)
-	cond.EachHandCallback = func(sr *SearchResult) bool {
-		if sr.Depth != len(puyoSets) {
-			if sr.RensaResult.Chains != 0 {
-				return false
-			}
-		}
-		return true
-	}
-	cond.FoundCallback = func(sr *SearchResult) {
-		if sr.RensaResult.Chains == 5 {
-			solved = true
-			fmt.Println(sr.BeforeSimulate.MattulwanEditorUrl())
-		}
-	}
-	cond.SearchWithPuyoSetsV2()
-	if solved == false {
-		t.Fatal("can not solve a60cabacabadadacacaba")
-	}
+	// solved = false
+	// puyoSets = []PuyoSet{
+	// 	{Blue, Red},
+	// 	{Blue, Red},
+	// 	{Yellow, Red},
+	// 	{Blue, Red},
+	// 	{Blue, Red},
+	// 	{Yellow, Red},
+	// }
+	// cond = NewSearchConditionWithBFAndPuyoSets(NewBitFieldWithMattulwan("a60cabacabadadacacaba"), puyoSets)
+	// cond.EachHandCallback = func(sr *SearchResult) bool {
+	// 	if sr.Depth != len(puyoSets) {
+	// 		if sr.RensaResult.Chains != 0 {
+	// 			return false
+	// 		}
+	// 	}
+	// 	return true
+	// }
+	// cond.FoundCallback = func(sr *SearchResult) {
+	// 	if sr.RensaResult.Chains == 5 {
+	// 		solved = true
+	// 		fmt.Println(sr.BeforeSimulate.MattulwanEditorUrl())
+	// 	}
+	// }
+	// cond.SearchWithPuyoSetsV2()
+	// if solved == false {
+	// 	t.Fatal("can not solve a60cabacabadadacacaba")
+	// }
 
-	solved = false
-	puyoSets = []PuyoSet{
-		{Green, Blue},
-		{Red, Green},
-		{Red, Red},
-		{Yellow, Yellow},
-		{Green, Green},
-		{Blue, Yellow},
-	}
-	cond = NewSearchConditionWithBFAndPuyoSets(NewBitFieldWithMattulwan("a7baca3baba3daea3eada3cada3bada3eaca3daca3dada3daca3eaca3daba2"), puyoSets)
-	cond.EachHandCallback = func(sr *SearchResult) bool {
-		if sr.Depth != len(puyoSets) {
-			if sr.RensaResult.Chains != 0 {
-				return false
-			}
-		}
-		return true
-	}
-	cond.FoundCallback = func(sr *SearchResult) {
-		if sr.RensaResult.Chains == 9 {
-			solved = true
-			fmt.Println(sr.BeforeSimulate.MattulwanEditorUrl())
-		}
-	}
-	cond.SearchWithPuyoSetsV2()
-	if solved == false {
-		t.Fatal("can not solve a7baca3baba3daea3eada3cada3bada3eaca3daca3dada3daca3eaca3daba2")
-	}
+	// solved = false
+	// puyoSets = []PuyoSet{
+	// 	{Green, Blue},
+	// 	{Red, Green},
+	// 	{Red, Red},
+	// 	{Yellow, Yellow},
+	// 	{Green, Green},
+	// 	{Blue, Yellow},
+	// }
+	// cond = NewSearchConditionWithBFAndPuyoSets(NewBitFieldWithMattulwan("a7baca3baba3daea3eada3cada3bada3eaca3daca3dada3daca3eaca3daba2"), puyoSets)
+	// cond.EachHandCallback = func(sr *SearchResult) bool {
+	// 	if sr.Depth != len(puyoSets) {
+	// 		if sr.RensaResult.Chains != 0 {
+	// 			return false
+	// 		}
+	// 	}
+	// 	return true
+	// }
+	// cond.FoundCallback = func(sr *SearchResult) {
+	// 	if sr.RensaResult.Chains == 9 {
+	// 		solved = true
+	// 		fmt.Println(sr.BeforeSimulate.MattulwanEditorUrl())
+	// 	}
+	// }
+	// cond.SearchWithPuyoSetsV2()
+	// if solved == false {
+	// 	t.Fatal("can not solve a7baca3baba3daea3eada3cada3bada3eaca3daca3dada3daca3eaca3daba2")
+	// }
 }
