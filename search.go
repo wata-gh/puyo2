@@ -34,7 +34,14 @@ func (bf *BitField) placePuyo(puyoSet PuyoSet, pos [2]int) (bool, bool) {
 
 	heights := map[int]int{}
 	for i := 0; i < 6; i++ {
-		heights[i] = 16 - bits.OnesCount64(empty.ColBits(i))
+		emptyBits := empty.ColBits(i)
+		if i < 4 {
+			emptyBits >>= 16 * i
+		} else {
+			emptyBits >>= (i - 4) * 16
+		}
+		emptyBits |= 0xC000
+		heights[i] = 16 - bits.OnesCount64(emptyBits)
 	}
 
 	y := heights[ax] + 1
@@ -115,6 +122,8 @@ func (bf *BitField) placePuyo(puyoSet PuyoSet, pos [2]int) (bool, bool) {
 					}
 					if hasStep == false {
 						return false, false
+					} else {
+						break
 					}
 				}
 			}

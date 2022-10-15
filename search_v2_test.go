@@ -11,13 +11,13 @@ func TestSearchPositionV2(t *testing.T) {
 		BitField:      NewBitFieldWithMattulwan("a62gacbagecb2ae2g3"),
 		PuyoSets:      []PuyoSet{{Red, Blue}},
 		EnableChigiri: true,
-		FoundCallback: func(sr *SearchResult) {
+		LastCallback: func(sr *SearchResult) {
 			if sr.RensaResult.Chains == 0 {
 				newCond := SearchCondition{
 					BitField:      sr.BeforeSimulate,
 					PuyoSets:      []PuyoSet{{Green, Blue}},
 					EnableChigiri: true,
-					FoundCallback: func(sr2 *SearchResult) {
+					LastCallback: func(sr2 *SearchResult) {
 						if sr2.RensaResult.Chains == 3 {
 							sr2.BeforeSimulate.ShowDebug()
 							solved = true
@@ -50,7 +50,7 @@ func TestSearchWithPuyoSets(t *testing.T) {
 		}
 		return true
 	}
-	cond.FoundCallback = func(sr *SearchResult) {
+	cond.LastCallback = func(sr *SearchResult) {
 		if sr.RensaResult.Chains == 3 {
 			solved = true
 			fmt.Println(sr.BeforeSimulate.MattulwanEditorUrl())
@@ -76,7 +76,7 @@ func TestSearchWithPuyoSets(t *testing.T) {
 		}
 		return true
 	}
-	cond.FoundCallback = func(sr *SearchResult) {
+	cond.LastCallback = func(sr *SearchResult) {
 		if sr.RensaResult.Chains == 3 {
 			solved = true
 			fmt.Println(sr.BeforeSimulate.MattulwanEditorUrl())
@@ -102,7 +102,7 @@ func TestSearchWithPuyoSets(t *testing.T) {
 		}
 		return true
 	}
-	cond.FoundCallback = func(sr *SearchResult) {
+	cond.LastCallback = func(sr *SearchResult) {
 		if sr.RensaResult.Chains == 4 {
 			solved = true
 			fmt.Println(sr.BeforeSimulate.MattulwanEditorUrl())
@@ -121,7 +121,7 @@ func TestSearchWithPuyoSets(t *testing.T) {
 		{Blue, Blue},
 	}
 	cond = NewSearchConditionWithBFAndPuyoSets(NewBitFieldWithMattulwan("a16ca5ga4cgca3g3a3g3a3g3cacg4ag5cg16"), puyoSets)
-	cond.FoundCallback = func(sr *SearchResult) {
+	cond.LastCallback = func(sr *SearchResult) {
 		if sr.RensaResult.BitField.Bits(Blue).IsEmpty() {
 			solved = true
 			fmt.Println(sr.BeforeSimulate.MattulwanEditorUrl())
@@ -150,7 +150,7 @@ func TestSearchWithPuyoSets(t *testing.T) {
 	// 	}
 	// 	return true
 	// }
-	// cond.FoundCallback = func(sr *SearchResult) {
+	// cond.LastCallback = func(sr *SearchResult) {
 	// 	if sr.RensaResult.Chains == 5 {
 	// 		solved = true
 	// 		fmt.Println(sr.BeforeSimulate.MattulwanEditorUrl())
@@ -179,7 +179,7 @@ func TestSearchWithPuyoSets(t *testing.T) {
 	// 	}
 	// 	return true
 	// }
-	// cond.FoundCallback = func(sr *SearchResult) {
+	// cond.LastCallback = func(sr *SearchResult) {
 	// 	if sr.RensaResult.Chains == 9 {
 	// 		solved = true
 	// 		fmt.Println(sr.BeforeSimulate.MattulwanEditorUrl())
