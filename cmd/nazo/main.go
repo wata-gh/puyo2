@@ -7,18 +7,24 @@ import (
 	"os"
 	"os/signal"
 	"runtime"
+	"strconv"
 	"strings"
 	"sync"
 	"syscall"
 	"time"
 
 	"github.com/wata-gh/puyo2"
+	"golang.org/x/text/language"
+	"golang.org/x/text/message"
 )
 
 type options struct {
-	Hands    string
-	Chains   int
-	AllClear bool
+	AllClear       bool
+	ChainsEQ       int
+	ChainsGT       int
+	ClearColor     puyo2.Color
+	DisableChigiri bool
+	Hands          string
 }
 
 var opt options
@@ -90,32 +96,17 @@ func search(num int, field chan string, puyoSets []puyo2.PuyoSet, wg *sync.WaitG
 		cond := puyo2.NewSearchConditionWithBFAndPuyoSets(puyo2.NewBitFieldWithMattulwanC(params[0]), puyoSets)
 		cond.EachHandCallback = func(sr *puyo2.SearchResult) bool {
 			searchedCount[num]++
-			// if sr.Hands[0].Position[0] == 4 && sr.Hands[0].Position[1] == 0 {
-			// 	if sr.Depth > 1 {
-			// 		if sr.Hands[1].Position[0] == 1 && sr.Hands[1].Position[1] == 1 {
-			// 			if sr.Depth > 2 {
-			// 				if sr.Hands[2].Position[0] == 1 && sr.Hands[2].Position[1] == 1 {
-			// 					if sr.Depth > 3 {
-			// 						sr.RensaResult.BitField.ShowDebug()
-			// 						if sr.Hands[2].Position[0] == 2 && sr.Hands[2].Position[1] == 2 {
-			// 							return false
-			// 						}
-			// 					}
-			// 				}
-			// 			}
-			// 		}
-			// 	}
-			// 	if sr.Depth > 4 {
-			// 		return false
-			// 	}
-			// 	return true
-			// }
-			// return false
 			if opt.AllClear && sr.RensaResult.BitField.IsEmpty() {
-				fmt.Println(sr.BeforeSimulate.MattulwanEditorUrl(), params[1]+hands2Str(sr.Hands))
+				fmt.Printf("%s %s %+v\n", sr.BeforeSimulate.MattulwanEditorUrl(), params[1]+hands2Str(sr.Hands), sr.RensaResult)
 			}
-			if opt.Chains > 0 && sr.RensaResult.Chains >= opt.Chains {
-				fmt.Println(sr.BeforeSimulate.MattulwanEditorUrl(), params[1]+hands2Str(sr.Hands))
+			if opt.ClearColor != puyo2.Empty && sr.RensaResult.BitField.Bits(opt.ClearColor).IsEmpty() {
+				fmt.Printf("%s %s %+v\n", sr.BeforeSimulate.MattulwanEditorUrl(), params[1]+hands2Str(sr.Hands), sr.RensaResult)
+			}
+			if opt.ChainsEQ > 0 && sr.RensaResult.Chains == opt.ChainsEQ {
+				fmt.Printf("%s %s %+v\n", sr.BeforeSimulate.MattulwanEditorUrl(), params[1]+hands2Str(sr.Hands), sr.RensaResult)
+			}
+			if opt.ChainsGT > 0 && sr.RensaResult.Chains >= opt.ChainsGT {
+				fmt.Printf("%s %s %+v\n", sr.BeforeSimulate.MattulwanEditorUrl(), params[1]+hands2Str(sr.Hands), sr.RensaResult)
 			}
 			return true
 		}
@@ -141,6 +132,7 @@ func run(param *string, opt *options) {
 	}
 
 	cond := puyo2.NewSearchConditionWithBFAndPuyoSets(puyo2.NewBitFieldWithMattulwanC(*param), puyoSets[0:1])
+	cond.DisableChigiri = opt.DisableChigiri
 	cond.BitField.ShowDebug()
 	fmt.Printf("%+v\n", puyoSets)
 
