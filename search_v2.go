@@ -1,7 +1,7 @@
 package puyo2
 
 type SearchCondition struct {
-	EnableChigiri    bool
+	DisableChigiri   bool
 	ChigiriableCount int
 	PuyoSets         []PuyoSet
 	BitField         *BitField
@@ -11,13 +11,13 @@ type SearchCondition struct {
 
 func NewSearchCondition() *SearchCondition {
 	cond := new(SearchCondition)
-	cond.EnableChigiri = true
+	cond.DisableChigiri = false
 	return cond
 }
 
 func NewSearchConditionWithBFAndPuyoSets(bf *BitField, puyoSets []PuyoSet) *SearchCondition {
 	cond := new(SearchCondition)
-	cond.EnableChigiri = true
+	cond.DisableChigiri = false
 	cond.BitField = bf
 	cond.PuyoSets = puyoSets
 	return cond
@@ -70,7 +70,7 @@ func (cond *SearchCondition) SearchPositionV2(hands []Hand) {
 	for i, pos := range positions {
 		bf := cond.BitField.Clone()
 		placed, chigiri := bf.placePuyo(puyoSet, pos)
-		if placed == false || (cond.EnableChigiri == false && chigiri) {
+		if placed == false || (cond.DisableChigiri && chigiri) {
 			continue
 		}
 		newHands := make([]Hand, len(hands))
@@ -92,7 +92,7 @@ func (cond *SearchCondition) SearchPositionV2(hands []Hand) {
 		if cond.EachHandCallback == nil || cond.EachHandCallback(searchResult) {
 			newCond := new(SearchCondition)
 			newCond.PuyoSets = cond.PuyoSets[1:]
-			newCond.EnableChigiri = cond.EnableChigiri
+			newCond.DisableChigiri = cond.DisableChigiri
 			newCond.ChigiriableCount = cond.ChigiriableCount
 			newCond.BitField = result.BitField
 			newCond.LastCallback = cond.LastCallback
