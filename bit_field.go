@@ -6,29 +6,38 @@ import (
 )
 
 type BitField struct {
-	m     [3][2]uint64
-	table map[Color]Color
+	m      [3][2]uint64
+	table  map[Color]Color
+	colors []Color
 }
 
 func NewBitField() *BitField {
 	bitField := new(BitField)
+	bitField.colors = []Color{Red, Blue, Yellow, Green}
 	return bitField
 }
 
 func NewBitFieldWithTable(table map[Color]Color) *BitField {
 	bitField := new(BitField)
 	bitField.table = table
+	for k := range bitField.table {
+		if table[k] != Empty && table[k] != Ojama {
+			bitField.colors = append(bitField.colors, table[k])
+		}
+	}
 	return bitField
 }
 
 func NewBitFieldWithM(m [3][2]uint64) *BitField {
 	bitField := new(BitField)
 	bitField.m = m
+	bitField.colors = []Color{Red, Blue, Yellow, Green}
 	return bitField
 }
 
 func NewBitFieldWithMattulwan(field string) *BitField {
 	bf := new(BitField)
+	bf.colors = []Color{Red, Blue, Yellow, Green}
 
 	for i, c := range ExpandMattulwanParam(field) {
 		x := i % 6
@@ -72,26 +81,31 @@ func NewBitFieldWithMattulwanC(field string) *BitField {
 		case 'b':
 			if bf.table[Red] == Empty {
 				bf.table[Red] = Red
+				bf.colors = append(bf.colors, Red)
 				colorCnt++
 			}
 		case 'c':
 			if bf.table[Blue] == Empty {
 				bf.table[Blue] = Blue
+				bf.colors = append(bf.colors, Blue)
 				colorCnt++
 			}
 		case 'd':
 			if bf.table[Yellow] == Empty {
 				bf.table[Yellow] = Yellow
+				bf.colors = append(bf.colors, Yellow)
 				colorCnt++
 			}
 		case 'e':
 			if bf.table[Green] == Empty {
 				bf.table[Green] = Green
+				bf.colors = append(bf.colors, Green)
 				colorCnt++
 			}
 		case 'f':
 			if bf.table[Purple] == Empty {
 				bf.table[Purple] = Purple
+				bf.colors = append(bf.colors, Purple)
 				colorCnt++
 			}
 		}
@@ -194,7 +208,7 @@ func (bf *BitField) converColor(puyo Color) Color {
 }
 
 func (bf *BitField) Bits(c Color) *FieldBits {
-	switch c {
+	switch bf.converColor(c) {
 	case Empty:
 		return NewFieldBitsWithM([2]uint64{^(bf.m[0][0] | bf.m[1][0] | bf.m[2][0]), ^(bf.m[0][1] | bf.m[1][1] | bf.m[2][1])})
 	case Ojama:
@@ -212,7 +226,7 @@ func (bf *BitField) Bits(c Color) *FieldBits {
 	case Green:
 		return NewFieldBitsWithM([2]uint64{bf.m[2][0] & bf.m[1][0] & bf.m[0][0], bf.m[2][1] & bf.m[1][1] & bf.m[0][1]})
 	}
-	panic(fmt.Sprintf("Color must be valid. passed %d", c))
+	panic(fmt.Sprintf("Color must be valid. passed %d, %d, %+v", c, bf.converColor(c), bf.table))
 }
 
 func (bf *BitField) Clone() *BitField {
@@ -221,6 +235,7 @@ func (bf *BitField) Clone() *BitField {
 	bitField.m[1] = bf.m[1]
 	bitField.m[2] = bf.m[2]
 	bitField.table = bf.table
+	bitField.colors = bf.colors
 	return bitField
 }
 
@@ -373,7 +388,7 @@ func (bf *BitField) SimulateDetail() *RensaResult {
 		longBonusCoef := 0
 		vanished := NewFieldBits()
 
-		for _, color := range []Color{Red, Blue, Yellow, Green} {
+		for _, color := range bf.colors {
 			vb := bf.Bits(color).MaskField12().FindVanishingBits()
 			if vb.IsEmpty() == false {
 				numColors++

@@ -8,24 +8,12 @@ import (
 func TestSearchPositionV2(t *testing.T) {
 	solved := false
 	cond := SearchCondition{
-		BitField:      NewBitFieldWithMattulwan("a62gacbagecb2ae2g3"),
-		PuyoSets:      []PuyoSet{{Red, Blue}},
-		EnableChigiri: true,
+		BitField:       NewBitFieldWithMattulwan("a62gacbagecb2ae2g3"),
+		PuyoSets:       []PuyoSet{{Red, Blue}, {Green, Blue}},
+		DisableChigiri: false,
 		LastCallback: func(sr *SearchResult) {
-			if sr.RensaResult.Chains == 0 {
-				newCond := SearchCondition{
-					BitField:      sr.BeforeSimulate,
-					PuyoSets:      []PuyoSet{{Green, Blue}},
-					EnableChigiri: true,
-					LastCallback: func(sr2 *SearchResult) {
-						if sr2.RensaResult.Chains == 3 {
-							sr2.BeforeSimulate.ShowDebug()
-							solved = true
-							fmt.Println(sr2.BeforeSimulate.MattulwanEditorUrl())
-						}
-					},
-				}
-				newCond.SearchWithPuyoSetsV2()
+			if sr.RensaResult.Chains == 3 {
+				solved = true
 			}
 		},
 	}
