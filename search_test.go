@@ -1,6 +1,7 @@
 package puyo2
 
 import (
+	"fmt"
 	"testing"
 )
 
@@ -35,7 +36,7 @@ func TestPlacePuyoWall(t *testing.T) {
 	// 10: YGRBYG
 	bf := NewBitFieldWithMattulwan("a12bcdebcdebcdebcdebcdebcdebcdebcdebcdebcdebcdebcdebcdebcdebcdebcdebc")
 	for _, pos := range positions {
-		suc, _ := bf.Clone().placePuyo(PuyoSet{Red, Blue}, pos)
+		suc, _ := bf.Clone().PlacePuyo(PuyoSet{Red, Blue}, pos)
 		if suc == false {
 			t.Fatalf("11 rows 12 rows must be able to place puyos.")
 		}
@@ -48,11 +49,11 @@ func TestPlacePuyoWall(t *testing.T) {
 	// 11: RBYGRB
 	// 10: YGRBYG
 	bf = NewBitFieldWithMattulwan("a9ca2bcdebcdebcdebcdebcdebcdebcdebcdebcdebcdebcdebcdebcdebcdebcdebcdebc")
-	suc, _ := bf.Clone().placePuyo(PuyoSet{Red, Blue}, [2]int{5, 0})
+	suc, _ := bf.Clone().PlacePuyo(PuyoSet{Red, Blue}, [2]int{5, 0})
 	if suc == false {
 		t.Fatalf("11 rows with 12th wall must be able to place puyos over wall puyos.")
 	}
-	suc, _ = bf.Clone().placePuyo(PuyoSet{Red, Blue}, [2]int{4, 1})
+	suc, _ = bf.Clone().PlacePuyo(PuyoSet{Red, Blue}, [2]int{4, 1})
 	if suc == false {
 		t.Fatalf("11 rows with 12th wall must be able to place puyos over wall puyos.")
 	}
@@ -64,11 +65,11 @@ func TestPlacePuyoWall(t *testing.T) {
 	// 11: RBYGRB
 	// 10: YGRBYG
 	bf = NewBitFieldWithMattulwan("a3ca5ca2bcdebcdebcdebcdebcdebcdebcdebcdebcdebcdebcdebcdebcdebcdebcdebcdebc")
-	suc, _ = bf.Clone().placePuyo(PuyoSet{Red, Blue}, [2]int{5, 0})
+	suc, _ = bf.Clone().PlacePuyo(PuyoSet{Red, Blue}, [2]int{5, 0})
 	if suc {
 		t.Fatalf("11 rows with 13th wall must not be able to place puyos over wall.")
 	}
-	suc, _ = bf.Clone().placePuyo(PuyoSet{Red, Blue}, [2]int{0, 0})
+	suc, _ = bf.Clone().PlacePuyo(PuyoSet{Red, Blue}, [2]int{0, 0})
 	if suc == false {
 		t.Fatalf("11 rows with 13th wall that does not affect to place must be placeable.")
 	}
@@ -80,11 +81,11 @@ func TestPlacePuyoWall(t *testing.T) {
 	// 11: ...G..
 	// 10: YGRBYG
 	bf = NewBitFieldWithMattulwan("a9ca5ea2debcdebcdebcdebcdebcdebcdebcdebcdebcdebcdebcdebcdebcdebcdebc")
-	suc, _ = bf.Clone().placePuyo(PuyoSet{Red, Blue}, [2]int{5, 0})
+	suc, _ = bf.Clone().PlacePuyo(PuyoSet{Red, Blue}, [2]int{5, 0})
 	if suc {
 		t.Fatalf("10 rows with 12th wall must not be able to place puyos over wall.")
 	}
-	suc, _ = bf.Clone().placePuyo(PuyoSet{Red, Blue}, [2]int{0, 0})
+	suc, _ = bf.Clone().PlacePuyo(PuyoSet{Red, Blue}, [2]int{0, 0})
 	if suc == false {
 		t.Fatalf("10 rows with 12th wall that does not affect to place must be placeable.")
 	}
@@ -96,11 +97,11 @@ func TestPlacePuyoWall(t *testing.T) {
 	// 11: R..G..
 	// 10: YGRBYG
 	bf = NewBitFieldWithMattulwan("a9ca2ba2ea2debcdebcdebcdebcdebcdebcdebcdebcdebcdebcdebcdebcdebcdebcdebc")
-	suc, _ = bf.Clone().placePuyo(PuyoSet{Red, Blue}, [2]int{5, 0})
+	suc, _ = bf.Clone().PlacePuyo(PuyoSet{Red, Blue}, [2]int{5, 0})
 	if suc == false {
 		t.Fatalf("one 11 rows with 12th wall must be able to place puyos over wall.")
 	}
-	suc, _ = bf.Clone().placePuyo(PuyoSet{Red, Blue}, [2]int{0, 0})
+	suc, _ = bf.Clone().PlacePuyo(PuyoSet{Red, Blue}, [2]int{0, 0})
 	if suc == false {
 		t.Fatalf("one 11 rows with 12th wall that does not affect to place must be placeable.")
 	}
@@ -112,11 +113,11 @@ func TestPlacePuyoWall(t *testing.T) {
 	// 11: RG....
 	// 10: YGRBYG
 	bf = NewBitFieldWithMattulwan("a7ea4bca4debcdebcdebcdebcdebcdebcdebcdebcdebcdebcdebcdebcdebcdebcdebc")
-	suc, _ = bf.Clone().placePuyo(PuyoSet{Red, Blue}, [2]int{5, 0})
+	suc, _ = bf.Clone().PlacePuyo(PuyoSet{Red, Blue}, [2]int{5, 0})
 	if suc == false {
 		t.Fatalf("one 11th row over the wall with 12th wall must not be able to place puyos over wall.")
 	}
-	suc, _ = bf.Clone().placePuyo(PuyoSet{Red, Blue}, [2]int{0, 0})
+	suc, _ = bf.Clone().PlacePuyo(PuyoSet{Red, Blue}, [2]int{0, 0})
 	if suc {
 		t.Fatalf("one 11 row over the wall with 12th wall that does not affect to place must be placeable.")
 	}
@@ -128,11 +129,11 @@ func TestPlacePuyoWall(t *testing.T) {
 	// 11: ...G.B
 	// 10: YGRBYG
 	bf = NewBitFieldWithMattulwan("a9ca5eacdebcdebcdebcdebcdebcdebcdebcdebcdebcdebcdebcdebcdebcdebcdebc")
-	suc, _ = bf.Clone().placePuyo(PuyoSet{Red, Blue}, [2]int{0, 0})
+	suc, _ = bf.Clone().PlacePuyo(PuyoSet{Red, Blue}, [2]int{0, 0})
 	if suc == false {
 		t.Fatalf("one 11th row over the wall with 12th wall must not be able to place puyos over wall.")
 	}
-	suc, _ = bf.Clone().placePuyo(PuyoSet{Red, Blue}, [2]int{5, 0})
+	suc, _ = bf.Clone().PlacePuyo(PuyoSet{Red, Blue}, [2]int{5, 0})
 	if suc {
 		t.Fatalf("one 11 row over the wall with 12th wall that does not affect to place must be placeable.")
 	}
@@ -144,19 +145,122 @@ func TestPlacePuyoWall(t *testing.T) {
 	// 11: .B.G..
 	// 10: YGRBYG
 	bf = NewBitFieldWithMattulwan("a7eaca3caea2debcdebcdebcdebcdebcdebcdebcdebcdebcdebcdebcdebcdebcdebcdebc")
-	suc, _ = bf.Clone().placePuyo(PuyoSet{Red, Blue}, [2]int{0, 0})
+	suc, _ = bf.Clone().PlacePuyo(PuyoSet{Red, Blue}, [2]int{0, 0})
 	if suc == false {
 		t.Fatalf("hasama-chomu 12th wall must be able to place puyos over wall.")
 	}
-	suc, _ = bf.Clone().placePuyo(PuyoSet{Red, Blue}, [2]int{5, 0})
+	suc, _ = bf.Clone().PlacePuyo(PuyoSet{Red, Blue}, [2]int{5, 0})
 	if suc == false {
 		t.Fatalf("hasama-chomu 12th wall must be able to place puyos over wall.")
 	}
 }
 
+func TestPlacePuyo2(t *testing.T) {
+	bf := NewBitFieldWithMattulwan("a10gca4gca4gc3d2gecebdge3b2gec2e2gdcb2egd2bd2gd2c2dgbdce2gb4egb")
+	bf.ShowDebug()
+	//bg32rg53ry41by50yb22yr12gr12gb02
+	// bg21
+	r, c := bf.PlacePuyo(PuyoSet{Blue, Green}, [2]int{3, 2})
+	fmt.Printf("placed: %v chigiri: %v\n", r, c)
+	bf.ShowDebug()
+	bf.SimulateDetail()
+	bf.ShowDebug()
+	// rg11
+	r, c = bf.PlacePuyo(PuyoSet{Red, Green}, [2]int{5, 3})
+	fmt.Printf("placed: %v chigiri: %v\n", r, c)
+	bf.ShowDebug()
+	bf.SimulateDetail()
+	bf.ShowDebug()
+	// ry12
+	r, c = bf.PlacePuyo(PuyoSet{Red, Yellow}, [2]int{4, 1})
+	fmt.Printf("placed: %v chigiri: %v\n", r, c)
+	bf.ShowDebug()
+	bf.SimulateDetail()
+	bf.ShowDebug()
+	// by50
+	r, c = bf.PlacePuyo(PuyoSet{Blue, Yellow}, [2]int{5, 0})
+	fmt.Printf("placed: %v chigiri: %v\n", r, c)
+	bf.ShowDebug()
+	bf.SimulateDetail()
+	bf.ShowDebug()
+	// yb32
+	r, c = bf.PlacePuyo(PuyoSet{Yellow, Blue}, [2]int{2, 2})
+	fmt.Printf("placed: %v chigiri: %v\n", r, c)
+	bf.ShowDebug()
+	bf.SimulateDetail()
+	bf.ShowDebug()
+	// yr10
+	r, c = bf.PlacePuyo(PuyoSet{Yellow, Red}, [2]int{1, 2})
+	fmt.Printf("placed: %v chigiri: %v\n", r, c)
+	bf.ShowDebug()
+	bf.SimulateDetail()
+	bf.ShowDebug()
+	// gr31
+	r, c = bf.PlacePuyo(PuyoSet{Green, Red}, [2]int{1, 2})
+	fmt.Printf("placed: %v chigiri: %v\n", r, c)
+	bf.ShowDebug()
+	bf.SimulateDetail()
+	bf.ShowDebug()
+	// gb02
+	r, c = bf.PlacePuyo(PuyoSet{Green, Blue}, [2]int{0, 2})
+	fmt.Printf("placed: %v chigiri: %v\n", r, c)
+	result := bf.SimulateDetail()
+	bf.ShowDebug()
+	fmt.Printf("%+v\n", result)
+
+	// // bg21
+	// r, c := bf.placePuyo(PuyoSet{Blue, Green}, [2]int{0, 2})
+	// fmt.Printf("placed: %v chigiri: %v\n", r, c)
+	// bf.ShowDebug()
+	// bf.SimulateDetail()
+	// bf.ShowDebug()
+	// // rg11
+	// r, c = bf.placePuyo(PuyoSet{Red, Green}, [2]int{4, 0})
+	// fmt.Printf("placed: %v chigiri: %v\n", r, c)
+	// bf.ShowDebug()
+	// bf.SimulateDetail()
+	// bf.ShowDebug()
+	// // ry12
+	// r, c = bf.placePuyo(PuyoSet{Red, Yellow}, [2]int{1, 1})
+	// fmt.Printf("placed: %v chigiri: %v\n", r, c)
+	// bf.ShowDebug()
+	// bf.SimulateDetail()
+	// bf.ShowDebug()
+	// // by50
+	// r, c = bf.placePuyo(PuyoSet{Blue, Yellow}, [2]int{1, 1})
+	// fmt.Printf("placed: %v chigiri: %v\n", r, c)
+	// bf.ShowDebug()
+	// bf.SimulateDetail()
+	// bf.ShowDebug()
+	// // yb32
+	// r, c = bf.placePuyo(PuyoSet{Yellow, Blue}, [2]int{2, 0})
+	// fmt.Printf("placed: %v chigiri: %v\n", r, c)
+	// bf.ShowDebug()
+	// bf.SimulateDetail()
+	// bf.ShowDebug()
+	// // yr10
+	// r, c = bf.placePuyo(PuyoSet{Yellow, Red}, [2]int{1, 3})
+	// fmt.Printf("placed: %v chigiri: %v\n", r, c)
+	// bf.ShowDebug()
+	// bf.SimulateDetail()
+	// bf.ShowDebug()
+	// // gr31
+	// r, c = bf.placePuyo(PuyoSet{Green, Red}, [2]int{0, 1})
+	// fmt.Printf("placed: %v chigiri: %v\n", r, c)
+	// bf.ShowDebug()
+	// bf.SimulateDetail()
+	// bf.ShowDebug()
+	// // gb02
+	// r, c = bf.placePuyo(PuyoSet{Green, Blue}, [2]int{5, 3})
+	// fmt.Printf("placed: %v chigiri: %v\n", r, c)
+	// result := bf.SimulateDetail()
+	// bf.ShowDebug()
+	// fmt.Printf("%+v\n", result)
+}
+
 func TestPlacePuyo(t *testing.T) {
 	bf := NewBitField()
-	bf.placePuyo(PuyoSet{Red, Green}, [2]int{0, 0})
+	bf.PlacePuyo(PuyoSet{Red, Green}, [2]int{0, 0})
 	bf.Drop(bf.Bits(Empty).MaskField12())
 	if bf.Bits(Red).Equals(NewFieldBitsWithM([2]uint64{2, 0})) == false {
 		bf.ShowDebug()
@@ -168,7 +272,7 @@ func TestPlacePuyo(t *testing.T) {
 	}
 
 	bf = NewBitField()
-	bf.placePuyo(PuyoSet{Red, Green}, [2]int{0, 1})
+	bf.PlacePuyo(PuyoSet{Red, Green}, [2]int{0, 1})
 	bf.Drop(bf.Bits(Empty).MaskField12())
 	if bf.Bits(Red).Equals(NewFieldBitsWithM([2]uint64{2, 0})) == false {
 		bf.ShowDebug()
@@ -180,7 +284,7 @@ func TestPlacePuyo(t *testing.T) {
 	}
 
 	bf = NewBitField()
-	bf.placePuyo(PuyoSet{Red, Green}, [2]int{0, 2})
+	bf.PlacePuyo(PuyoSet{Red, Green}, [2]int{0, 2})
 	bf.Drop(bf.Bits(Empty).MaskField12())
 	if bf.Bits(Red).Equals(NewFieldBitsWithM([2]uint64{4, 0})) == false {
 		bf.ShowDebug()
@@ -192,7 +296,7 @@ func TestPlacePuyo(t *testing.T) {
 	}
 
 	bf = NewBitField()
-	bf.placePuyo(PuyoSet{Red, Green}, [2]int{1, 3})
+	bf.PlacePuyo(PuyoSet{Red, Green}, [2]int{1, 3})
 	bf.ShowDebug()
 	bf.Drop(bf.Bits(Empty).MaskField12())
 	if bf.Bits(Red).Equals(NewFieldBitsWithM([2]uint64{2 << 16, 0})) == false {

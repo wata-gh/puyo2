@@ -69,7 +69,7 @@ func (cond *SearchCondition) SearchPositionV2(hands []Hand) {
 
 	for i, pos := range positions {
 		bf := cond.BitField.Clone()
-		placed, chigiri := bf.placePuyo(puyoSet, pos)
+		placed, chigiri := bf.PlacePuyo(puyoSet, pos)
 		if placed == false || (cond.DisableChigiri && chigiri) {
 			continue
 		}
