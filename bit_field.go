@@ -66,13 +66,11 @@ func NewBitFieldWithMattulwanC(field string) *BitField {
 
 	expandField := ExpandMattulwanParam(field)
 	bf.table = map[Color]Color{
-		Empty:  Empty,
 		Red:    Empty,
 		Blue:   Empty,
 		Green:  Empty,
 		Yellow: Empty,
 		Purple: Empty,
-		Ojama:  Ojama,
 	}
 	colorCnt := 0
 	for _, c := range expandField {
@@ -197,7 +195,7 @@ func (bf *BitField) colorChar(c Color) string {
 }
 
 func (bf *BitField) converColor(puyo Color) Color {
-	if bf.table != nil {
+	if bf.table != nil && puyo != Empty && puyo != Ojama && puyo != Iron && puyo != Wall {
 		c, ok := bf.table[puyo]
 		if ok == false {
 			panic(fmt.Sprintf("conver table is not nil, but can not convert color. %v %v", puyo, bf.table))
@@ -342,6 +340,29 @@ func (bf *BitField) Normalize() *BitField {
 }
 
 func (bf *BitField) SetColor(c Color, x int, y int) {
+	if len(bf.colors) < 4 && c != Empty && c != Ojama && c != Iron && c != Wall {
+		found := false
+		for _, color := range bf.colors {
+			if c == color {
+				found = true
+				break
+			}
+		}
+		if found == false {
+			bf.colors = append(bf.colors, c)
+			if c == Purple {
+				for _, c := range []Color{Red, Blue, Yellow, Green} {
+					if bf.table[c] == Empty {
+						bf.table[c] = Purple
+						bf.table[Purple] = c
+						break
+					}
+				}
+			} else {
+				bf.table[c] = c
+			}
+		}
+	}
 	b := bf.colorBits(bf.converColor(c))
 	pos := x&3*16 + y
 	idx := x >> 2
@@ -387,6 +408,7 @@ func (bf *BitField) SimulateDetail() *RensaResult {
 		numErased := 0
 		longBonusCoef := 0
 		vanished := NewFieldBits()
+		nth := NewNthResult(result.Chains + 1)
 
 		for _, color := range bf.colors {
 			vb := bf.Bits(color).MaskField12().FindVanishingBits()
@@ -396,15 +418,25 @@ func (bf *BitField) SimulateDetail() *RensaResult {
 				numErased += popCount
 				vanished = vanished.Or(vb)
 
-				popcount := vb.PopCount()
-				if popcount <= 7 {
+				if popCount <= 7 {
+					sr := SingleResult{
+						Color:     color,
+						Connected: popCount,
+					}
+					nth.ErasedPuyos = append(nth.ErasedPuyos, sr)
 					longBonusCoef += LongBonus(popCount)
 					continue
 				}
 
 				vb.IterateBitWithMasking(func(c *FieldBits) *FieldBits {
 					v := c.Expand(vb)
-					longBonusCoef += LongBonus(c.PopCount())
+					popCount := v.PopCount()
+					sr := SingleResult{
+						Color:     color,
+						Connected: popCount,
+					}
+					nth.ErasedPuyos = append(nth.ErasedPuyos, sr)
+					longBonusCoef += LongBonus(popCount)
 					return v
 				})
 			}
@@ -414,6 +446,7 @@ func (bf *BitField) SimulateDetail() *RensaResult {
 			break
 		}
 
+		result.NthResults = append(result.NthResults, nth)
 		vanished = vanished.Or(vanished.expand1(bf.Bits(Ojama)))
 		result.AddChain()
 		colorBonusCoef := ColorBonus(numColors)

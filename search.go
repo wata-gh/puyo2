@@ -25,7 +25,7 @@ type Hand struct {
 	Position [2]int
 }
 
-func (bf *BitField) placePuyo(puyoSet PuyoSet, pos [2]int) (bool, bool) {
+func (bf *BitField) PlacePuyo(puyoSet PuyoSet, pos [2]int) (bool, bool) {
 	// TODO check invalid placement and return false.
 	ax := pos[0]
 	cx := pos[0]
@@ -269,7 +269,7 @@ func (obf *BitField) SearchPosition(puyoSet PuyoSet, hands []Hand, callback func
 			continue
 		}
 		bf := obf.Clone()
-		placed, chigiri := bf.placePuyo(puyoSet, pos)
+		placed, chigiri := bf.PlacePuyo(puyoSet, pos)
 		if placed == false || chigiri {
 			// fmt.Fprintf(os.Stderr, "placed: %v, chigiri: %v\n", placed, chigiri)
 			continue

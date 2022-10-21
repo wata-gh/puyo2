@@ -1,12 +1,31 @@
 package puyo2
 
+import "fmt"
+
+type NthResult struct {
+	Nth         int
+	ErasedPuyos []SingleResult
+}
+
+type SingleResult struct {
+	Color     Color
+	Connected int
+}
+
 type RensaResult struct {
-	Chains   int
-	Score    int
-	Frames   int
-	Erased   int
-	Quick    bool
-	BitField *BitField
+	Chains     int
+	Score      int
+	Frames     int
+	Erased     int
+	Quick      bool
+	BitField   *BitField
+	NthResults []*NthResult
+}
+
+func NewNthResult(nth int) *NthResult {
+	r := new(NthResult)
+	r.Nth = nth
+	return r
 }
 
 func NewRensaResult() *RensaResult {
@@ -38,6 +57,16 @@ func (rr *RensaResult) AddScore(score int) {
 func (rr *RensaResult) SetBitField(bf *BitField) {
 	rr.BitField = bf
 }
+
 func (rr *RensaResult) SetQuick(quick bool) {
 	rr.Quick = quick
+}
+
+func (rr *RensaResult) NthResult(n int) *NthResult {
+	for _, nth := range rr.NthResults {
+		if nth.Nth == n {
+			return nth
+		}
+	}
+	panic(fmt.Sprintf("no %d th result. ", +n))
 }
