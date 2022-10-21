@@ -277,7 +277,7 @@ func (obf *BitField) ExportHandsSimulateImage(hands []Hand, path string) {
 	for _, hand := range hands {
 		idx++
 		bf.ExportHandImage(fmt.Sprintf("%s/%d.png", path, idx), &hand)
-		placed, _ := bf.placePuyo(hand.PuyoSet, hand.Position)
+		placed, _ := bf.PlacePuyo(hand.PuyoSet, hand.Position)
 		if placed == false {
 			bf.ShowDebug()
 			fmt.Printf("hand %v\n", hand)
