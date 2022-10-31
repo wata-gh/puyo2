@@ -74,7 +74,7 @@ func TestInsertShape(t *testing.T) {
 	insert.SetOnebit(2, 2)
 	sbf.InsertShape(insert)
 
-	if sbf.Shapes[0].m[0] != 131122 || sbf.Shapes[0].m[1] != 0 {
+	if sbf.Shapes[0].M[0] != 131122 || sbf.Shapes[0].M[1] != 0 {
 		t.Fatalf("shape must be %d %d", 131122, 0)
 	}
 
@@ -93,7 +93,7 @@ func TestInsertShape(t *testing.T) {
 	insert.SetOnebit(2, 1)
 
 	sbf.InsertShape(insert)
-	if sbf.Shapes[0].m[0] != 17180131352 || sbf.Shapes[0].m[1] != 0 {
+	if sbf.Shapes[0].M[0] != 17180131352 || sbf.Shapes[0].M[1] != 0 {
 		t.Fatalf("shape must be %d %d", 17180131352, 0)
 	}
 
@@ -104,7 +104,7 @@ func TestInsertShape(t *testing.T) {
 	insert.SetOnebit(2, 1)
 
 	sbf.InsertShape(insert)
-	if sbf.Shapes[0].m[0] != 34360262752 || sbf.Shapes[0].m[1] != 0 {
+	if sbf.Shapes[0].M[0] != 34360262752 || sbf.Shapes[0].M[1] != 0 {
 		t.Fatalf("shape must be %d %d", 34360262752, 0)
 	}
 
@@ -115,7 +115,7 @@ func TestInsertShape(t *testing.T) {
 	insert.SetOnebit(2, 1)
 
 	sbf.InsertShape(insert)
-	if sbf.Shapes[0].m[0] != 68721574080 || sbf.Shapes[0].m[1] != 0 {
+	if sbf.Shapes[0].M[0] != 68721574080 || sbf.Shapes[0].M[1] != 0 {
 		t.Fatalf("shape must be %d %d", 68721574080, 0)
 	}
 
@@ -134,7 +134,7 @@ func TestInsertShape(t *testing.T) {
 	insert.SetOnebit(5, 1)
 
 	sbf.InsertShape(insert)
-	if sbf.Shapes[0].m[0] != 6755399441055744 || sbf.Shapes[0].m[1] != 262148 {
+	if sbf.Shapes[0].M[0] != 6755399441055744 || sbf.Shapes[0].M[1] != 262148 {
 		t.Fatalf("shape must be %d %d", 6755399441055744, 262148)
 	}
 
@@ -145,7 +145,7 @@ func TestInsertShape(t *testing.T) {
 	insert.SetOnebit(5, 1)
 
 	sbf.InsertShape(insert)
-	if sbf.Shapes[0].m[0] != 27021597764222976 || sbf.Shapes[0].m[1] != 524296 {
+	if sbf.Shapes[0].M[0] != 27021597764222976 || sbf.Shapes[0].M[1] != 524296 {
 		t.Fatalf("shape must be %d %d", 27021597764222976, 524296)
 	}
 
@@ -156,7 +156,7 @@ func TestInsertShape(t *testing.T) {
 	insert.SetOnebit(5, 1)
 
 	sbf.InsertShape(insert)
-	if sbf.Shapes[0].m[0] != 54043195528445952 || sbf.Shapes[0].m[1] != 1048608 {
+	if sbf.Shapes[0].M[0] != 54043195528445952 || sbf.Shapes[0].M[1] != 1048608 {
 		t.Fatalf("shape must be %d %d", 54043195528445952, 1048608)
 	}
 }

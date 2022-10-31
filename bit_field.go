@@ -6,8 +6,8 @@ import (
 )
 
 type BitField struct {
-	m      [3][2]uint64
-	table  map[Color]Color
+	M      [3][2]uint64
+	Table  map[Color]Color
 	colors []Color
 }
 
@@ -19,8 +19,8 @@ func NewBitField() *BitField {
 
 func NewBitFieldWithTable(table map[Color]Color) *BitField {
 	bitField := new(BitField)
-	bitField.table = table
-	for k := range bitField.table {
+	bitField.Table = table
+	for k := range bitField.Table {
 		if table[k] != Empty && table[k] != Ojama {
 			bitField.colors = append(bitField.colors, table[k])
 		}
@@ -28,9 +28,16 @@ func NewBitFieldWithTable(table map[Color]Color) *BitField {
 	return bitField
 }
 
+func NewBitFieldWithTableAndColors(table map[Color]Color, colors []Color) *BitField {
+	bitField := new(BitField)
+	bitField.Table = table
+	bitField.colors = colors
+	return bitField
+}
+
 func NewBitFieldWithM(m [3][2]uint64) *BitField {
 	bitField := new(BitField)
-	bitField.m = m
+	bitField.M = m
 	bitField.colors = []Color{Red, Blue, Yellow, Green}
 	return bitField
 }
@@ -65,7 +72,7 @@ func NewBitFieldWithMattulwanC(field string) *BitField {
 	bf := new(BitField)
 
 	expandField := ExpandMattulwanParam(field)
-	bf.table = map[Color]Color{
+	bf.Table = map[Color]Color{
 		Red:    Empty,
 		Blue:   Empty,
 		Green:  Empty,
@@ -77,32 +84,32 @@ func NewBitFieldWithMattulwanC(field string) *BitField {
 		switch c {
 		case 'a':
 		case 'b':
-			if bf.table[Red] == Empty {
-				bf.table[Red] = Red
+			if bf.Table[Red] == Empty {
+				bf.Table[Red] = Red
 				bf.colors = append(bf.colors, Red)
 				colorCnt++
 			}
 		case 'c':
-			if bf.table[Blue] == Empty {
-				bf.table[Blue] = Blue
+			if bf.Table[Blue] == Empty {
+				bf.Table[Blue] = Blue
 				bf.colors = append(bf.colors, Blue)
 				colorCnt++
 			}
 		case 'd':
-			if bf.table[Yellow] == Empty {
-				bf.table[Yellow] = Yellow
+			if bf.Table[Yellow] == Empty {
+				bf.Table[Yellow] = Yellow
 				bf.colors = append(bf.colors, Yellow)
 				colorCnt++
 			}
 		case 'e':
-			if bf.table[Green] == Empty {
-				bf.table[Green] = Green
+			if bf.Table[Green] == Empty {
+				bf.Table[Green] = Green
 				bf.colors = append(bf.colors, Green)
 				colorCnt++
 			}
 		case 'f':
-			if bf.table[Purple] == Empty {
-				bf.table[Purple] = Purple
+			if bf.Table[Purple] == Empty {
+				bf.Table[Purple] = Purple
 				bf.colors = append(bf.colors, Purple)
 				colorCnt++
 			}
@@ -113,11 +120,11 @@ func NewBitFieldWithMattulwanC(field string) *BitField {
 	}
 
 	// contains purple
-	if bf.table[Purple] == Purple {
+	if bf.Table[Purple] == Purple {
 		for _, c := range []Color{Red, Blue, Yellow, Green} {
-			if bf.table[c] == Empty {
-				bf.table[c] = Purple
-				bf.table[Purple] = c
+			if bf.Table[c] == Empty {
+				bf.Table[c] = Purple
+				bf.Table[Purple] = c
 				break
 			}
 		}
@@ -195,10 +202,10 @@ func (bf *BitField) colorChar(c Color) string {
 }
 
 func (bf *BitField) converColor(puyo Color) Color {
-	if bf.table != nil && puyo != Empty && puyo != Ojama && puyo != Iron && puyo != Wall {
-		c, ok := bf.table[puyo]
+	if bf.Table != nil && puyo != Empty && puyo != Ojama && puyo != Iron && puyo != Wall {
+		c, ok := bf.Table[puyo]
 		if ok == false {
-			panic(fmt.Sprintf("conver table is not nil, but can not convert color. %v %v", puyo, bf.table))
+			panic(fmt.Sprintf("conver table is not nil, but can not convert color. %v %v", puyo, bf.Table))
 		}
 		return c
 	}
@@ -208,31 +215,31 @@ func (bf *BitField) converColor(puyo Color) Color {
 func (bf *BitField) Bits(c Color) *FieldBits {
 	switch bf.converColor(c) {
 	case Empty:
-		return NewFieldBitsWithM([2]uint64{^(bf.m[0][0] | bf.m[1][0] | bf.m[2][0]), ^(bf.m[0][1] | bf.m[1][1] | bf.m[2][1])})
+		return NewFieldBitsWithM([2]uint64{^(bf.M[0][0] | bf.M[1][0] | bf.M[2][0]), ^(bf.M[0][1] | bf.M[1][1] | bf.M[2][1])})
 	case Ojama:
-		return NewFieldBitsWithM([2]uint64{bf.m[0][0] &^ (bf.m[1][0] | bf.m[2][0]), bf.m[0][1] &^ (bf.m[1][1] | bf.m[2][1])})
+		return NewFieldBitsWithM([2]uint64{bf.M[0][0] &^ (bf.M[1][0] | bf.M[2][0]), bf.M[0][1] &^ (bf.M[1][1] | bf.M[2][1])})
 	case Wall:
-		return NewFieldBitsWithM([2]uint64{bf.m[1][0] &^ (bf.m[0][0] | bf.m[2][0]), bf.m[1][1] &^ (bf.m[0][1] | bf.m[2][1])})
+		return NewFieldBitsWithM([2]uint64{bf.M[1][0] &^ (bf.M[0][0] | bf.M[2][0]), bf.M[1][1] &^ (bf.M[0][1] | bf.M[2][1])})
 	case Iron:
-		return NewFieldBitsWithM([2]uint64{bf.m[0][0] & bf.m[1][0] &^ bf.m[2][0], bf.m[0][1] & bf.m[1][1] &^ bf.m[2][1]})
+		return NewFieldBitsWithM([2]uint64{bf.M[0][0] & bf.M[1][0] &^ bf.M[2][0], bf.M[0][1] & bf.M[1][1] &^ bf.M[2][1]})
 	case Red:
-		return NewFieldBitsWithM([2]uint64{bf.m[2][0] &^ (bf.m[0][0] | bf.m[1][0]), bf.m[2][1] &^ (bf.m[0][1] | bf.m[1][1])})
+		return NewFieldBitsWithM([2]uint64{bf.M[2][0] &^ (bf.M[0][0] | bf.M[1][0]), bf.M[2][1] &^ (bf.M[0][1] | bf.M[1][1])})
 	case Blue:
-		return NewFieldBitsWithM([2]uint64{bf.m[2][0] & bf.m[0][0] &^ bf.m[1][0], bf.m[2][1] & bf.m[0][1] &^ bf.m[1][1]})
+		return NewFieldBitsWithM([2]uint64{bf.M[2][0] & bf.M[0][0] &^ bf.M[1][0], bf.M[2][1] & bf.M[0][1] &^ bf.M[1][1]})
 	case Yellow:
-		return NewFieldBitsWithM([2]uint64{bf.m[2][0] & bf.m[1][0] &^ bf.m[0][0], bf.m[2][1] & bf.m[1][1] &^ bf.m[0][1]})
+		return NewFieldBitsWithM([2]uint64{bf.M[2][0] & bf.M[1][0] &^ bf.M[0][0], bf.M[2][1] & bf.M[1][1] &^ bf.M[0][1]})
 	case Green:
-		return NewFieldBitsWithM([2]uint64{bf.m[2][0] & bf.m[1][0] & bf.m[0][0], bf.m[2][1] & bf.m[1][1] & bf.m[0][1]})
+		return NewFieldBitsWithM([2]uint64{bf.M[2][0] & bf.M[1][0] & bf.M[0][0], bf.M[2][1] & bf.M[1][1] & bf.M[0][1]})
 	}
-	panic(fmt.Sprintf("Color must be valid. passed %d, %d, %+v", c, bf.converColor(c), bf.table))
+	panic(fmt.Sprintf("Color must be valid. passed %d, %d, %+v", c, bf.converColor(c), bf.Table))
 }
 
 func (bf *BitField) Clone() *BitField {
 	bitField := new(BitField)
-	bitField.m[0] = bf.m[0]
-	bitField.m[1] = bf.m[1]
-	bitField.m[2] = bf.m[2]
-	bitField.table = bf.table
+	bitField.M[0] = bf.M[0]
+	bitField.M[1] = bf.M[1]
+	bitField.M[2] = bf.M[2]
+	bitField.Table = bf.Table
 	bitField.colors = bf.colors
 	return bitField
 }
@@ -240,27 +247,27 @@ func (bf *BitField) Clone() *BitField {
 func (bf *BitField) Color(x int, y int) Color {
 	idx := x >> 2
 	pos := x&3*16 + y
-	c := ((bf.m[0][idx] >> pos) & 1) + ((bf.m[1][idx] >> pos) & 1 << 1) + ((bf.m[2][idx] >> pos) & 1 << 2)
+	c := ((bf.M[0][idx] >> pos) & 1) + ((bf.M[1][idx] >> pos) & 1 << 1) + ((bf.M[2][idx] >> pos) & 1 << 2)
 	return bf.converColor(Color(c))
 }
 
 func (bf *BitField) Drop(fb *FieldBits) {
-	for i := 0; i < len(bf.m); i++ {
-		r0 := Extract(bf.m[i][0], ^fb.m[0])
-		r1 := Extract(bf.m[i][1], ^fb.m[1])
+	for i := 0; i < len(bf.M); i++ {
+		r0 := Extract(bf.M[i][0], ^fb.M[0])
+		r1 := Extract(bf.M[i][1], ^fb.M[1])
 		var dropmask1 [2]uint64
 		for x := 0; x < 6; x++ {
 			idx := x >> 2
 			vc := bits.OnesCount64(fb.ColBits(x))
 			dropmask1[idx] |= bits.RotateLeft64((1<<vc)-1, 14-vc) << (x & 3 * 16)
 		}
-		bf.m[i][0] = Deposit(r0, ^dropmask1[0])
-		bf.m[i][1] = Deposit(r1, ^dropmask1[1])
+		bf.M[i][0] = Deposit(r0, ^dropmask1[0])
+		bf.M[i][1] = Deposit(r1, ^dropmask1[1])
 	}
 }
 
 func (bf *BitField) Equals(bf2 *BitField) bool {
-	return bf.m[0] == bf2.m[0] && bf.m[1] == bf2.m[1] && bf.m[2] == bf2.m[2]
+	return bf.M[0] == bf2.M[0] && bf.M[1] == bf2.M[1] && bf.M[2] == bf2.M[2]
 }
 
 func (bf *BitField) EqualChain(bf2 *BitField) bool {
@@ -279,7 +286,11 @@ func (bf *BitField) EqualChain(bf2 *BitField) bool {
 }
 
 func (bf *BitField) FindVanishingBits() *FieldBits {
-	v := bf.Bits(Green).MaskField12().FindVanishingBits().Or(bf.Bits(Red).MaskField12().FindVanishingBits()).Or(bf.Bits(Yellow).MaskField12().FindVanishingBits()).Or(bf.Bits(Blue).MaskField12().FindVanishingBits())
+	v := bf.Bits(bf.colors[0]).MaskField12().FindVanishingBits()
+	for _, c := range bf.colors[1:] {
+		v = v.Or(bf.Bits(c).MaskField12().FindVanishingBits())
+	}
+	// v := bf.Bits(Green).MaskField12().FindVanishingBits().Or(bf.Bits(Red).MaskField12().FindVanishingBits()).Or(bf.Bits(Yellow).MaskField12().FindVanishingBits()).Or(bf.Bits(Blue).MaskField12().FindVanishingBits())
 	o := v.expand1(bf.Bits(Ojama))
 	return v.Or(o)
 }
@@ -287,19 +298,19 @@ func (bf *BitField) FindVanishingBits() *FieldBits {
 func (bf *BitField) FlipHorizontal() *BitField {
 	m := [3][2]uint64{{0, 0}, {0, 0}, {0, 0}}
 	for i := 0; i < 3; i++ {
-		m[i][1] = (bf.m[i][0] & 0xffff) << 16              // 1 -> 6
-		m[i][1] |= (bf.m[i][0] & 0xffff0000) >> 16         // 2 -> 5
-		m[i][0] = (bf.m[i][0] & 0xffff00000000) << 16      // 3 -> 4
-		m[i][0] |= (bf.m[i][0] & 0xffff000000000000) >> 16 // 4 -> 3
-		m[i][0] |= (bf.m[i][1] & 0xffff) << 16             // 5 -> 2
-		m[i][0] |= (bf.m[i][1] & 0xffff0000) >> 16         // 6 -> 1
+		m[i][1] = (bf.M[i][0] & 0xffff) << 16              // 1 -> 6
+		m[i][1] |= (bf.M[i][0] & 0xffff0000) >> 16         // 2 -> 5
+		m[i][0] = (bf.M[i][0] & 0xffff00000000) << 16      // 3 -> 4
+		m[i][0] |= (bf.M[i][0] & 0xffff000000000000) >> 16 // 4 -> 3
+		m[i][0] |= (bf.M[i][1] & 0xffff) << 16             // 5 -> 2
+		m[i][0] |= (bf.M[i][1] & 0xffff0000) >> 16         // 6 -> 1
 	}
-	bf.m = m
+	bf.M = m
 	return bf
 }
 
 func (bf *BitField) IsEmpty() bool {
-	return bf.m[0][0] == 0 && bf.m[1][0] == 0 && bf.m[2][0] == 0 && bf.m[0][1] == 0 && bf.m[1][1] == 0 && bf.m[2][1] == 0
+	return bf.M[0][0] == 0 && bf.M[1][0] == 0 && bf.M[2][0] == 0 && bf.M[0][1] == 0 && bf.M[1][1] == 0 && bf.M[2][1] == 0
 }
 
 func (bf *BitField) MattulwanEditorParam() string {
@@ -352,27 +363,27 @@ func (bf *BitField) SetColor(c Color, x int, y int) {
 			bf.colors = append(bf.colors, c)
 			if c == Purple {
 				for _, c := range []Color{Red, Blue, Yellow, Green} {
-					if bf.table[c] == Empty {
-						bf.table[c] = Purple
-						bf.table[Purple] = c
+					if bf.Table[c] == Empty {
+						bf.Table[c] = Purple
+						bf.Table[Purple] = c
 						break
 					}
 				}
 			} else {
-				bf.table[c] = c
+				bf.Table[c] = c
 			}
 		}
 	}
 	b := bf.colorBits(bf.converColor(c))
 	pos := x&3*16 + y
 	idx := x >> 2
-	for i := 0; i < len(bf.m); i++ {
+	for i := 0; i < len(bf.M); i++ {
 		if b[i] == 1 {
-			bf.m[i][idx] |= b[i] << pos
+			bf.M[i][idx] |= b[i] << pos
 		} else {
 			posbit := uint64(1) << pos
-			if bf.m[i][idx]&posbit > 0 {
-				bf.m[i][idx] -= posbit
+			if bf.M[i][idx]&posbit > 0 {
+				bf.M[i][idx] -= posbit
 			}
 		}
 	}
@@ -380,14 +391,14 @@ func (bf *BitField) SetColor(c Color, x int, y int) {
 
 func (bf *BitField) SetColorWithFieldBits(c Color, fb *FieldBits) {
 	b := bf.colorBits(c)
-	mask := [2]uint64{^fb.m[0], ^fb.m[1]}
-	for i := 0; i < len(fb.m); i++ {
-		bf.m[i][0] &= mask[0]
-		bf.m[i][1] &= mask[1]
+	mask := [2]uint64{^fb.M[0], ^fb.M[1]}
+	for i := 0; i < len(fb.M); i++ {
+		bf.M[i][0] &= mask[0]
+		bf.M[i][1] &= mask[1]
 
 		if b[i] == 1 {
-			bf.m[i][0] |= fb.m[0]
-			bf.m[i][1] |= fb.m[1]
+			bf.M[i][0] |= fb.M[0]
+			bf.M[i][1] |= fb.M[1]
 		}
 	}
 }
@@ -520,17 +531,17 @@ func (bf *BitField) ToString() string {
 
 func (bf *BitField) TrimLeft() *BitField {
 	mv := 0
-	if bf.m[2][0]&0xffff == 0 { // row 1
+	if bf.M[2][0]&0xffff == 0 { // row 1
 		mv++
-		if bf.m[2][0]&0xffff0000 == 0 { // row 2
+		if bf.M[2][0]&0xffff0000 == 0 { // row 2
 			mv++
-			if bf.m[2][0]&0xffff00000000 == 0 { // row 3
+			if bf.M[2][0]&0xffff00000000 == 0 { // row 3
 				mv++
-				if bf.m[2][0]&0xffff000000000000 == 0 { // row 4
+				if bf.M[2][0]&0xffff000000000000 == 0 { // row 4
 					mv++
-					if bf.m[2][1]&0xffff == 0 { // row 5
+					if bf.M[2][1]&0xffff == 0 { // row 5
 						mv++
-						if bf.m[2][1]&0xffff0000 == 0 { // row 6
+						if bf.M[2][1]&0xffff0000 == 0 { // row 6
 							// all clear
 							return bf
 						}
@@ -545,31 +556,31 @@ func (bf *BitField) TrimLeft() *BitField {
 	switch mv {
 	case 1:
 		for i := 0; i < 3; i++ {
-			bf.m[i][0] >>= 16
-			bf.m[i][0] |= (bf.m[i][1] << 48) & 0xffff000000000000
-			bf.m[i][1] >>= 16
+			bf.M[i][0] >>= 16
+			bf.M[i][0] |= (bf.M[i][1] << 48) & 0xffff000000000000
+			bf.M[i][1] >>= 16
 		}
 	case 2:
 		for i := 0; i < 3; i++ {
-			bf.m[i][0] >>= 32
-			bf.m[i][0] |= ((bf.m[i][1] << 32) & 0xffffffff00000000)
-			bf.m[i][1] = 0
+			bf.M[i][0] >>= 32
+			bf.M[i][0] |= ((bf.M[i][1] << 32) & 0xffffffff00000000)
+			bf.M[i][1] = 0
 		}
 	case 3:
 		for i := 0; i < 3; i++ {
-			bf.m[i][0] >>= 48
-			bf.m[i][0] |= (bf.m[i][1] << 16) & 0x0000ffffffff0000
-			bf.m[i][1] = 0
+			bf.M[i][0] >>= 48
+			bf.M[i][0] |= (bf.M[i][1] << 16) & 0x0000ffffffff0000
+			bf.M[i][1] = 0
 		}
 	case 4:
 		for i := 0; i < 3; i++ {
-			bf.m[i][0] = bf.m[i][1]
-			bf.m[i][1] = 0
+			bf.M[i][0] = bf.M[i][1]
+			bf.M[i][1] = 0
 		}
 	case 5:
 		for i := 0; i < 3; i++ {
-			bf.m[i][0] = bf.m[i][1] >> 16
-			bf.m[i][1] = 0
+			bf.M[i][0] = bf.M[i][1] >> 16
+			bf.M[i][1] = 0
 		}
 	}
 	return bf

@@ -23,6 +23,8 @@ type options struct {
 	ChainsEQ       int
 	ChainsGT       int
 	ClearColor     puyo2.Color
+	Color          puyo2.Color
+	N              int
 	DisableChigiri bool
 	Hands          string
 }
@@ -108,6 +110,22 @@ func search(num int, field chan string, puyoSets []puyo2.PuyoSet, wg *sync.WaitG
 			if opt.ChainsGT > 0 && sr.RensaResult.Chains >= opt.ChainsGT {
 				fmt.Printf("%s %s %+v\n", sr.BeforeSimulate.MattulwanEditorUrl(), params[1]+hands2Str(sr.Hands), sr.RensaResult)
 			}
+			if opt.N > 0 && opt.Color != puyo2.Empty {
+				if sr.RensaResult.Chains > 0 {
+					for n := 1; n <= sr.RensaResult.Chains; n++ {
+						nth := sr.RensaResult.NthResult(n)
+						erasedCount := 0
+						for _, erased := range nth.ErasedPuyos {
+							if erased.Color == opt.Color {
+								erasedCount += erased.Connected
+							}
+						}
+						if erasedCount == opt.N {
+							fmt.Printf("%s %s %+v\n", sr.BeforeSimulate.MattulwanEditorUrl(), params[1]+hands2Str(sr.Hands), sr.RensaResult)
+						}
+					}
+				}
+			}
 			return true
 		}
 		cond.SearchWithPuyoSetsV2()
@@ -125,28 +143,56 @@ func run(param *string, opt *options) {
 	puyoSets := parsePuyoSets(opt.Hands)
 	allSearchCnt = math.Pow(22, float64(len(puyoSets)))
 	searchedCount = append(searchedCount, 0)
-	for i := 0; i < cpus; i++ {
+
+	if len(puyoSets) == 1 {
 		searchedCount = append(searchedCount, 0)
 		wg.Add(1)
-		go search(i+1, field, puyoSets[1:], wg)
-	}
-
-	cond := puyo2.NewSearchConditionWithBFAndPuyoSets(puyo2.NewBitFieldWithMattulwanC(*param), puyoSets[0:1])
-	cond.DisableChigiri = opt.DisableChigiri
-	cond.BitField.ShowDebug()
-	fmt.Printf("%+v\n", puyoSets)
-
-	cond.LastCallback = func(sr *puyo2.SearchResult) {
-		searchedCount[0]++
-		param := fmt.Sprintf("%s %s", sr.RensaResult.BitField.MattulwanEditorParam(), hands2Str(sr.Hands))
-		field <- param
-	}
-	cond.SearchWithPuyoSetsV2()
-
-	for i := 0; i < cpus; i++ {
+		go search(1, field, puyoSets, wg)
+		field <- fmt.Sprintf("%s ", *param)
 		field <- ""
+	} else {
+		for i := 0; i < cpus; i++ {
+			searchedCount = append(searchedCount, 0)
+			wg.Add(1)
+			go search(i+1, field, puyoSets[1:], wg)
+		}
+		cond := puyo2.NewSearchConditionWithBFAndPuyoSets(puyo2.NewBitFieldWithMattulwanC(*param), puyoSets[0:1])
+		cond.DisableChigiri = opt.DisableChigiri
+		cond.BitField.ShowDebug()
+
+		cond.LastCallback = func(sr *puyo2.SearchResult) {
+			searchedCount[0]++
+			param := fmt.Sprintf("%s %s", sr.RensaResult.BitField.MattulwanEditorParam(), hands2Str(sr.Hands))
+			field <- param
+		}
+		cond.SearchWithPuyoSetsV2()
+		for i := 0; i < cpus; i++ {
+			field <- ""
+		}
 	}
+
 	wg.Wait()
+}
+
+func str2Color(color string) puyo2.Color {
+	switch color {
+	case "":
+		return puyo2.Empty
+	case "r":
+		return puyo2.Red
+	case "g":
+		return puyo2.Green
+	case "b":
+		return puyo2.Blue
+	case "y":
+		return puyo2.Yellow
+	case "p":
+		return puyo2.Purple
+	case "o":
+		return puyo2.Ojama
+	default:
+		panic("clear color must be one of r,g,b,y,p,o")
+	}
 }
 
 func main() {
@@ -154,10 +200,13 @@ func main() {
 	trapSignal()
 	var chainStr string
 	var clearColor string
+	var color string
 	param := flag.String("param", "a78", "puyofu")
 	flag.StringVar(&opt.Hands, "hands", "", "hands")
 	flag.StringVar(&chainStr, "chains", "", "chains")
 	flag.StringVar(&clearColor, "clear", "", "clear color(r,g,b,y,p)")
+	flag.StringVar(&color, "color", "", "color(r,g,b,y,p)")
+	flag.IntVar(&opt.N, "n", 0, "puyo count")
 	flag.BoolVar(&opt.AllClear, "allclear", false, "allclear")
 	flag.BoolVar(&opt.DisableChigiri, "disablechigiri", false, "disable chigiri")
 	flag.Parse()
@@ -177,24 +226,8 @@ func main() {
 		}
 		opt.ChainsEQ = n
 	}
-	switch clearColor {
-	case "":
-		opt.ClearColor = puyo2.Empty
-	case "r":
-		opt.ClearColor = puyo2.Red
-	case "g":
-		opt.ClearColor = puyo2.Green
-	case "b":
-		opt.ClearColor = puyo2.Blue
-	case "y":
-		opt.ClearColor = puyo2.Yellow
-	case "p":
-		opt.ClearColor = puyo2.Purple
-	case "o":
-		opt.ClearColor = puyo2.Ojama
-	default:
-		panic("clear color must be one of r,g,b,y,p,o")
-	}
+	opt.ClearColor = str2Color(clearColor)
+	opt.Color = str2Color(color)
 
 	run(param, &opt)
 	p := message.NewPrinter(language.Japanese)

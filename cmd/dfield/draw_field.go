@@ -19,6 +19,7 @@ type options struct {
 	NoBG      bool
 	Simulate  bool
 	ShapeOnly bool
+	Table     string
 }
 
 func letter2Color(puyo string) puyo2.Color {
@@ -34,7 +35,7 @@ func letter2Color(puyo string) puyo2.Color {
 	case "p":
 		return puyo2.Purple
 	}
-	panic("letter must be one of r,g,y,b,p")
+	panic("letter must be one of r,g,y,b,p but " + puyo)
 }
 
 func parseSimpleHands(handsStr string) []puyo2.Hand {
@@ -59,6 +60,23 @@ func parseSimpleHands(handsStr string) []puyo2.Hand {
 func expHands(param string, handsStr string, path string) {
 	bf := puyo2.NewBitFieldWithMattulwanC(param)
 	hands := parseSimpleHands(handsStr)
+	for _, hand := range hands {
+		c := bf.Table[hand.PuyoSet.Axis]
+		if c == puyo2.Empty {
+			bf.Table[hand.PuyoSet.Axis] = hand.PuyoSet.Axis
+		}
+		c = bf.Table[hand.PuyoSet.Child]
+		if c == puyo2.Empty {
+			bf.Table[hand.PuyoSet.Child] = hand.PuyoSet.Child
+		}
+	}
+	if bf.Table[puyo2.Purple] == puyo2.Purple {
+		for _, c := range []puyo2.Color{puyo2.Red, puyo2.Blue, puyo2.Yellow, puyo2.Green} {
+			if bf.Table[c] == puyo2.Empty {
+				bf.Table[puyo2.Purple] = c
+			}
+		}
+	}
 	bf.ExportHandsSimulateImage(hands, path)
 }
 
@@ -126,6 +144,7 @@ func main() {
 	flag.StringVar(&opt.Out, "out", "", "output file path")
 	flag.StringVar(&opt.Dir, "dir", "", "output directory path")
 	flag.StringVar(&opt.Hands, "hands", "", "hands")
+	flag.StringVar(&opt.Table, "table", "", "table")
 	flag.BoolVar(&opt.NoBG, "nobg", false, "don't draw background")
 	flag.BoolVar(&opt.Simulate, "simulate", false, "simulate")
 	flag.BoolVar(&opt.ShapeOnly, "shape-only", false, "use shape only")

@@ -73,16 +73,16 @@ func (bf *ShapeBitField) Clone() *ShapeBitField {
 
 func (sbf *ShapeBitField) Drop(fb *FieldBits) {
 	for _, shape := range sbf.Shapes {
-		r0 := Extract(shape.m[0], ^fb.m[0])
-		r1 := Extract(shape.m[1], ^fb.m[1])
+		r0 := Extract(shape.M[0], ^fb.M[0])
+		r1 := Extract(shape.M[1], ^fb.M[1])
 		var dropmask1 [2]uint64
 		for x := 0; x < 6; x++ {
 			idx := x >> 2
 			vc := bits.OnesCount64(fb.ColBits(x))
 			dropmask1[idx] |= bits.RotateLeft64((1<<vc)-1, 14-vc) << (x & 3 * 16)
 		}
-		shape.m[0] = Deposit(r0, ^dropmask1[0])
-		shape.m[1] = Deposit(r1, ^dropmask1[1])
+		shape.M[0] = Deposit(r0, ^dropmask1[0])
+		shape.M[1] = Deposit(r1, ^dropmask1[1])
 	}
 }
 
@@ -266,32 +266,32 @@ func (sbf *ShapeBitField) shiftCol(insertShape *FieldBits, shiftTarget *FieldBit
 		shiftCol := colBits << shiftBits
 		if colNum < 4 {
 			shift := NewFieldBitsWithM([2]uint64{shiftCol, 0})
-			unTarget := NewFieldBitsWithM([2]uint64{^(shiftTarget.m[0] | 1<<(colNum*16)), 0})
-			unTarget.m[0] = unTarget.ColBits(colNum)
+			unTarget := NewFieldBitsWithM([2]uint64{^(shiftTarget.M[0] | 1<<(colNum*16)), 0})
+			unTarget.M[0] = unTarget.ColBits(colNum)
 			unTarget = unTarget.And(shape)
 			switch colNum {
 			case 0:
-				shape.m[0] &= ^uint64(0xffff)
+				shape.M[0] &= ^uint64(0xffff)
 			case 1:
-				shape.m[0] &= ^uint64(0xffff0000)
+				shape.M[0] &= ^uint64(0xffff0000)
 			case 2:
-				shape.m[0] &= ^uint64(0xffff00000000)
+				shape.M[0] &= ^uint64(0xffff00000000)
 			case 3:
-				shape.m[0] &= ^uint64(0xffff000000000000)
+				shape.M[0] &= ^uint64(0xffff000000000000)
 			}
 
 			shape = shape.Or(shift)
 			shape = shape.Or(unTarget)
 		} else {
 			shift := NewFieldBitsWithM([2]uint64{0, shiftCol})
-			unTarget := NewFieldBitsWithM([2]uint64{0, ^(shiftTarget.m[1] | 1<<((colNum-4)*16))})
-			unTarget.m[1] = unTarget.ColBits(colNum)
+			unTarget := NewFieldBitsWithM([2]uint64{0, ^(shiftTarget.M[1] | 1<<((colNum-4)*16))})
+			unTarget.M[1] = unTarget.ColBits(colNum)
 			unTarget = unTarget.And(shape)
 			switch colNum {
 			case 4:
-				shape.m[1] &= ^uint64(0xffff)
+				shape.M[1] &= ^uint64(0xffff)
 			case 5:
-				shape.m[1] &= ^uint64(0xffff0000)
+				shape.M[1] &= ^uint64(0xffff0000)
 			}
 
 			shape = shape.Or(shift)
@@ -312,7 +312,11 @@ func (sbf *ShapeBitField) InsertShape(fb *FieldBits) {
 			continue
 		}
 		shiftTarget := fb.Clone()
-		for y := bits.Len64(col >> (x * 16)); y < 16; y++ {
+		sb := x * 16
+		if x > 3 {
+			sb = (x - 4) * 16
+		}
+		for y := bits.Len64(col >> sb); y < 16; y++ {
 			shiftTarget.SetOnebit(x, y)
 		}
 		sbf.shiftCol(fb, shiftTarget, x)
@@ -370,9 +374,13 @@ func (sbf *ShapeBitField) ChainOrderedFieldString() string {
 }
 
 func (sbf *ShapeBitField) ShowDebug() {
+	fmt.Print(sbf.ToString())
+}
+
+func (sbf *ShapeBitField) ToString() string {
 	var b strings.Builder
 	b.Grow(165)
-	for y := 14; y >= 0; y-- {
+	for y := 14; y > 0; y-- {
 		fmt.Fprintf(&b, "%02d: ", y)
 		for x := 0; x < 6; x++ {
 			e := true
@@ -389,7 +397,7 @@ func (sbf *ShapeBitField) ShowDebug() {
 		}
 		fmt.Fprintln(&b)
 	}
-	fmt.Print(b.String())
+	return b.String()
 }
 
 func (sbf *ShapeBitField) ToChainShapes() []*FieldBits {

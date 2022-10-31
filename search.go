@@ -25,6 +25,156 @@ type Hand struct {
 	Position [2]int
 }
 
+type PuyoSetPlacement struct {
+	PuyoSet *PuyoSet
+	Pos     [2]int
+	AxisX   int
+	AxisY   int
+	ChildX  int
+	ChildY  int
+	Chigiri bool
+}
+
+var SetupPositions = [][2]int{
+	{0, 0}, {0, 1}, {0, 2},
+	{1, 0}, {1, 1}, {1, 2}, {1, 3},
+	{2, 0}, {2, 1}, {2, 2}, {2, 3},
+	{3, 0}, {3, 1}, {3, 2}, {3, 3},
+	{4, 0}, {4, 1}, {4, 2}, {4, 3},
+	{5, 0}, {5, 2}, {5, 3},
+}
+
+func CreateHeights(bf *BitField) map[int]int {
+	empty := bf.Bits(Empty)
+
+	heights := map[int]int{}
+	for i := 0; i < 6; i++ {
+		emptyBits := empty.ColBits(i)
+		if i < 4 {
+			emptyBits >>= 16 * i
+		} else {
+			emptyBits >>= (i - 4) * 16
+		}
+		emptyBits |= 0xC000
+		heights[i] = 16 - bits.OnesCount64(emptyBits)
+	}
+	return heights
+}
+
+func (bf *BitField) SearchPlacementForPos(puyoSet *PuyoSet, pos [2]int) *PuyoSetPlacement {
+	// TODO check invalid placement and return false.
+	ax := pos[0]
+	cx := pos[0]
+
+	heights := CreateHeights(bf)
+
+	y := heights[ax] + 1
+	ay := y
+	cy := y + 1
+	switch pos[1] {
+	case 0:
+	case 1:
+		cx += 1
+		cy = heights[cx] + 1
+	case 2:
+		ay = cy
+		cy = y
+	case 3:
+		cx -= 1
+		cy = heights[cx] + 1
+	}
+
+	x := 0
+	if ax != 2 || cx != 2 {
+		if ax > 2 || cx > 2 {
+			if ax > cx {
+				x = ax
+			} else {
+				x = cx
+			}
+		} else if ax < 2 || cx < 2 {
+			if ax < cx {
+				x = ax
+			} else {
+				x = cx
+			}
+		}
+	}
+
+	if x != 2 {
+		// right side
+		if x > 2 {
+			for i := 3; i < x; i++ {
+				// height 13 wall
+				if heights[i] >= 13 {
+					return nil
+				}
+				if heights[i] == 12 {
+					hasStep := heights[1] == 12 && heights[3] == 12 // hasama-chomu
+					if hasStep == false {
+						for j := i - 1; j >= 0; j-- {
+							if heights[j] >= 12 {
+								break
+							}
+							if heights[j] == 11 {
+								hasStep = true
+							}
+						}
+					}
+					if hasStep == false {
+						return nil
+					}
+				}
+			}
+		} else { // left side
+			for i := 1; i >= x; i-- {
+				// height 13 wall
+				if heights[i] >= 13 {
+					return nil
+				}
+				if heights[i] == 12 {
+					hasStep := heights[1] == 12 && heights[3] == 12 // hasama-chomu
+					if hasStep == false {
+						for j := i + 1; j < len(heights); j++ {
+							if heights[j] >= 12 {
+								break
+							}
+							if heights[j] == 11 {
+								hasStep = true
+								break
+							}
+						}
+					}
+					if hasStep == false {
+						return nil
+					} else {
+						break
+					}
+				}
+			}
+		}
+	}
+
+	if ay > 13 {
+		return nil
+	}
+	// can't place puyo if 14th is used.
+	if cy == 14 {
+		if bf.Color(cx, cy) != Empty {
+			return nil
+		}
+	}
+	placement := new(PuyoSetPlacement)
+	placement.PuyoSet = puyoSet
+	placement.Pos = pos
+	placement.AxisX = ax
+	placement.AxisY = ay
+	placement.ChildX = cx
+	placement.ChildY = cy
+	placement.Chigiri = ax != cx && ay != cy
+	return placement
+}
+
 func (bf *BitField) PlacePuyo(puyoSet PuyoSet, pos [2]int) (bool, bool) {
 	// TODO check invalid placement and return false.
 	ax := pos[0]
@@ -240,14 +390,7 @@ func (obf *BitField) SearchPosition(puyoSet PuyoSet, hands []Hand, callback func
 	// 0:  1:    2:  3:
 	// y   x y   x   y x
 	// x         y
-	positions := [][2]int{
-		{0, 0}, {0, 1}, {0, 2},
-		{1, 0}, {1, 1}, {1, 2}, {1, 3},
-		{2, 0}, {2, 1}, {2, 2}, {2, 3},
-		{3, 0}, {3, 1}, {3, 2}, {3, 3},
-		{4, 0}, {4, 1}, {4, 2}, {4, 3},
-		{5, 0}, {5, 2}, {5, 3},
-	}
+	positions := SetupPositions
 	if puyoSet.Axis == puyoSet.Child {
 		positions = [][2]int{
 			{0, 0}, {0, 1},
