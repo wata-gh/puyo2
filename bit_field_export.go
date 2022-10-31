@@ -283,6 +283,8 @@ func (obf *BitField) ExportHandsSimulateImage(hands []Hand, path string) {
 			fmt.Printf("hand %v\n", hand)
 			panic("can not place puyo.")
 		}
+		idx++
+		bf.ExportHandImage(fmt.Sprintf("%s/%d.png", path, idx), nil)
 		for {
 			v := bf.FindVanishingBits()
 			if v.IsEmpty() {
