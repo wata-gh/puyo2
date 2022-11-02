@@ -29,7 +29,7 @@ func (fb *FieldBits) bitChar(b int) string {
 func (fb *FieldBits) Expand(mask *FieldBits) *FieldBits {
 	cfb := fb
 	for {
-		nfb := cfb.expand1(mask)
+		nfb := cfb.Expand1(mask)
 		if nfb.Equals(cfb) {
 			return nfb
 		}
@@ -37,7 +37,7 @@ func (fb *FieldBits) Expand(mask *FieldBits) *FieldBits {
 	}
 }
 
-func (fb *FieldBits) expand1(mask *FieldBits) *FieldBits {
+func (fb *FieldBits) Expand1(mask *FieldBits) *FieldBits {
 	// 4 列目と 5 列目は変数をまたぐので個別に計算
 	r4 := fb.M[0] & 0xffff000000000000
 	r5 := fb.M[1] & 0xffff
@@ -137,7 +137,7 @@ func (fb *FieldBits) FindVanishingBits() *FieldBits {
 
 	vanishing.M[0] |= two_u[0] | two_r[0]
 	vanishing.M[1] |= two_u[1] | two_r[1]
-	return vanishing.expand1(fb)
+	return vanishing.Expand1(fb)
 }
 
 func (fb *FieldBits) Onebit(x int, y int) uint64 {
@@ -168,15 +168,15 @@ func (fb *FieldBits) IterateBitWithMasking(callback func(fb *FieldBits) *FieldBi
 
 func (fb *FieldBits) MaskField13() *FieldBits {
 	mfb := new(FieldBits)
-	mfb.M[0] = fb.M[0] & 0xBFFEBFFEBFFEBFFE
-	mfb.M[1] = fb.M[1] & 0xBFFEBFFEBFFEBFFE
+	mfb.M[0] = fb.M[0] & 0x3FFE3FFE3FFE3FFE
+	mfb.M[1] = fb.M[1] & 0x3FFE3FFE
 	return mfb
 }
 
 func (fb *FieldBits) MaskField12() *FieldBits {
 	mfb := new(FieldBits)
 	mfb.M[0] = fb.M[0] & 0x1FFE1FFE1FFE1FFE
-	mfb.M[1] = fb.M[1] & 0x1FFE1FFE1FFE1FFE
+	mfb.M[1] = fb.M[1] & 0x1FFE1FFE
 	return mfb
 }
 
