@@ -291,7 +291,7 @@ func (bf *BitField) FindVanishingBits() *FieldBits {
 		v = v.Or(bf.Bits(c).MaskField12().FindVanishingBits())
 	}
 	// v := bf.Bits(Green).MaskField12().FindVanishingBits().Or(bf.Bits(Red).MaskField12().FindVanishingBits()).Or(bf.Bits(Yellow).MaskField12().FindVanishingBits()).Or(bf.Bits(Blue).MaskField12().FindVanishingBits())
-	o := v.expand1(bf.Bits(Ojama))
+	o := v.Expand1(bf.Bits(Ojama))
 	return v.Or(o)
 }
 
@@ -458,7 +458,7 @@ func (bf *BitField) SimulateDetail() *RensaResult {
 		}
 
 		result.NthResults = append(result.NthResults, nth)
-		vanished = vanished.Or(vanished.expand1(bf.Bits(Ojama)))
+		vanished = vanished.Or(vanished.Expand1(bf.Bits(Ojama)))
 		result.AddChain()
 		colorBonusCoef := ColorBonus(numColors)
 		coef := CalcRensaBonusCoef(RensaBonus(result.Chains), longBonusCoef, colorBonusCoef)
