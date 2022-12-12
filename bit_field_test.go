@@ -70,6 +70,24 @@ func TestEqualChain(t *testing.T) {
 	}
 }
 
+func TestSetMattulwan(t *testing.T) {
+	field := "a54ea3eaebdece3bd2eb2dc3"
+	bf := NewBitField()
+	bf.SetMattulwanParam(field)
+	bf2 := NewBitFieldWithMattulwanC(field)
+	if bf.MattulwanEditorParam() != bf2.MattulwanEditorParam() {
+		t.Fatalf("mattulwan editor param must be same. actual %s\nexpected %s", bf.MattulwanEditorParam(), bf2.MattulwanEditorParam())
+	}
+
+	field = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaaaabfaaaadbdaabbffaa"
+	bf = NewBitField()
+	bf.SetMattulwanParam(field)
+	bf2 = NewBitFieldWithMattulwanC(field)
+	if bf.MattulwanEditorParam() != bf2.MattulwanEditorParam() {
+		t.Fatalf("mattulwan editor param must be same. actual %s\nexpected %s", bf.MattulwanEditorParam(), bf2.MattulwanEditorParam())
+	}
+}
+
 func TestSimulateDetail(t *testing.T) {
 	// 通常連鎖
 	bf := NewBitFieldWithMattulwan("a54ea3eaebdece3bd2eb2dc3")
