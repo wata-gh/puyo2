@@ -110,6 +110,14 @@ func ToSimpleHands(hands []Hand) string {
 	return b.String()
 }
 
+func ToSimpleHands2(hands []*Hand) string {
+	var b strings.Builder
+	for _, hand := range hands {
+		fmt.Fprintf(&b, "%s%s%d%d", color2rbgyp(hand.PuyoSet.Axis), color2rbgyp(hand.PuyoSet.Child), hand.Position[0], hand.Position[1])
+	}
+	return b.String()
+}
+
 func ParseSimpleHands(handsStr string) []Hand {
 	var hands []Hand
 	data := strings.Split(handsStr, "")
@@ -127,4 +135,82 @@ func ParseSimpleHands(handsStr string) []Hand {
 		hands = append(hands, Hand{PuyoSet: PuyoSet{Axis: axis, Child: child}, Position: [2]int{row, dir}})
 	}
 	return hands
+}
+
+func ParseSimpleHands2(handsStr string) []*Hand {
+	var hands []*Hand
+	data := strings.Split(handsStr, "")
+	for i := 0; i < len(data); i += 4 {
+		axis := Rbygp2Color(data[i])
+		child := Rbygp2Color(data[i+1])
+		row, err := strconv.Atoi(data[i+2])
+		if err != nil {
+			panic(err)
+		}
+		dir, err := strconv.Atoi(data[i+3])
+		if err != nil {
+			panic(err)
+		}
+		hands = append(hands, &Hand{PuyoSet: PuyoSet{Axis: axis, Child: child}, Position: [2]int{row, dir}})
+	}
+	return hands
+}
+
+var encodeChar = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ[]"
+
+func convertBitDataToFcode(bitData []int) string {
+	var fcode = ""
+	for {
+		index := 0
+		num := 0
+		for bit := 0; bit < 6; /* FCODE_CHAR_BIT */ bit++ {
+			index = len(fcode)*6 + bit
+			if index < len(bitData) {
+				num += (bitData[index] << bit)
+			}
+		}
+		fcode += strings.Split(encodeChar, "")[num]
+		if index >= len(bitData)-1 {
+			break
+		}
+	}
+	return fcode
+}
+
+func getNextSettingFcode(hands []*Hand) string {
+	handConv := map[Color]int{
+		Red:    0,
+		Green:  1,
+		Blue:   2,
+		Yellow: 3,
+		Purple: 4,
+	}
+	puyoConvLen := 5
+	puyoHistoryLen := len(hands)
+	nextSettingData := []int{}
+	oneData := 0
+	for i, hand := range hands {
+		pair := [2]int{handConv[hand.PuyoSet.Axis], handConv[hand.PuyoSet.Child]}
+		settingNum := pair[0]*puyoConvLen + pair[1]
+		oneData = settingNum
+		if i < puyoHistoryLen {
+			axis := hand.Position[0] + 1
+			dir := hand.Position[1]
+			historyNum := ((axis << 2) + dir)
+			oneData |= (historyNum << 7)
+		}
+		nextSettingData = append(nextSettingData, oneData)
+	}
+
+	bitData := []int{}
+	for i := 0; i < len(nextSettingData); i++ {
+		for bit := 0; bit < 12; /* FCODE_NEXT_DATA_BIT */ bit++ {
+			bitData = append(bitData, (nextSettingData[i]>>bit)&1)
+		}
+	}
+	return "_" + convertBitDataToFcode(bitData)
+}
+
+func Hands2Puyop(hands []*Hand) string {
+	return getNextSettingFcode(hands)
 }

@@ -44,6 +44,38 @@ var SetupPositions = [][2]int{
 	{5, 0}, {5, 2}, {5, 3},
 }
 
+var AllPuyoSets = [...]PuyoSet{
+	{Red, Red},
+	{Red, Blue},
+	{Red, Yellow},
+	{Red, Green},
+	{Blue, Red},
+	{Blue, Blue},
+	{Blue, Yellow},
+	{Blue, Green},
+	{Yellow, Red},
+	{Yellow, Blue},
+	{Yellow, Yellow},
+	{Yellow, Green},
+	{Green, Red},
+	{Green, Blue},
+	{Green, Yellow},
+	{Green, Green},
+}
+
+var UniquePuyoSets = [...]PuyoSet{
+	{Red, Red},
+	{Red, Blue},
+	{Red, Yellow},
+	{Red, Green},
+	{Blue, Blue},
+	{Blue, Yellow},
+	{Blue, Green},
+	{Yellow, Yellow},
+	{Yellow, Green},
+	{Green, Green},
+}
+
 func CreateHeights(bf *BitField) map[int]int {
 	empty := bf.Bits(Empty)
 
