@@ -33,6 +33,7 @@ type PuyoSetPlacement struct {
 	ChildX  int
 	ChildY  int
 	Chigiri bool
+	Frames  int
 }
 
 var SetupPositions = [][2]int{
@@ -76,7 +77,40 @@ var UniquePuyoSets = [...]PuyoSet{
 	{Green, Green},
 }
 
-func CreateHeights(bf *BitField) map[int]int {
+var SetFramesTable = [15][6]int{
+	{0, 0, 0, 0, 0, 0}, // zero
+	{54, 52, 50, 52, 54, 56},
+	{52, 50, 48, 50, 52, 54},
+	{50, 48, 46, 48, 50, 52},
+	{48, 46, 44, 46, 48, 50},
+	{46, 44, 42, 44, 46, 48},
+	{44, 42, 40, 42, 44, 46},
+	{42, 40, 38, 40, 42, 44},
+	{40, 38, 36, 38, 40, 42},
+	{38, 36, 34, 36, 38, 40},
+	{36, 34, 32, 34, 36, 38},
+	{34, 32, 30, 32, 34, 36},
+	{32, 30, 28, 30, 32, 34},
+	{30, 28, 26, 28, 30, 32}, // this is not accurate. because of needs of mawashi.
+	{30, 28, 26, 28, 30, 32}, // this is not accurate. because of needs of mawashi.
+}
+
+var ChigiriFramesTable = []int{
+	0,
+	19,
+	24,
+	28,
+	31,
+	34,
+	37,
+	40,
+	42,
+	44,
+	46,
+	48,
+}
+
+func (bf *BitField) CreateHeights() map[int]int {
 	empty := bf.Bits(Empty)
 
 	heights := map[int]int{}
@@ -94,11 +128,11 @@ func CreateHeights(bf *BitField) map[int]int {
 }
 
 func (bf *BitField) SearchPlacementForPos(puyoSet *PuyoSet, pos [2]int) *PuyoSetPlacement {
-	// TODO check invalid placement and return false.
+	// TODO check invalid placement and return nil.
 	ax := pos[0]
 	cx := pos[0]
 
-	heights := CreateHeights(bf)
+	heights := bf.CreateHeights()
 
 	y := heights[ax] + 1
 	ay := y
@@ -204,126 +238,27 @@ func (bf *BitField) SearchPlacementForPos(puyoSet *PuyoSet, pos [2]int) *PuyoSet
 	placement.ChildX = cx
 	placement.ChildY = cy
 	placement.Chigiri = ax != cx && ay != cy
+	if placement.AxisX == placement.ChildX || placement.AxisY == placement.ChildY { // no chigiri rotate 0,1,2,3
+		placement.Frames = SetFramesTable[placement.AxisY][placement.AxisX]
+	} else { // with chigiri
+		higher := placement.AxisY
+		steps := placement.AxisY - placement.ChildY
+		if higher < placement.ChildY {
+			higher = placement.ChildY
+			steps = placement.ChildY - placement.AxisY
+		}
+		placement.Frames = SetFramesTable[higher][placement.AxisX] + ChigiriFramesTable[steps]
+	}
 	return placement
 }
 
 func (bf *BitField) PlacePuyo(puyoSet PuyoSet, pos [2]int) (bool, bool) {
-	// TODO check invalid placement and return false.
-	ax := pos[0]
-	cx := pos[0]
-
-	empty := bf.Bits(Empty)
-
-	heights := map[int]int{}
-	for i := 0; i < 6; i++ {
-		emptyBits := empty.ColBits(i)
-		if i < 4 {
-			emptyBits >>= 16 * i
-		} else {
-			emptyBits >>= (i - 4) * 16
-		}
-		emptyBits |= 0xC000
-		heights[i] = 16 - bits.OnesCount64(emptyBits)
+	placement := bf.SearchPlacementForPos(&puyoSet, pos)
+	if placement != nil {
+		bf.PlacePuyoWithPlacement(placement)
+		return true, placement.Chigiri
 	}
-
-	y := heights[ax] + 1
-	ay := y
-	cy := y + 1
-	switch pos[1] {
-	case 0:
-	case 1:
-		cx += 1
-		cy = heights[cx] + 1
-	case 2:
-		ay = cy
-		cy = y
-	case 3:
-		cx -= 1
-		cy = heights[cx] + 1
-	}
-
-	x := 0
-	if ax != 2 || cx != 2 {
-		if ax > 2 || cx > 2 {
-			if ax > cx {
-				x = ax
-			} else {
-				x = cx
-			}
-		} else if ax < 2 || cx < 2 {
-			if ax < cx {
-				x = ax
-			} else {
-				x = cx
-			}
-		}
-	}
-	if x != 2 {
-		// right side
-		if x > 2 {
-			for i := 3; i < x; i++ {
-				// height 13 wall
-				if heights[i] >= 13 {
-					return false, false
-				}
-				if heights[i] == 12 {
-					hasStep := heights[1] == 12 && heights[3] == 12 // hasama-chomu
-					if hasStep == false {
-						for j := i - 1; j >= 0; j-- {
-							if heights[j] >= 12 {
-								break
-							}
-							if heights[j] == 11 {
-								hasStep = true
-							}
-						}
-					}
-					if hasStep == false {
-						return false, false
-					}
-				}
-			}
-		} else { // left side
-			for i := 1; i >= x; i-- {
-				// height 13 wall
-				if heights[i] >= 13 {
-					return false, false
-				}
-				if heights[i] == 12 {
-					hasStep := heights[1] == 12 && heights[3] == 12 // hasama-chomu
-					if hasStep == false {
-						for j := i + 1; j < len(heights); j++ {
-							if heights[j] >= 12 {
-								break
-							}
-							if heights[j] == 11 {
-								hasStep = true
-								break
-							}
-						}
-					}
-					if hasStep == false {
-						return false, false
-					} else {
-						break
-					}
-				}
-			}
-		}
-	}
-
-	if ay > 13 {
-		return false, false
-	}
-	// can't place puyo if 14th is used.
-	if cy == 14 {
-		if bf.Color(cx, cy) != Empty {
-			return false, false
-		}
-	}
-	bf.SetColor(puyoSet.Axis, ax, ay)
-	bf.SetColor(puyoSet.Child, cx, cy)
-	return true, ax != cx && ay != cy
+	return false, false
 }
 
 func samePuyoSet(puyoSet1 PuyoSet, puyoSet2 PuyoSet) bool {

@@ -1,8 +1,12 @@
 package puyo2
 
+import "fmt"
+
 type SearchCondition struct {
 	DisableChigiri   bool
 	ChigiriableCount int
+	Chigiris         int
+	SetFrames        int
 	PuyoSets         []PuyoSet
 	BitField         *BitField
 	LastCallback     func(sr *SearchResult)
@@ -69,9 +73,13 @@ func (cond *SearchCondition) SearchPositionV2(hands []Hand) {
 
 	for i, pos := range positions {
 		bf := cond.BitField.Clone()
-		placed, chigiri := bf.PlacePuyo(puyoSet, pos)
-		if placed == false || (cond.DisableChigiri && chigiri) {
+		placement := bf.SearchPlacementForPos(&puyoSet, pos)
+		if placement == nil || (cond.DisableChigiri && placement.Chigiri) {
 			continue
+		}
+		if bf.PlacePuyoWithPlacement(placement) == false {
+			bf.ShowDebug()
+			panic(fmt.Sprintf("should be able to place. %+v\n", placement))
 		}
 		newHands := make([]Hand, len(hands))
 		copy(newHands, hands)
@@ -88,6 +96,12 @@ func (cond *SearchCondition) SearchPositionV2(hands []Hand) {
 		searchResult.RensaResult = result
 		searchResult.Hands = newHands
 		searchResult.Depth = len(newHands)
+		searchResult.RensaResult.SetFrames = cond.SetFrames + placement.Frames
+		if placement.Chigiri {
+			searchResult.RensaResult.Chigiris = cond.Chigiris + 1
+		} else {
+			searchResult.RensaResult.Chigiris = cond.Chigiris
+		}
 
 		if cond.EachHandCallback == nil || cond.EachHandCallback(searchResult) {
 			newCond := new(SearchCondition)
@@ -97,6 +111,8 @@ func (cond *SearchCondition) SearchPositionV2(hands []Hand) {
 			newCond.BitField = result.BitField
 			newCond.LastCallback = cond.LastCallback
 			newCond.EachHandCallback = cond.EachHandCallback
+			newCond.Chigiris = searchResult.RensaResult.Chigiris
+			newCond.SetFrames = searchResult.RensaResult.SetFrames
 			newCond.searchWithPuyoSetsV2(newHands, searchResult)
 		}
 	}

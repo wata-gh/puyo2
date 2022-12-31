@@ -30,11 +30,7 @@ func NewBitField() *BitField {
 func NewBitFieldWithTable(table map[Color]Color) *BitField {
 	bitField := new(BitField)
 	bitField.Table = table
-	for k := range bitField.Table {
-		if table[k] != Empty && table[k] != Ojama {
-			bitField.colors = append(bitField.colors, table[k])
-		}
-	}
+	bitField.resetColor()
 	return bitField
 }
 
@@ -81,6 +77,16 @@ func NewBitFieldWithMattulwan(field string) *BitField {
 func NewBitFieldWithMattulwanC(field string) *BitField {
 	bf := new(BitField)
 	bf.SetMattulwanParam(field)
+	return bf
+}
+
+func NewBitFieldWithMattulwanCAndHaipuyo(field string, haipuyo string) *BitField {
+	bf := new(BitField)
+	bf.SetMattulwanParam(field)
+	tableColors := bf.tableColors(bf.Table)
+	puyoSets := Haipuyo2PuyoSets(haipuyo)
+	_, colors := bf.createTableAndColors(puyoSets)
+	bf.mergeTableColors(tableColors, colors)
 	return bf
 }
 
@@ -142,6 +148,98 @@ func (bf *BitField) converColor(puyo Color) Color {
 	return puyo
 }
 
+func (bf *BitField) createTableAndColors(puyoSets []*PuyoSet) (map[Color]Color, []Color) {
+	colors := []Color{}
+	table := map[Color]Color{
+		Red:    Empty,
+		Blue:   Empty,
+		Green:  Empty,
+		Yellow: Empty,
+		Purple: Empty,
+	}
+
+	for _, puyoSet := range puyoSets {
+		table[puyoSet.Axis] = puyoSet.Axis
+		table[puyoSet.Child] = puyoSet.Child
+	}
+	// contains purple
+	if table[Purple] == Purple {
+		for _, c := range []Color{Red, Blue, Yellow, Green} {
+			if table[c] == Empty {
+				table[c] = Purple
+				table[Purple] = c
+			} else {
+				colors = append(colors, c)
+			}
+		}
+		colors = append(colors, Purple)
+	} else {
+		for k, v := range table {
+			if v != Empty {
+				colors = append(colors, k)
+			}
+		}
+	}
+	return table, colors
+}
+
+func (bf *BitField) mergeTableColors(tableColors []Color, colors []Color) {
+	for _, c := range tableColors {
+		found := false
+		for _, c2 := range colors {
+			if c == c2 {
+				found = true
+				break
+			}
+		}
+		if found == false {
+			colors = append(colors, c)
+		}
+	}
+
+	ntable := map[Color]Color{
+		Red:    Empty,
+		Blue:   Empty,
+		Green:  Empty,
+		Yellow: Empty,
+		Purple: Empty,
+	}
+
+	for _, c := range colors {
+		ntable[c] = c
+	}
+
+	// contains purple
+	if ntable[Purple] == Purple {
+		for _, c := range []Color{Red, Blue, Yellow, Green} {
+			if ntable[c] == Empty {
+				ntable[c] = Purple
+				ntable[Purple] = c
+				break
+			}
+		}
+	}
+	bf.Table = ntable
+	bf.resetColor()
+}
+
+func (bf *BitField) resetColor() {
+	bf.colors = bf.tableColors(bf.Table)
+}
+
+func (bf *BitField) tableColors(table map[Color]Color) []Color {
+	colors := []Color{}
+	for _, c := range []Color{Red, Blue, Yellow, Green} {
+		v := table[c]
+		if v == Purple {
+			colors = append(colors, Purple)
+		} else if c == v {
+			colors = append(colors, c)
+		}
+	}
+	return colors
+}
+
 func (bf *BitField) Bits(c Color) *FieldBits {
 	switch bf.converColor(c) {
 	case Empty:
@@ -161,7 +259,7 @@ func (bf *BitField) Bits(c Color) *FieldBits {
 	case Green:
 		return NewFieldBitsWithM([2]uint64{bf.M[2][0] & bf.M[1][0] & bf.M[0][0], bf.M[2][1] & bf.M[1][1] & bf.M[0][1]})
 	}
-	panic(fmt.Sprintf("Color must be valid. passed %d, %d, %+v", c, bf.converColor(c), bf.Table))
+	panic(fmt.Sprintf("Color must be valid. passed %d, converted to -> %d, %+v", c, bf.converColor(c), bf.Table))
 }
 
 func (bf *BitField) Clone() *BitField {
@@ -278,6 +376,13 @@ func (bf *BitField) Normalize() *BitField {
 		}
 	}
 	return NewBitFieldWithMattulwan(ns)
+}
+
+func (bf *BitField) PlacePuyoWithPlacement(placement *PuyoSetPlacement) bool {
+	// TODO return false if invalid placement.
+	bf.SetColor(placement.PuyoSet.Axis, placement.AxisX, placement.AxisY)
+	bf.SetColor(placement.PuyoSet.Child, placement.ChildX, placement.ChildY)
+	return true
 }
 
 func (bf *BitField) SetColor(c Color, x int, y int) {
@@ -468,6 +573,16 @@ func (bf *BitField) SimulateDetail() *RensaResult {
 		coef := CalcRensaBonusCoef(RensaBonus(result.Chains), longBonusCoef, colorBonusCoef)
 		result.AddErased(numErased)
 		result.AddScore(10 * numErased * coef)
+		heights := bf.CreateHeights()
+		result.Quick = true
+		for x, height := range heights {
+			col := vanished.ShiftedColBits(x)
+			vh := bits.Len64(col) - 1
+			if vh != -1 && height > vh {
+				result.Quick = false
+				break
+			}
+		}
 		bf.Drop(vanished)
 	}
 	result.SetBitField(bf)
