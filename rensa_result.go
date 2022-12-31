@@ -3,23 +3,25 @@ package puyo2
 import "fmt"
 
 type NthResult struct {
-	Nth         int
-	ErasedPuyos []SingleResult
+	Nth         int            `json:"nth"`
+	ErasedPuyos []SingleResult `json:"erasedPuyos"`
 }
 
 type SingleResult struct {
-	Color     Color
-	Connected int
+	Color     Color `json:"color"`
+	Connected int   `json:"connected"`
 }
 
 type RensaResult struct {
-	Chains     int
-	Score      int
-	Frames     int
-	Erased     int
-	Quick      bool
-	BitField   *BitField
-	NthResults []*NthResult
+	Chains      int          `json:"chains"`
+	Chigiris    int          `json:"chigiris"`
+	Score       int          `json:"score"`
+	RensaFrames int          `json:"rensaFrames"`
+	SetFrames   int          `json:"setFrames"`
+	Erased      int          `json:"erased"`
+	Quick       bool         `json:"quick"`
+	BitField    *BitField    `json:"bitFeild"`
+	NthResults  []*NthResult `json:"nthResults"`
 }
 
 func NewNthResult(nth int) *NthResult {
@@ -36,7 +38,7 @@ func NewRensaResultWithResult(chains int, score int, frames int, quick bool, bf 
 	r := new(RensaResult)
 	r.Chains = chains
 	r.Score = score
-	r.Frames = frames
+	r.RensaFrames = frames
 	r.Quick = quick
 	r.BitField = bf
 	return r

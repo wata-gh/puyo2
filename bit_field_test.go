@@ -70,6 +70,15 @@ func TestEqualChain(t *testing.T) {
 	}
 }
 
+func TestNewBitFieldWithMattulwanCAndHaipuyo(t *testing.T) {
+	param := "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+	haipuyo := "pprr"
+	bf := NewBitFieldWithMattulwanCAndHaipuyo(param, haipuyo)
+	bf.SetColor(Purple, 0, 1)
+	bf.SetColor(Red, 0, 2)
+	bf.ShowDebug()
+}
+
 func TestSetMattulwan(t *testing.T) {
 	field := "a54ea3eaebdece3bd2eb2dc3"
 	bf := NewBitField()

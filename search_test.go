@@ -309,6 +309,53 @@ func TestPlacePuyo(t *testing.T) {
 	}
 }
 
+func TestSearchPlacementForPos(t *testing.T) {
+	bf := NewBitField()
+	place := bf.SearchPlacementForPos(&PuyoSet{Axis: Red, Child: Blue}, [2]int{0, 0})
+	if place == nil {
+		t.Fatal("must not be nil.")
+	}
+	if place.Frames != 54 {
+		t.Fatalf("frames must be 54 but %d.", place.Frames)
+	}
+
+	bf = NewBitField()
+	place = bf.SearchPlacementForPos(&PuyoSet{Axis: Red, Child: Blue}, [2]int{0, 2})
+	if place == nil {
+		t.Fatal("must not be nil.")
+	}
+	if place.Frames != 52 {
+		t.Fatalf("frames must be 52 but %d.", place.Frames)
+	}
+
+	bf = NewBitField()
+	place = bf.SearchPlacementForPos(&PuyoSet{Axis: Red, Child: Blue}, [2]int{0, 1})
+	if place == nil {
+		t.Fatal("must not be nil.")
+	}
+	if place.Frames != 54 {
+		t.Fatalf("frames must be 54 but %d.", place.Frames)
+	}
+
+	bf = NewBitFieldWithMattulwan("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaaaa")
+	place = bf.SearchPlacementForPos(&PuyoSet{Axis: Red, Child: Blue}, [2]int{0, 1})
+	if place == nil {
+		t.Fatal("must not be nil.")
+	}
+	if place.Frames != 52+19 {
+		t.Fatalf("frames must be 71 but %d.", place.Frames)
+	}
+
+	bf = NewBitFieldWithMattulwan("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaaa")
+	place = bf.SearchPlacementForPos(&PuyoSet{Axis: Red, Child: Blue}, [2]int{0, 1})
+	if place == nil {
+		t.Fatal("must not be nil.")
+	}
+	if place.Frames != 52+19 {
+		t.Fatalf("frames must be 71 but %d.", place.Frames)
+	}
+}
+
 // func TestSearchPosition(t *testing.T) {
 // 	solved := false
 // 	hands := []Hand{}

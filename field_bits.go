@@ -198,6 +198,16 @@ func (fb *FieldBits) ShowDebug() {
 	fmt.Println(fb.ToString())
 }
 
+func (fb *FieldBits) ShiftedColBits(c int) uint64 {
+	col := fb.ColBits(c)
+	if c < 4 {
+		col >>= 16 * c
+	} else {
+		col >>= (c - 4) * 16
+	}
+	return col
+}
+
 func (fb *FieldBits) ToIntArray() [2]uint64 {
 	return fb.M
 }
