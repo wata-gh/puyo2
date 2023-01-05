@@ -26,14 +26,14 @@ type Hand struct {
 }
 
 type PuyoSetPlacement struct {
-	PuyoSet *PuyoSet
-	Pos     [2]int
-	AxisX   int
-	AxisY   int
-	ChildX  int
-	ChildY  int
-	Chigiri bool
-	Frames  int
+	PuyoSet *PuyoSet `json:"-"`
+	Pos     [2]int   `json:"pos"`
+	AxisX   int      `json:"axisX"`
+	AxisY   int      `json:"axisY"`
+	ChildX  int      `json:"childX"`
+	ChildY  int      `json:"childY"`
+	Chigiri bool     `json:"chigiri"`
+	Frames  int      `json:"frames"`
 }
 
 var SetupPositions = [][2]int{

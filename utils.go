@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-func color2rbgyp(c Color) string {
+func Color2rbgyp(c Color) string {
 	switch c {
 	case Red:
 		return "r"
@@ -105,7 +105,7 @@ func Haipuyo2PuyoSets(haipuyo string) []*PuyoSet {
 func ToSimpleHands(hands []Hand) string {
 	var b strings.Builder
 	for _, hand := range hands {
-		fmt.Fprintf(&b, "%s%s%d%d", color2rbgyp(hand.PuyoSet.Axis), color2rbgyp(hand.PuyoSet.Child), hand.Position[0], hand.Position[1])
+		fmt.Fprintf(&b, "%s%s%d%d", Color2rbgyp(hand.PuyoSet.Axis), Color2rbgyp(hand.PuyoSet.Child), hand.Position[0], hand.Position[1])
 	}
 	return b.String()
 }
@@ -113,7 +113,7 @@ func ToSimpleHands(hands []Hand) string {
 func ToSimpleHands2(hands []*Hand) string {
 	var b strings.Builder
 	for _, hand := range hands {
-		fmt.Fprintf(&b, "%s%s%d%d", color2rbgyp(hand.PuyoSet.Axis), color2rbgyp(hand.PuyoSet.Child), hand.Position[0], hand.Position[1])
+		fmt.Fprintf(&b, "%s%s%d%d", Color2rbgyp(hand.PuyoSet.Axis), Color2rbgyp(hand.PuyoSet.Child), hand.Position[0], hand.Position[1])
 	}
 	return b.String()
 }

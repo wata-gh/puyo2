@@ -314,8 +314,9 @@ func (bf *BitField) EqualChain(bf2 *BitField) bool {
 }
 
 func (bf *BitField) FindVanishingBits() *FieldBits {
-	v := bf.Bits(bf.colors[0]).MaskField12().FindVanishingBits()
-	for _, c := range bf.colors[1:] {
+	v := NewFieldBits()
+	// v := bf.Bits(bf.colors[0]).MaskField12().FindVanishingBits()
+	for _, c := range bf.colors {
 		v = v.Or(bf.Bits(c).MaskField12().FindVanishingBits())
 	}
 	// v := bf.Bits(Green).MaskField12().FindVanishingBits().Or(bf.Bits(Red).MaskField12().FindVanishingBits()).Or(bf.Bits(Yellow).MaskField12().FindVanishingBits()).Or(bf.Bits(Blue).MaskField12().FindVanishingBits())
