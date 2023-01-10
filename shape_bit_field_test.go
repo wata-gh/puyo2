@@ -5,19 +5,19 @@ import (
 )
 
 func TestFillChainableColor(t *testing.T) {
-	sbf := NewShapeBitFieldWithFieldString("aaaaaaaaaaaaaaaaaaaaaaaa23aaaa11aaaa13aaaa12aaaa52aaaa42aaaa33aaaa445aaa455aaa")
+	sbf := NewShapeBitFieldWithFieldString("........................23....11....13....12....52....42....33....445...455...")
 	bf := sbf.FillChainableColor()
 	if bf.MattulwanEditorParam() != "aaaaaaaaaaaaaaaaaaaaaaaacdaaaabbaaaabdaaaabcaaaaecaaaabcaaaaddaaaabbeaaabeeaaa" {
-		t.Fatalf("mattulwan editor param must be\aaaaaaaaaaaaaaaaaaaaaaaacdaaaabbaaaabdaaaabcaaaaecaaaabcaaaaddaaaabbeaaabeeaaa but\n%s", bf.MattulwanEditorParam())
+		t.Fatalf("mattulwan editor param must be\naaaaaaaaaaaaaaaaaaaaaaaacdaaaabbaaaabdaaaabcaaaaecaaaabcaaaaddaaaabbeaaabeeaaa but\n%s", bf.MattulwanEditorParam())
 	}
 
-	sbf = NewShapeBitFieldWithFieldString("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa5aaaaa32aaaa12aaaa11aaaa212aaa334aaa355aaa4454aa")
+	sbf = NewShapeBitFieldWithFieldString("..............................5.....32....12....11....212...334...355...4454..")
 	bf = sbf.FillChainableColor()
 	if bf.MattulwanEditorParam() != "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaaaadcaaaabcaaaabbaaaacbcaaaddbaaadccaaabbcbaa" {
-		t.Fatalf("mattulwan editor param must be\aaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaaaadcaaaabcaaaabbaaaacbcaaaddbaaadccaaabbcbaa but\n%s", bf.MattulwanEditorParam())
+		t.Fatalf("mattulwan editor param must be\naaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaaaadcaaaabcaaaabbaaaacbcaaaddbaaadccaaabbcbaa but\n%s", bf.MattulwanEditorParam())
 	}
 
-	sbf = NewShapeBitFieldWithFieldString("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa2aaaa513aaaa4aaaa")
+	sbf = NewShapeBitFieldWithFieldString(".............................................................2....513....4....")
 	bf = sbf.FillChainableColor()
 	if bf != nil {
 		t.Fatalf("BitField must be nil but %v", bf)
