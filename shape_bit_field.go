@@ -18,15 +18,61 @@ func NewShapeBitField() *ShapeBitField {
 	return shapeBitField
 }
 
+var letter2Num = map[rune]int{
+	'1': 1,
+	'2': 2,
+	'3': 3,
+	'4': 4,
+	'5': 5,
+	'6': 6,
+	'7': 7,
+	'8': 8,
+	'9': 9,
+	'a': 10,
+	'b': 11,
+	'c': 12,
+	'd': 13,
+	'e': 14,
+	'f': 15,
+	'g': 16,
+	'h': 17,
+	'i': 18,
+	'j': 19,
+	'k': 20,
+}
+
+var num2Letter = map[int]string{
+	1:  "1",
+	2:  "2",
+	3:  "3",
+	4:  "4",
+	5:  "5",
+	6:  "6",
+	7:  "7",
+	8:  "8",
+	9:  "9",
+	10: "a",
+	11: "b",
+	12: "c",
+	13: "d",
+	14: "e",
+	15: "f",
+	16: "g",
+	17: "h",
+	18: "i",
+	19: "j",
+	20: "k",
+}
+
 func NewShapeBitFieldWithFieldString(param string) *ShapeBitField {
 	shapeBitField := new(ShapeBitField)
 
 	max := 0
 	for _, c := range param {
-		if c == 'a' {
+		if c == '.' {
 			continue
 		}
-		n := int(c) - int('0')
+		n := letter2Num[c]
 		if n > max {
 			max = n
 		}
@@ -36,10 +82,10 @@ func NewShapeBitFieldWithFieldString(param string) *ShapeBitField {
 		shapes[i] = NewFieldBits()
 	}
 	for i, c := range param {
-		if c == 'a' {
+		if c == '.' {
 			continue
 		}
-		n := int(c) - int('0')
+		n := letter2Num[c]
 		x := i % 6
 		y := 13 - i/6
 
@@ -331,13 +377,13 @@ func (sbf *ShapeBitField) FieldString() string {
 			e := true
 			for i, shape := range sbf.Shapes {
 				if shape.Onebit(x, y) > 0 {
-					fmt.Fprint(&b, i+1)
+					fmt.Fprint(&b, num2Letter[i+1])
 					e = false
 					break
 				}
 			}
 			if e {
-				fmt.Fprint(&b, "a")
+				fmt.Fprint(&b, ".")
 			}
 		}
 	}
@@ -360,13 +406,13 @@ func (sbf *ShapeBitField) ChainOrderedFieldString() string {
 			e := true
 			for i, shape := range shapes {
 				if shape.Onebit(x, y) > 0 {
-					fmt.Fprint(&b, i+1)
+					fmt.Fprint(&b, num2Letter[i+1])
 					e = false
 					break
 				}
 			}
 			if e {
-				fmt.Fprint(&b, "a")
+				fmt.Fprint(&b, ".")
 			}
 		}
 	}
@@ -386,7 +432,7 @@ func (sbf *ShapeBitField) ToString() string {
 			e := true
 			for i, shape := range sbf.Shapes {
 				if shape.Onebit(x, y) > 0 {
-					fmt.Fprint(&b, i)
+					fmt.Fprint(&b, num2Letter[i+1])
 					e = false
 					break
 				}
