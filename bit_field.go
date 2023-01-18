@@ -27,6 +27,44 @@ func NewBitField() *BitField {
 	return bitField
 }
 
+func NewBitFieldWithColors(colors []Color) *BitField {
+	bitField := new(BitField)
+	hasPurple := false
+	for _, c := range colors {
+		if c == Purple {
+			hasPurple = true
+			break
+		}
+	}
+	table := map[Color]Color{}
+	if hasPurple {
+		for _, c := range []Color{Red, Blue, Yellow, Green} {
+			found := false
+			for _, c2 := range colors {
+				if c2 == Purple {
+					continue
+				}
+				if c == c2 {
+					table[c] = c
+					found = true
+					break
+				}
+			}
+			if found == false {
+				table[Purple] = c
+				table[c] = Purple
+			}
+		}
+	} else {
+		for _, c := range []Color{Red, Blue, Yellow, Green} {
+			table[c] = c
+		}
+	}
+	bitField.Table = table
+	bitField.resetColor()
+	return bitField
+}
+
 func NewBitFieldWithTable(table map[Color]Color) *BitField {
 	bitField := new(BitField)
 	bitField.Table = table
