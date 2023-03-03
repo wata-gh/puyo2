@@ -57,7 +57,16 @@ func Deposit(x uint64, mask uint64) uint64 {
 
 func ExpandMattulwanParam(field string) string {
 	if len(field) == 78 {
-		return field
+		hasNumber := false
+		for _, r := range field {
+			if '0' <= r && r <= '9' {
+				hasNumber = true
+				break
+			}
+		}
+		if hasNumber == false {
+			return field
+		}
 	}
 	var b = strings.Builder{}
 	r := regexp.MustCompile(`(([a-z])([0-9]*))?`)
