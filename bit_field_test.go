@@ -99,7 +99,7 @@ func TestSetMattulwan(t *testing.T) {
 	}
 
 	field = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaaaabfaaaadbdaabbffaa"
-	bf = NewBitField()
+	bf = NewBitFieldWithColors([]Color{Red, Blue, Yellow, Purple})
 	bf.SetMattulwanParam(field)
 	bf2 = NewBitFieldWithMattulwanC(field)
 	if bf.MattulwanEditorParam() != bf2.MattulwanEditorParam() {
