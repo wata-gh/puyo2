@@ -233,6 +233,39 @@ func TestShapeBitFieldSimulate(t *testing.T) {
 	}
 }
 
+func TestFieldString(t *testing.T) {
+	fs := "..........................................................5.123545112335223444"
+	sbf := NewShapeBitFieldWithFieldString(fs)
+	if sbf.FieldString() != fs {
+		t.Fatalf("FieldString must be %s but %s", fs, sbf.FieldString())
+	}
+	sbf2 := NewShapeBitField()
+	for _, shape := range sbf.Shapes {
+		sbf2.AddShape(shape)
+	}
+	if sbf2.FieldString() != fs {
+		t.Fatalf("FieldString must be %s but %s", fs, sbf2.FieldString())
+	}
+}
+
+func BenchmarkFieldStringB(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		fs := "..........................................................5.123545112335223444"
+		sbf := NewShapeBitFieldWithFieldString(fs)
+		if sbf.FieldString() != fs {
+			// b.Fatalf("FieldString must be %s but %s", fs, sbf.FieldString())
+		}
+		sbf2 := NewShapeBitField()
+		for _, shape := range sbf.Shapes {
+			sbf2.AddShape(shape)
+		}
+		if sbf2.FieldString() != fs {
+			// b.Fatalf("FieldString must be %s but %s", fs, sbf2.FieldString())
+		}
+	}
+}
+
 /*
 func TestShapeBitFieldExport(t *testing.T) {
 	sbf := NewShapeBitField()

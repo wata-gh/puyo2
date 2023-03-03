@@ -56,19 +56,31 @@ func Deposit(x uint64, mask uint64) uint64 {
 }
 
 func ExpandMattulwanParam(field string) string {
-	s := ""
+	if len(field) == 78 {
+		hasNumber := false
+		for _, r := range field {
+			if '0' <= r && r <= '9' {
+				hasNumber = true
+				break
+			}
+		}
+		if hasNumber == false {
+			return field
+		}
+	}
+	var b = strings.Builder{}
 	r := regexp.MustCompile(`(([a-z])([0-9]*))?`)
 	for _, v := range r.FindAllStringSubmatch(field, -1) {
 		if v[3] == "" {
-			s += v[0]
+			fmt.Fprintf(&b, v[0])
 		} else {
 			len, _ := strconv.Atoi(v[3])
 			for i := 0; i < len; i++ {
-				s += v[2]
+				fmt.Fprintf(&b, v[2])
 			}
 		}
 	}
-	return s
+	return b.String()
 }
 
 func Extract(x uint64, mask uint64) uint64 {

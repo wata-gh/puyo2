@@ -11,6 +11,7 @@ type ShapeBitField struct {
 	Shapes             []*FieldBits
 	originalShapes     []*FieldBits
 	ChainOrderedShapes [][]*FieldBits
+	keyString          *string
 }
 
 func NewShapeBitField() *ShapeBitField {
@@ -104,14 +105,14 @@ func (sbf *ShapeBitField) AddShape(shape *FieldBits) {
 	sbf.originalShapes = append(sbf.originalShapes, shape.Clone())
 }
 
-func (bf *ShapeBitField) Clone() *ShapeBitField {
+func (sbf *ShapeBitField) Clone() *ShapeBitField {
 	shapeBitField := new(ShapeBitField)
-	shapeBitField.Shapes = make([]*FieldBits, len(bf.Shapes))
-	for i, shape := range bf.Shapes {
+	shapeBitField.Shapes = make([]*FieldBits, len(sbf.Shapes))
+	for i, shape := range sbf.Shapes {
 		shapeBitField.Shapes[i] = shape.Clone()
 	}
-	shapeBitField.originalShapes = make([]*FieldBits, len(bf.originalShapes))
-	for i, originalShape := range bf.originalShapes {
+	shapeBitField.originalShapes = make([]*FieldBits, len(sbf.originalShapes))
+	for i, originalShape := range sbf.originalShapes {
 		shapeBitField.originalShapes[i] = originalShape.Clone()
 	}
 	return shapeBitField
@@ -370,24 +371,54 @@ func (sbf *ShapeBitField) InsertShape(fb *FieldBits) {
 	sbf.AddShape(fb)
 }
 
+func (sbf *ShapeBitField) Expand3PuyoShapes() *ShapeBitField {
+	csbf := sbf.Clone()
+	for i, shape := range csbf.Shapes {
+		if shape.PopCount() == 3 {
+			overall := csbf.OverallShape()
+			overall.M[0] = ^overall.M[0]
+			overall.M[1] = ^overall.M[1]
+			overall = overall.MaskField13()
+			expand := shape.Expand1(overall)
+			csbf.Shapes[i] = shape.Or(expand)
+		}
+	}
+	return csbf
+}
+
+func (sbf *ShapeBitField) KeyString() string {
+	if sbf.keyString != nil {
+		return *sbf.keyString
+	}
+
+	var b = strings.Builder{}
+	for _, shape := range sbf.Shapes {
+		fmt.Fprintf(&b, "_%x:%x", shape.M[0], shape.M[1])
+	}
+	ks := b.String()
+	sbf.keyString = &ks
+	return ks
+
+}
+
 func (sbf *ShapeBitField) FieldString() string {
-	var b strings.Builder
+	buf := []string{".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", "."}
+	overall := sbf.OverallShape()
 	for y := 13; y > 0; y-- {
 		for x := 0; x < 6; x++ {
-			e := true
+			if overall.Onebit(x, y) == 0 {
+				continue
+			}
+			idx := (13-y)*6 + x
 			for i, shape := range sbf.Shapes {
 				if shape.Onebit(x, y) > 0 {
-					fmt.Fprint(&b, num2Letter[i+1])
-					e = false
+					buf[idx] = num2Letter[i+1]
 					break
 				}
 			}
-			if e {
-				fmt.Fprint(&b, ".")
-			}
 		}
 	}
-	return b.String()
+	return strings.Join(buf, "")
 }
 
 func (sbf *ShapeBitField) ChainOrderedFieldString() string {

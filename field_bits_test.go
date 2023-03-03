@@ -30,6 +30,15 @@ func TestFastLift(t *testing.T) {
 	}
 }
 
+func TestNot(t *testing.T) {
+	fb := NewFieldBits()
+	fb.SetOnebit(0, 1)
+	nfb := fb.Not()
+	if nfb.M[0] != 18446744073709551613 || nfb.M[1] != 18446744073709551615 {
+		t.Fatalf("M must be 18446744073709551613 18446744073709551615 but %d %d", nfb.M[0], nfb.M[1])
+	}
+}
+
 func TestAnd(t *testing.T) {
 	fb := NewFieldBits()
 	fb.SetOnebit(0, 4)

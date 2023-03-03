@@ -18,12 +18,16 @@ var Rune2ColorTable = map[rune]Color{
 type BitField struct {
 	M      [3][2]uint64
 	Table  map[Color]Color
-	colors []Color
+	Colors []Color
 }
 
 func NewBitField() *BitField {
 	bitField := new(BitField)
-	bitField.colors = []Color{Red, Blue, Yellow, Green}
+	bitField.Colors = []Color{Red, Blue, Yellow, Green}
+	bitField.Table = map[Color]Color{}
+	for _, c := range bitField.Colors {
+		bitField.Table[c] = c
+	}
 	return bitField
 }
 
@@ -75,45 +79,24 @@ func NewBitFieldWithTable(table map[Color]Color) *BitField {
 func NewBitFieldWithTableAndColors(table map[Color]Color, colors []Color) *BitField {
 	bitField := new(BitField)
 	bitField.Table = table
-	bitField.colors = colors
+	bitField.Colors = colors
 	return bitField
 }
 
 func NewBitFieldWithM(m [3][2]uint64) *BitField {
 	bitField := new(BitField)
 	bitField.M = m
-	bitField.colors = []Color{Red, Blue, Yellow, Green}
+	bitField.Colors = []Color{Red, Blue, Yellow, Green}
 	return bitField
 }
 
 func NewBitFieldWithMattulwan(field string) *BitField {
-	bf := new(BitField)
-	bf.colors = []Color{Red, Blue, Yellow, Green}
-
-	for i, c := range ExpandMattulwanParam(field) {
-		x := i % 6
-		y := 13 - i/6
-		switch c {
-		case 'a':
-		case 'b':
-			bf.SetColor(Red, x, y)
-		case 'c':
-			bf.SetColor(Blue, x, y)
-		case 'd':
-			bf.SetColor(Yellow, x, y)
-		case 'e':
-			bf.SetColor(Green, x, y)
-		case 'g':
-			bf.SetColor(Ojama, x, y)
-		default:
-			panic("only supports puyo color a,b,c,d,e,g")
-		}
-	}
-	return bf
+	return NewBitFieldWithMattulwanC(field)
 }
 
 func NewBitFieldWithMattulwanC(field string) *BitField {
 	bf := new(BitField)
+	bf.buildColorsByFieldString(field)
 	bf.SetMattulwanParam(field)
 	return bf
 }
@@ -184,6 +167,62 @@ func (bf *BitField) converColor(puyo Color) Color {
 		return c
 	}
 	return puyo
+}
+
+func (bf *BitField) buildColorsByFieldString(field string) {
+	bf.Table = map[Color]Color{
+		Red:    Empty,
+		Blue:   Empty,
+		Green:  Empty,
+		Yellow: Empty,
+		Purple: Empty,
+	}
+	colorCnt := 0
+	for _, c := range ExpandMattulwanParam(field) {
+		switch c {
+		case 'a':
+		case 'b':
+			if bf.Table[Red] == Empty {
+				bf.Table[Red] = Red
+				colorCnt++
+			}
+		case 'c':
+			if bf.Table[Blue] == Empty {
+				bf.Table[Blue] = Blue
+				colorCnt++
+			}
+		case 'd':
+			if bf.Table[Yellow] == Empty {
+				bf.Table[Yellow] = Yellow
+				colorCnt++
+			}
+		case 'e':
+			if bf.Table[Green] == Empty {
+				bf.Table[Green] = Green
+				colorCnt++
+			}
+		case 'f':
+			if bf.Table[Purple] == Empty {
+				bf.Table[Purple] = Purple
+				colorCnt++
+			}
+		}
+		if colorCnt == 4 {
+			break
+		}
+	}
+
+	// contains purple
+	if bf.Table[Purple] == Purple {
+		for _, c := range []Color{Red, Blue, Yellow, Green} {
+			if bf.Table[c] == Empty {
+				bf.Table[c] = Purple
+				bf.Table[Purple] = c
+				break
+			}
+		}
+	}
+	bf.resetColor()
 }
 
 func (bf *BitField) createTableAndColors(puyoSets []*PuyoSet) (map[Color]Color, []Color) {
@@ -262,7 +301,7 @@ func (bf *BitField) mergeTableColors(tableColors []Color, colors []Color) {
 }
 
 func (bf *BitField) resetColor() {
-	bf.colors = bf.tableColors(bf.Table)
+	bf.Colors = bf.tableColors(bf.Table)
 }
 
 func (bf *BitField) tableColors(table map[Color]Color) []Color {
@@ -306,7 +345,7 @@ func (bf *BitField) Clone() *BitField {
 	bitField.M[1] = bf.M[1]
 	bitField.M[2] = bf.M[2]
 	bitField.Table = bf.Table
-	bitField.colors = bf.colors
+	bitField.Colors = bf.Colors
 	return bitField
 }
 
@@ -354,7 +393,7 @@ func (bf *BitField) EqualChain(bf2 *BitField) bool {
 func (bf *BitField) FindVanishingBits() *FieldBits {
 	v := NewFieldBits()
 	// v := bf.Bits(bf.colors[0]).MaskField12().FindVanishingBits()
-	for _, c := range bf.colors {
+	for _, c := range bf.Colors {
 		v = v.Or(bf.Bits(c).MaskField12().FindVanishingBits())
 	}
 	// v := bf.Bits(Green).MaskField12().FindVanishingBits().Or(bf.Bits(Red).MaskField12().FindVanishingBits()).Or(bf.Bits(Yellow).MaskField12().FindVanishingBits()).Or(bf.Bits(Blue).MaskField12().FindVanishingBits())
@@ -378,6 +417,15 @@ func (bf *BitField) FlipHorizontal() *BitField {
 
 func (bf *BitField) IsEmpty() bool {
 	return bf.M[0][0] == 0 && bf.M[1][0] == 0 && bf.M[2][0] == 0 && bf.M[0][1] == 0 && bf.M[1][1] == 0 && bf.M[2][1] == 0
+}
+
+func (bf *BitField) MaskField(fb *FieldBits) *BitField {
+	mbf := bf.Clone()
+	for i := 0; i < 3; i++ {
+		mbf.M[i][0] = mbf.M[i][0] & fb.M[0]
+		mbf.M[i][1] = mbf.M[i][1] & fb.M[1]
+	}
+	return mbf
 }
 
 func (bf *BitField) MattulwanEditorParam() string {
@@ -417,6 +465,15 @@ func (bf *BitField) Normalize() *BitField {
 	return NewBitFieldWithMattulwan(ns)
 }
 
+func (bf *BitField) OverallShape() *FieldBits {
+	v := NewFieldBits()
+	for _, c := range bf.Colors {
+		v = v.Or(bf.Bits(c))
+	}
+	v = v.Or(bf.Bits(Ojama)).Or(bf.Bits(Iron))
+	return v
+}
+
 func (bf *BitField) PlacePuyoWithPlacement(placement *PuyoSetPlacement) bool {
 	// TODO return false if invalid placement.
 	bf.SetColor(placement.PuyoSet.Axis, placement.AxisX, placement.AxisY)
@@ -425,16 +482,16 @@ func (bf *BitField) PlacePuyoWithPlacement(placement *PuyoSetPlacement) bool {
 }
 
 func (bf *BitField) SetColor(c Color, x int, y int) {
-	if len(bf.colors) < 4 && c != Empty && c != Ojama && c != Iron && c != Wall {
+	if len(bf.Colors) < 4 && c != Empty && c != Ojama && c != Iron && c != Wall {
 		found := false
-		for _, color := range bf.colors {
+		for _, color := range bf.Colors {
 			if c == color {
 				found = true
 				break
 			}
 		}
 		if found == false {
-			bf.colors = append(bf.colors, c)
+			bf.Colors = append(bf.Colors, c)
 			if c == Purple {
 				for _, c := range []Color{Red, Blue, Yellow, Green} {
 					if bf.Table[c] == Empty {
@@ -478,66 +535,7 @@ func (bf *BitField) SetColorWithFieldBits(c Color, fb *FieldBits) {
 }
 
 func (bf *BitField) SetMattulwanParam(field string) {
-	expandField := ExpandMattulwanParam(field)
-	bf.Table = map[Color]Color{
-		Red:    Empty,
-		Blue:   Empty,
-		Green:  Empty,
-		Yellow: Empty,
-		Purple: Empty,
-	}
-	colorCnt := 0
-	for _, c := range expandField {
-		switch c {
-		case 'a':
-		case 'b':
-			if bf.Table[Red] == Empty {
-				bf.Table[Red] = Red
-				bf.colors = append(bf.colors, Red)
-				colorCnt++
-			}
-		case 'c':
-			if bf.Table[Blue] == Empty {
-				bf.Table[Blue] = Blue
-				bf.colors = append(bf.colors, Blue)
-				colorCnt++
-			}
-		case 'd':
-			if bf.Table[Yellow] == Empty {
-				bf.Table[Yellow] = Yellow
-				bf.colors = append(bf.colors, Yellow)
-				colorCnt++
-			}
-		case 'e':
-			if bf.Table[Green] == Empty {
-				bf.Table[Green] = Green
-				bf.colors = append(bf.colors, Green)
-				colorCnt++
-			}
-		case 'f':
-			if bf.Table[Purple] == Empty {
-				bf.Table[Purple] = Purple
-				bf.colors = append(bf.colors, Purple)
-				colorCnt++
-			}
-		}
-		if colorCnt == 4 {
-			break
-		}
-	}
-
-	// contains purple
-	if bf.Table[Purple] == Purple {
-		for _, c := range []Color{Red, Blue, Yellow, Green} {
-			if bf.Table[c] == Empty {
-				bf.Table[c] = Purple
-				bf.Table[Purple] = c
-				break
-			}
-		}
-	}
-
-	for i, c := range expandField {
+	for i, c := range ExpandMattulwanParam(field) {
 		x := i % 6
 		y := 13 - i/6
 		puyo, ok := Rune2ColorTable[c]
@@ -569,7 +567,7 @@ func (bf *BitField) SimulateDetail() *RensaResult {
 		vanished := NewFieldBits()
 		nth := NewNthResult(result.Chains + 1)
 
-		for _, color := range bf.colors {
+		for _, color := range bf.Colors {
 			vb := bf.Bits(color).MaskField12().FindVanishingBits()
 			if vb.IsEmpty() == false {
 				numColors++
