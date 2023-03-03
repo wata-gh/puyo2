@@ -55,6 +55,16 @@ func TestDrop(t *testing.T) {
 	}
 }
 
+func TestMaskField(t *testing.T) {
+	// 13 段目のぷよが落ちてくるテスト
+	bf := NewBitFieldWithMattulwanC("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaaaaeaaaaacccaaaeeeaaabcdaeabbcddaccdeee")
+	fb := NewShapeBitFieldWithFieldString("............................................................111.1.111111111111").Shapes[0]
+	mbf := bf.MaskField(fb)
+	if mbf.MattulwanEditorParam() != "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabcdaeabbcddaccdeee" {
+		t.Fatalf("param must be aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabcdaeabbcddaccdeee but %s\n", mbf.MattulwanEditorParam())
+	}
+}
+
 func TestEqualChain(t *testing.T) {
 	bf := NewBitFieldWithMattulwan("a54ea3eaebdece3bd2eb2dc3")
 	if bf.EqualChain(bf) == false {

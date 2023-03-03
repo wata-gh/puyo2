@@ -140,6 +140,13 @@ func (fb *FieldBits) FindVanishingBits() *FieldBits {
 	return vanishing.Expand1(fb)
 }
 
+func (fb *FieldBits) Not() *FieldBits {
+	nfb := NewFieldBits()
+	nfb.M[0] = ^fb.M[0]
+	nfb.M[1] = ^fb.M[1]
+	return nfb
+}
+
 func (fb *FieldBits) Onebit(x int, y int) uint64 {
 	idx := x >> 2
 	pos := x&3*16 + y

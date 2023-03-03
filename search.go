@@ -108,6 +108,7 @@ var ChigiriFramesTable = []int{
 	44,
 	46,
 	48,
+	50,
 }
 
 func (bf *BitField) CreateHeights() map[int]int {
