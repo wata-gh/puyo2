@@ -43,20 +43,18 @@ func NewBitFieldWithColors(colors []Color) *BitField {
 	table := map[Color]Color{}
 	if hasPurple {
 		for _, c := range []Color{Red, Blue, Yellow, Green} {
-			found := false
 			for _, c2 := range colors {
-				if c2 == Purple {
-					continue
-				}
 				if c == c2 {
 					table[c] = c
-					found = true
 					break
 				}
 			}
-			if found == false {
+		}
+		for _, c := range []Color{Red, Blue, Yellow, Green} {
+			if table[c] == Empty {
 				table[Purple] = c
 				table[c] = Purple
+				break
 			}
 		}
 	} else {
@@ -71,15 +69,15 @@ func NewBitFieldWithColors(colors []Color) *BitField {
 
 func NewBitFieldWithTable(table map[Color]Color) *BitField {
 	bitField := new(BitField)
-	bitField.Table = table
+	bitField.Table = cloneColorTable(table)
 	bitField.resetColor()
 	return bitField
 }
 
 func NewBitFieldWithTableAndColors(table map[Color]Color, colors []Color) *BitField {
 	bitField := new(BitField)
-	bitField.Table = table
-	bitField.Colors = colors
+	bitField.Table = cloneColorTable(table)
+	bitField.Colors = append([]Color{}, colors...)
 	return bitField
 }
 
@@ -102,13 +100,23 @@ func NewBitFieldWithMattulwanC(field string) *BitField {
 }
 
 func NewBitFieldWithMattulwanCAndHaipuyo(field string, haipuyo string) *BitField {
-	bf := new(BitField)
-	bf.SetMattulwanParam(field)
+	bf := NewBitFieldWithMattulwanC(field)
 	tableColors := bf.tableColors(bf.Table)
 	puyoSets := Haipuyo2PuyoSets(haipuyo)
 	_, colors := bf.createTableAndColors(puyoSets)
 	bf.mergeTableColors(tableColors, colors)
 	return bf
+}
+
+func cloneColorTable(table map[Color]Color) map[Color]Color {
+	if table == nil {
+		return nil
+	}
+	cloned := map[Color]Color{}
+	for k, v := range table {
+		cloned[k] = v
+	}
+	return cloned
 }
 
 func (bf *BitField) colorBits(c Color) []uint64 {
@@ -159,7 +167,7 @@ func (bf *BitField) colorChar(c Color) string {
 }
 
 func (bf *BitField) converColor(puyo Color) Color {
-	if bf.Table != nil && puyo != Empty && puyo != Ojama && puyo != Iron && puyo != Wall {
+	if len(bf.Table) > 0 && puyo != Empty && puyo != Ojama && puyo != Iron && puyo != Wall {
 		c, ok := bf.Table[puyo]
 		if ok == false {
 			panic(fmt.Sprintf("conver table is not nil, but can not convert color. %v %v", puyo, bf.Table))
@@ -241,19 +249,23 @@ func (bf *BitField) createTableAndColors(puyoSets []*PuyoSet) (map[Color]Color, 
 	}
 	// contains purple
 	if table[Purple] == Purple {
+		assigned := false
 		for _, c := range []Color{Red, Blue, Yellow, Green} {
 			if table[c] == Empty {
 				table[c] = Purple
 				table[Purple] = c
-			} else {
-				colors = append(colors, c)
+				assigned = true
+				break
 			}
+			colors = append(colors, c)
 		}
-		colors = append(colors, Purple)
+		if assigned {
+			colors = append(colors, Purple)
+		}
 	} else {
-		for k, v := range table {
-			if v != Empty {
-				colors = append(colors, k)
+		for _, c := range []Color{Red, Blue, Yellow, Green} {
+			if table[c] != Empty {
+				colors = append(colors, c)
 			}
 		}
 	}
@@ -344,8 +356,8 @@ func (bf *BitField) Clone() *BitField {
 	bitField.M[0] = bf.M[0]
 	bitField.M[1] = bf.M[1]
 	bitField.M[2] = bf.M[2]
-	bitField.Table = bf.Table
-	bitField.Colors = bf.Colors
+	bitField.Table = cloneColorTable(bf.Table)
+	bitField.Colors = append([]Color{}, bf.Colors...)
 	return bitField
 }
 
@@ -357,17 +369,17 @@ func (bf *BitField) Color(x int, y int) Color {
 }
 
 func (bf *BitField) Drop(fb *FieldBits) {
+	var dropmask [2]uint64
+	for x := 0; x < 6; x++ {
+		idx := x >> 2
+		vc := bits.OnesCount64(fb.ColBits(x))
+		dropmask[idx] |= bits.RotateLeft64((1<<vc)-1, 14-vc) << (x & 3 * 16)
+	}
 	for i := 0; i < len(bf.M); i++ {
 		r0 := Extract(bf.M[i][0], ^fb.M[0])
 		r1 := Extract(bf.M[i][1], ^fb.M[1])
-		var dropmask1 [2]uint64
-		for x := 0; x < 6; x++ {
-			idx := x >> 2
-			vc := bits.OnesCount64(fb.ColBits(x))
-			dropmask1[idx] |= bits.RotateLeft64((1<<vc)-1, 14-vc) << (x & 3 * 16)
-		}
-		bf.M[i][0] = Deposit(r0, ^dropmask1[0])
-		bf.M[i][1] = Deposit(r1, ^dropmask1[1])
+		bf.M[i][0] = Deposit(r0, ^dropmask[0])
+		bf.M[i][1] = Deposit(r1, ^dropmask[1])
 	}
 }
 
@@ -475,13 +487,31 @@ func (bf *BitField) OverallShape() *FieldBits {
 }
 
 func (bf *BitField) PlacePuyoWithPlacement(placement *PuyoSetPlacement) bool {
-	// TODO return false if invalid placement.
+	if placement == nil || placement.PuyoSet == nil {
+		return false
+	}
+	if placement.AxisX == placement.ChildX && placement.AxisY == placement.ChildY {
+		return false
+	}
+	if bf.canSetColor(placement.AxisX, placement.AxisY) == false || bf.canSetColor(placement.ChildX, placement.ChildY) == false {
+		return false
+	}
 	bf.SetColor(placement.PuyoSet.Axis, placement.AxisX, placement.AxisY)
 	bf.SetColor(placement.PuyoSet.Child, placement.ChildX, placement.ChildY)
 	return true
 }
 
+func (bf *BitField) canSetColor(x int, y int) bool {
+	if x < 0 || x > 5 || y < 0 || y > 14 {
+		return false
+	}
+	return bf.Color(x, y) == Empty
+}
+
 func (bf *BitField) SetColor(c Color, x int, y int) {
+	if bf.Table == nil {
+		bf.Table = map[Color]Color{}
+	}
 	if len(bf.Colors) < 4 && c != Empty && c != Ojama && c != Iron && c != Wall {
 		found := false
 		for _, color := range bf.Colors {
@@ -521,9 +551,9 @@ func (bf *BitField) SetColor(c Color, x int, y int) {
 }
 
 func (bf *BitField) SetColorWithFieldBits(c Color, fb *FieldBits) {
-	b := bf.colorBits(c)
+	b := bf.colorBits(bf.converColor(c))
 	mask := [2]uint64{^fb.M[0], ^fb.M[1]}
-	for i := 0; i < len(fb.M); i++ {
+	for i := 0; i < len(bf.M); i++ {
 		bf.M[i][0] &= mask[0]
 		bf.M[i][1] &= mask[1]
 
@@ -540,8 +570,7 @@ func (bf *BitField) SetMattulwanParam(field string) {
 		y := 13 - i/6
 		puyo, ok := Rune2ColorTable[c]
 		if ok == false {
-			fmt.Printf("%c %v\n", c, puyo)
-			panic("only supports puyo color a,b,c,d,e,f,g")
+			panic(fmt.Sprintf("only supports puyo color a,b,c,d,e,f,g. passed %q", c))
 		}
 		if puyo != Empty {
 			bf.SetColor(puyo, x, y)
@@ -642,15 +671,13 @@ func (bf *BitField) Simulate1() bool {
 func (bf *BitField) ToChainShapes() []*FieldBits {
 	cbf := bf.Clone()
 	shapes := make([]*FieldBits, 0)
-	v := cbf.FindVanishingBits()
-	shapes = append(shapes, v)
-	for cbf.Simulate1() {
+	for {
 		v := cbf.FindVanishingBits()
-		if v.IsEmpty() == false {
-			shapes = append(shapes, v)
-		} else {
+		if v.IsEmpty() {
 			break
 		}
+		shapes = append(shapes, v)
+		cbf.Drop(v)
 	}
 	return shapes
 }

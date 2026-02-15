@@ -81,12 +81,16 @@ func TestEqualChain(t *testing.T) {
 }
 
 func TestNewBitFieldWithMattulwanCAndHaipuyo(t *testing.T) {
-	param := "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+	param := "ba77"
 	haipuyo := "pprr"
 	bf := NewBitFieldWithMattulwanCAndHaipuyo(param, haipuyo)
+	if bf.Color(0, 13) != Red {
+		t.Fatalf("field must keep existing puyo. actual=%v", bf.Color(0, 13))
+	}
 	bf.SetColor(Purple, 0, 1)
-	bf.SetColor(Red, 0, 2)
-	bf.ShowDebug()
+	if bf.Color(0, 1) != Purple {
+		t.Fatalf("set purple must succeed. actual=%v", bf.Color(0, 1))
+	}
 }
 
 func TestSetMattulwan(t *testing.T) {
@@ -227,4 +231,69 @@ func TestNewBitFieldWithMattulwanC(t *testing.T) {
 		t.Fatalf("must be purple, but -> %v", purple)
 	}
 	// bf.ExportSimulateImage("simulate_images2")
+}
+
+func TestCloneDoesNotShareTableAndColors(t *testing.T) {
+	original := NewBitFieldWithMattulwanC("ba77")
+	cloned := original.Clone()
+	oldTableColor := original.Table[Red]
+	oldColor := original.Colors[0]
+
+	cloned.Table[Red] = Blue
+	cloned.Colors[0] = Green
+
+	if original.Table[Red] != oldTableColor {
+		t.Fatalf("table must not be shared between clone and original")
+	}
+	if original.Colors[0] != oldColor {
+		t.Fatalf("colors must not be shared between clone and original")
+	}
+}
+
+func TestPlacePuyoWithPlacementValidation(t *testing.T) {
+	bf := NewBitFieldWithMattulwanC("ba77")
+	if bf.PlacePuyoWithPlacement(nil) {
+		t.Fatalf("nil placement must be rejected")
+	}
+
+	overlap := &PuyoSetPlacement{
+		PuyoSet: &PuyoSet{Axis: Red, Child: Blue},
+		AxisX:   0,
+		AxisY:   13,
+		ChildX:  1,
+		ChildY:  13,
+	}
+	if bf.PlacePuyoWithPlacement(overlap) {
+		t.Fatalf("placement on occupied cell must be rejected")
+	}
+
+	outOfRange := &PuyoSetPlacement{
+		PuyoSet: &PuyoSet{Axis: Red, Child: Blue},
+		AxisX:   -1,
+		AxisY:   1,
+		ChildX:  0,
+		ChildY:  1,
+	}
+	if bf.PlacePuyoWithPlacement(outOfRange) {
+		t.Fatalf("out-of-range placement must be rejected")
+	}
+}
+
+func TestSetColorWithFieldBitsPurple(t *testing.T) {
+	bf := NewBitFieldWithColors([]Color{Red, Blue, Yellow, Purple})
+	fb := NewFieldBits()
+	fb.SetOnebit(0, 1)
+	bf.SetColorWithFieldBits(Purple, fb)
+	if bf.Color(0, 1) != Purple {
+		t.Fatalf("purple bit set must keep purple color. actual=%v", bf.Color(0, 1))
+	}
+}
+
+func TestToChainShapesReturnsEmptyWhenNoChain(t *testing.T) {
+	bf := NewBitField()
+	bf.SetColor(Red, 0, 1)
+	shapes := bf.ToChainShapes()
+	if len(shapes) != 0 {
+		t.Fatalf("ToChainShapes must return empty when no chain, actual=%d", len(shapes))
+	}
 }
