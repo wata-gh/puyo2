@@ -72,11 +72,11 @@ func ExpandMattulwanParam(field string) string {
 	r := regexp.MustCompile(`(([a-z])([0-9]*))?`)
 	for _, v := range r.FindAllStringSubmatch(field, -1) {
 		if v[3] == "" {
-			fmt.Fprintf(&b, v[0])
+			b.WriteString(v[0])
 		} else {
 			len, _ := strconv.Atoi(v[3])
 			for i := 0; i < len; i++ {
-				fmt.Fprintf(&b, v[2])
+				b.WriteString(v[2])
 			}
 		}
 	}
