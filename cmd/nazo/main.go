@@ -235,7 +235,7 @@ func main() {
 }
 
 func trapSignal() {
-	c := make(chan os.Signal)
+	c := make(chan os.Signal, 1)
 	signal.Notify(c, syscall.SIGHUP)
 	go func() {
 		fmt.Println("trap goroutine start.", os.Getpid())
