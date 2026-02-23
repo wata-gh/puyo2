@@ -121,6 +121,18 @@ type pnsolveOutput struct {
 	} `json:"solutions"`
 }
 
+func isAllClearField(field string) bool {
+	if len(field) == 0 {
+		return true
+	}
+	for _, r := range field {
+		if r != 'a' {
+			return false
+		}
+	}
+	return true
+}
+
 func runPNSolve(t *testing.T, args ...string) (string, string, error) {
 	t.Helper()
 	cmd := exec.Command("go", append([]string{"run", "./cmd/pnsolve"}, args...)...)
@@ -170,11 +182,11 @@ func TestPNSolveCommandJSON(t *testing.T) {
 		t.Fatalf("searched=%d matched=%d", out.Searched, out.Matched)
 	}
 	for _, s := range out.Solutions {
-		if !s.Clear {
-			t.Fatalf("solution clear must be true: %+v", s)
-		}
 		if len(s.InitialField) != 78 || len(s.FinalField) != 78 {
 			t.Fatalf("field length invalid: %+v", s)
+		}
+		if s.Clear != isAllClearField(s.FinalField) {
+			t.Fatalf("clear must match finalField state: %+v", s)
 		}
 	}
 }
@@ -255,6 +267,34 @@ func TestPNSolveCommandNoIndex13Panic(t *testing.T) {
 	}
 	if strings.Contains(out.Error, "index out of range [13]") {
 		t.Fatalf("error must not include index out of range [13]: %q", out.Error)
+	}
+}
+
+func TestPNSolveCommandNonAllClearRegression(t *testing.T) {
+	param := "~000000000000000000000000000000000000000000000000000000000000000000000000111101___a01"
+	stdout, stderr, err := runPNSolve(t, "-param", param, "-pretty=false")
+	if err != nil {
+		t.Fatalf("pnsolve error=%v stderr=%s", err, stderr)
+	}
+	if stderr != "" {
+		t.Fatalf("unexpected stderr: %s", stderr)
+	}
+
+	var out pnsolveOutput
+	if err := json.Unmarshal([]byte(stdout), &out); err != nil {
+		t.Fatalf("invalid json: %v\n%s", err, stdout)
+	}
+	if out.Matched != 1 || len(out.Solutions) != 1 {
+		t.Fatalf("matched=%d solutions=%d want 1", out.Matched, len(out.Solutions))
+	}
+	if out.Solutions[0].Clear {
+		t.Fatalf("clear must be false for non-all-clear final field: %+v", out.Solutions[0])
+	}
+	if isAllClearField(out.Solutions[0].FinalField) {
+		t.Fatalf("finalField must be non-empty: %s", out.Solutions[0].FinalField)
+	}
+	if out.Status != "ok" {
+		t.Fatalf("status=%s want ok", out.Status)
 	}
 }
 

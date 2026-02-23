@@ -111,6 +111,7 @@ go run ./cmd/pnsolve -url 'http://ips.karou.jp/simu/pn.html?jjgqqqqqqqqq_q1q1q1_
 - `searched`: 探索した手順数
 - `matched`: 条件一致した解数
 - `solutions[]`: 各解（`hands/chains/score/clear/initialField/finalField`）
+  - `clear` は「条件一致」ではなく「`finalField` が全消し（オールクリア）か」を表します
 
 ## pnsolve2simus
 

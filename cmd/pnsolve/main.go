@@ -39,6 +39,17 @@ type solveOutputJSON struct {
 	Solutions    []solveSolutionJSON `json:"solutions"`
 }
 
+func newSolution(hands string, chains int, score int, initialField string, finalField string, clear bool) solveSolutionJSON {
+	return solveSolutionJSON{
+		Hands:        hands,
+		Chains:       chains,
+		Score:        score,
+		Clear:        clear,
+		InitialField: initialField,
+		FinalField:   finalField,
+	}
+}
+
 func readSingleInputFromStdin() (string, error) {
 	scanner := bufio.NewScanner(os.Stdin)
 	lines := make([]string, 0, 2)
@@ -125,14 +136,10 @@ func main() {
 		matched, _ := puyo2.EvaluateIPSNazoCondition(initial, decoded.Condition)
 		if matched {
 			result := initial.Clone().SimulateDetail()
-			out.Solutions = append(out.Solutions, solveSolutionJSON{
-				Hands:        "",
-				Chains:       result.Chains,
-				Score:        result.Score,
-				Clear:        true,
-				InitialField: initial.MattulwanEditorParam(),
-				FinalField:   result.BitField.MattulwanEditorParam(),
-			})
+			initialField := initial.MattulwanEditorParam()
+			finalField := result.BitField.MattulwanEditorParam()
+			clear := result.BitField.IsEmpty()
+			out.Solutions = append(out.Solutions, newSolution("", result.Chains, result.Score, initialField, finalField, clear))
 			out.Matched = 1
 		}
 	} else {
@@ -147,14 +154,10 @@ func main() {
 			if !matched {
 				return
 			}
-			out.Solutions = append(out.Solutions, solveSolutionJSON{
-				Hands:        puyo2.ToSimpleHands(sr.Hands),
-				Chains:       sr.RensaResult.Chains,
-				Score:        sr.RensaResult.Score,
-				Clear:        true,
-				InitialField: sr.BeforeSimulate.MattulwanEditorParam(),
-				FinalField:   sr.RensaResult.BitField.MattulwanEditorParam(),
-			})
+			initialField := sr.BeforeSimulate.MattulwanEditorParam()
+			finalField := sr.RensaResult.BitField.MattulwanEditorParam()
+			clear := sr.RensaResult.BitField.IsEmpty()
+			out.Solutions = append(out.Solutions, newSolution(puyo2.ToSimpleHands(sr.Hands), sr.RensaResult.Chains, sr.RensaResult.Score, initialField, finalField, clear))
 		}
 		var recovered any
 		func() {
