@@ -94,15 +94,20 @@ func normalizeIPSNazoQuery(input string) (string, error) {
 		if err != nil {
 			return "", fmt.Errorf("invalid url: %w", err)
 		}
-		if u.RawQuery != "" {
-			query = u.RawQuery
+		if u.RawQuery == "" {
+			return "", fmt.Errorf("query is empty")
+		}
+		query = u.RawQuery
+	} else {
+		// Keep raw IPS payload intact, but support path-like inputs such as:
+		//   pn.html?... or /simu/pn.html?...
+		lower := strings.ToLower(query)
+		if idx := strings.LastIndex(lower, "pn.html?"); idx >= 0 {
+			query = query[idx+len("pn.html?"):]
 		}
 	}
 	if strings.HasPrefix(query, "?") {
 		query = query[1:]
-	}
-	if idx := strings.Index(query, "?"); idx >= 0 {
-		query = query[idx+1:]
 	}
 	if idx := strings.Index(query, "#"); idx >= 0 {
 		query = query[:idx]

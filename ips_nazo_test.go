@@ -86,6 +86,48 @@ func TestParseIPSNazoURLRawQuery(t *testing.T) {
 	}
 }
 
+func TestParseIPSNazoURLInternalQuestionMarkRawQuery(t *testing.T) {
+	rawWithQuestion := "800F08J08A0E?B_8161__270"
+	got, err := ParseIPSNazoURL(rawWithQuestion)
+	if err != nil {
+		t.Fatalf("ParseIPSNazoURL(raw with '?') error = %v", err)
+	}
+	if got.InitialField != "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaaaafbaabaffaabaddaafaaadf" {
+		t.Fatalf("InitialField = %s, want %s", got.InitialField, "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaaaafbaabaffaabaddaafaaadf")
+	}
+
+	truncated, err := ParseIPSNazoURL("B_8161__270")
+	if err != nil {
+		t.Fatalf("ParseIPSNazoURL(truncated) error = %v", err)
+	}
+	if got.InitialField == truncated.InitialField {
+		t.Fatalf("internal '?' must not be treated as truncation point: got=%s truncated=%s", got.InitialField, truncated.InitialField)
+	}
+}
+
+func TestParseIPSNazoURLPathStyleInput(t *testing.T) {
+	urlInput := "https://ips.karou.jp/simu/pn.html?800F08J08A0EB_8161__270"
+	pathStyleInput := "pn.html?800F08J08A0EB_8161__270"
+
+	gotURL, err := ParseIPSNazoURL(urlInput)
+	if err != nil {
+		t.Fatalf("ParseIPSNazoURL(url) error = %v", err)
+	}
+	gotPathStyle, err := ParseIPSNazoURL(pathStyleInput)
+	if err != nil {
+		t.Fatalf("ParseIPSNazoURL(path style) error = %v", err)
+	}
+	if gotURL.InitialField != gotPathStyle.InitialField {
+		t.Fatalf("InitialField mismatch: %s != %s", gotURL.InitialField, gotPathStyle.InitialField)
+	}
+	if gotURL.Haipuyo != gotPathStyle.Haipuyo {
+		t.Fatalf("Haipuyo mismatch: %s != %s", gotURL.Haipuyo, gotPathStyle.Haipuyo)
+	}
+	if gotURL.ConditionCode != gotPathStyle.ConditionCode {
+		t.Fatalf("ConditionCode mismatch: %v != %v", gotURL.ConditionCode, gotPathStyle.ConditionCode)
+	}
+}
+
 func TestParseIPSNazoURLDataMode(t *testing.T) {
 	input := "~" + strings.Repeat("0", 77) + "1"
 	got, err := ParseIPSNazoURL(input)
