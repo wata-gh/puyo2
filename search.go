@@ -112,10 +112,10 @@ var ChigiriFramesTable = []int{
 	52,
 }
 
-func (bf *BitField) CreateHeights() map[int]int {
+func (bf *BitField) createHeightsArray() [6]int {
 	empty := bf.Bits(Empty)
 
-	heights := map[int]int{}
+	heights := [6]int{}
 	for i := 0; i < 6; i++ {
 		emptyBits := empty.ColBits(i)
 		if i < 4 {
@@ -129,12 +129,27 @@ func (bf *BitField) CreateHeights() map[int]int {
 	return heights
 }
 
+func (bf *BitField) CreateHeights() map[int]int {
+	heights := bf.createHeightsArray()
+	return map[int]int{
+		0: heights[0],
+		1: heights[1],
+		2: heights[2],
+		3: heights[3],
+		4: heights[4],
+		5: heights[5],
+	}
+}
+
 func (bf *BitField) SearchPlacementForPos(puyoSet *PuyoSet, pos [2]int) *PuyoSetPlacement {
+	heights := bf.createHeightsArray()
+	return bf.searchPlacementForPosWithHeights(puyoSet, pos, heights)
+}
+
+func (bf *BitField) searchPlacementForPosWithHeights(puyoSet *PuyoSet, pos [2]int, heights [6]int) *PuyoSetPlacement {
 	// TODO check invalid placement and return nil.
 	ax := pos[0]
 	cx := pos[0]
-
-	heights := bf.CreateHeights()
 
 	y := heights[ax] + 1
 	ay := y
@@ -392,15 +407,19 @@ func (obf *BitField) SearchPosition(puyoSet PuyoSet, hands []Hand, callback func
 	if obf.Color(2, 12) != Empty {
 		return true
 	}
+	heights := obf.createHeightsArray()
+	checkPosOffset := posOffset > 0 && posOffset < len(positions)
 
 	for i, pos := range positions {
-		if overlap(pos, positions[posOffset]) == false && i < posOffset {
+		if checkPosOffset && overlap(pos, positions[posOffset]) == false && i < posOffset {
+			continue
+		}
+		placement := obf.searchPlacementForPosWithHeights(&puyoSet, pos, heights)
+		if placement == nil || placement.Chigiri {
 			continue
 		}
 		bf := obf.Clone()
-		placed, chigiri := bf.PlacePuyo(puyoSet, pos)
-		if placed == false || chigiri {
-			// fmt.Fprintf(os.Stderr, "placed: %v, chigiri: %v\n", placed, chigiri)
+		if bf.PlacePuyoWithPlacement(placement) == false {
 			continue
 		}
 		newHands := make([]Hand, len(hands))
@@ -411,7 +430,7 @@ func (obf *BitField) SearchPosition(puyoSet PuyoSet, hands []Hand, callback func
 		newHands = append(newHands, *hand)
 
 		// result := bf.SimulateWithNewBitField()
-		result := bf.Clone().SimulateDetail() // for erased puyo count
+		result := bf.CloneForSimulation().SimulateDetail() // for erased puyo count
 		searchResult := new(SearchResult)
 		searchResult.BeforeSimulate = bf
 		searchResult.Position = pos

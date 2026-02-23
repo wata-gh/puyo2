@@ -1,0 +1,348 @@
+#!/bin/zsh
+
+setopt pipefail
+setopt nounset
+
+readonly NORMALIZE_FILTER='del(.searched) | (if has("solutions") then .solutions |= map(del(.clear)) else . end)'
+
+usage() {
+  cat <<'USAGE'
+Usage:
+  test/pnsolve/check
+  test/pnsolve/check level1 [level2 ...]
+  test/pnsolve/check -level levelN -param PARAM [-show-diff]
+
+Options:
+  -level <levelN>   Compare a single case in the specified level.
+  -param <PARAM>    Param string for single-case mode.
+  -show-diff        Print full jd diff output on DIFF.
+  -h, --help        Show this help.
+
+Description:
+  Compare current pnsolve outputs against baseline JSON files under test/pnsolve/level*/results
+  using: jd -set before.json after.json
+USAGE
+}
+
+validate_level_name() {
+  local level="$1"
+  [[ "${level}" =~ '^level[0-9]+$' ]]
+}
+
+append_diff_param() {
+  local level="$1"
+  local param="$2"
+  if [[ -z "${diff_params[$level]-}" ]]; then
+    diff_params[$level]="${param}"
+  else
+    diff_params[$level]+=$'\n'"${param}"
+  fi
+}
+
+run_one_case() {
+  local level="$1"
+  local param="$2"
+
+  ((checked++))
+
+  before="${SCRIPT_DIR}/${level}/results/${param}.json"
+  after="${TMP_ROOT}/${level}/${param}.json"
+  run_err_file="${TMP_ROOT}/errors/${level}/${param}.stderr"
+  diff_file="${TMP_ROOT}/diffs/${level}/${param}.jd"
+  diff_err_file="${TMP_ROOT}/diffs/${level}/${param}.jd.stderr"
+  before_cmp="${TMP_ROOT}/compare/${level}/${param}.before.json"
+  after_cmp="${TMP_ROOT}/compare/${level}/${param}.after.json"
+  norm_err_file="${TMP_ROOT}/errors/${level}/${param}.normalize.stderr"
+
+  LAST_STATUS="-"
+  LAST_BEFORE="${before}"
+  LAST_AFTER="${after}"
+  LAST_DIFF="-"
+  LAST_STDERR="-"
+
+  mkdir -p "${TMP_ROOT}/${level}" "${TMP_ROOT}/diffs/${level}" "${TMP_ROOT}/errors/${level}" "${TMP_ROOT}/compare/${level}"
+
+  if [[ ! -f "${before}" ]]; then
+    echo "BEFORE_MISSING ${level} ${param}"
+    ((missing_before++))
+    LAST_STATUS="BEFORE_MISSING"
+    return
+  fi
+
+  if ! (cd "${REPO_ROOT}" && go run ./cmd/pnsolve -param "${param}" -pretty=false -expand-equivalent-hands >"${after}" 2>"${run_err_file}"); then
+    echo "RUN_ERROR ${level} ${param} (stderr: ${run_err_file})"
+    ((run_error++))
+    LAST_STATUS="RUN_ERROR"
+    LAST_STDERR="${run_err_file}"
+    return
+  fi
+
+  if [[ ! -s "${run_err_file}" ]]; then
+    rm -f "${run_err_file}"
+  fi
+
+  : > "${norm_err_file}"
+  if ! jq "${NORMALIZE_FILTER}" "${before}" > "${before_cmp}" 2>>"${norm_err_file}"; then
+    echo "JD_ERROR ${level} ${param} (stderr: ${norm_err_file})"
+    ((jd_error++))
+    LAST_STATUS="JD_ERROR"
+    LAST_STDERR="${norm_err_file}"
+    return
+  fi
+  if ! jq "${NORMALIZE_FILTER}" "${after}" > "${after_cmp}" 2>>"${norm_err_file}"; then
+    echo "JD_ERROR ${level} ${param} (stderr: ${norm_err_file})"
+    ((jd_error++))
+    LAST_STATUS="JD_ERROR"
+    LAST_STDERR="${norm_err_file}"
+    return
+  fi
+  if [[ ! -s "${norm_err_file}" ]]; then
+    rm -f "${norm_err_file}"
+  fi
+
+  jd -set "${before_cmp}" "${after_cmp}" >"${diff_file}" 2>"${diff_err_file}"
+  jd_status=$?
+
+  if [[ ${jd_status} -eq 0 ]]; then
+    rm -f "${diff_file}" "${diff_err_file}"
+    LAST_STATUS="MATCH"
+    return
+  fi
+
+  if [[ ${jd_status} -eq 1 ]]; then
+    echo "DIFF ${level} ${param}"
+    ((diff_count++))
+    append_diff_param "${level}" "${param}"
+
+    LAST_STATUS="DIFF"
+    LAST_DIFF="${diff_file}"
+    if [[ -s "${diff_err_file}" ]]; then
+      LAST_STDERR="${diff_err_file}"
+    else
+      rm -f "${diff_err_file}"
+    fi
+
+    if [[ ${SHOW_DIFF} -eq 1 ]]; then
+      echo "--- DIFF BEGIN ${level} ${param} ---"
+      cat "${diff_file}"
+      echo "--- DIFF END ${level} ${param} ---"
+    fi
+    return
+  fi
+
+  echo "JD_ERROR ${level} ${param} (stderr: ${diff_err_file})"
+  ((jd_error++))
+  LAST_STATUS="JD_ERROR"
+  LAST_STDERR="${diff_err_file}"
+}
+
+typeset -a POSITIONAL=()
+SINGLE_LEVEL=""
+SINGLE_PARAM=""
+typeset -i SHOW_DIFF=0
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    -h|--help)
+      usage
+      exit 0
+      ;;
+    -show-diff)
+      SHOW_DIFF=1
+      shift
+      ;;
+    -level)
+      if [[ $# -lt 2 ]]; then
+        echo "error: -level requires a value" >&2
+        usage >&2
+        exit 2
+      fi
+      SINGLE_LEVEL="$2"
+      shift 2
+      ;;
+    -param)
+      if [[ $# -lt 2 ]]; then
+        echo "error: -param requires a value" >&2
+        usage >&2
+        exit 2
+      fi
+      SINGLE_PARAM="$2"
+      shift 2
+      ;;
+    -*)
+      echo "error: unknown option: $1" >&2
+      usage >&2
+      exit 2
+      ;;
+    *)
+      POSITIONAL+=("$1")
+      shift
+      ;;
+  esac
+done
+
+if ! command -v jd >/dev/null 2>&1; then
+  echo "error: jd command is required" >&2
+  exit 2
+fi
+if ! command -v jq >/dev/null 2>&1; then
+  echo "error: jq command is required" >&2
+  exit 2
+fi
+if ! command -v go >/dev/null 2>&1; then
+  echo "error: go command is required" >&2
+  exit 2
+fi
+
+SCRIPT_DIR=${0:A:h}
+REPO_ROOT=${SCRIPT_DIR:h:h}
+
+if [[ ! -d "${SCRIPT_DIR}" ]]; then
+  echo "error: script directory not found: ${SCRIPT_DIR}" >&2
+  exit 2
+fi
+if [[ ! -f "${REPO_ROOT}/go.mod" ]]; then
+  echo "error: repository root not found from script path: ${REPO_ROOT}" >&2
+  exit 2
+fi
+
+typeset -i SINGLE_MODE=0
+if [[ -n "${SINGLE_LEVEL}" || -n "${SINGLE_PARAM}" ]]; then
+  if [[ -z "${SINGLE_LEVEL}" || -z "${SINGLE_PARAM}" ]]; then
+    echo "error: -level and -param must be specified together" >&2
+    usage >&2
+    exit 2
+  fi
+  SINGLE_MODE=1
+fi
+
+if [[ ${SINGLE_MODE} -eq 1 && ${#POSITIONAL[@]} -gt 0 ]]; then
+  echo "error: positional level arguments cannot be used with -level/-param" >&2
+  usage >&2
+  exit 2
+fi
+
+typeset -a LEVELS=()
+if [[ ${SINGLE_MODE} -eq 1 ]]; then
+  if ! validate_level_name "${SINGLE_LEVEL}"; then
+    echo "error: invalid level format: ${SINGLE_LEVEL} (expected levelN)" >&2
+    usage >&2
+    exit 2
+  fi
+
+  single_list_file="${SCRIPT_DIR}/${SINGLE_LEVEL}/list"
+  if [[ ! -f "${single_list_file}" ]]; then
+    echo "error: invalid level: ${SINGLE_LEVEL}" >&2
+    usage >&2
+    exit 2
+  fi
+
+  if ! grep -F -x -- "${SINGLE_PARAM}" "${single_list_file}" >/dev/null 2>&1; then
+    echo "error: param not found in ${SINGLE_LEVEL}/list: ${SINGLE_PARAM}" >&2
+    usage >&2
+    exit 2
+  fi
+
+  LEVELS=("${SINGLE_LEVEL}")
+else
+  if [[ ${#POSITIONAL[@]} -eq 0 ]]; then
+    typeset -a AUTO_LEVELS=()
+    for list_file in "${SCRIPT_DIR}"/level*/list(N); do
+      AUTO_LEVELS+=("${list_file:h:t}")
+    done
+    if [[ ${#AUTO_LEVELS[@]} -gt 0 ]]; then
+      while IFS= read -r level; do
+        [[ -z "${level}" ]] && continue
+        LEVELS+=("${level}")
+      done < <(printf "%s\n" "${AUTO_LEVELS[@]}" | LC_ALL=C sort -V)
+    fi
+    if [[ ${#LEVELS[@]} -eq 0 ]]; then
+      echo "error: no level*/list files found under ${SCRIPT_DIR}" >&2
+      exit 2
+    fi
+  else
+    for level in "${POSITIONAL[@]}"; do
+      if ! validate_level_name "${level}"; then
+        echo "error: invalid level format: ${level} (expected levelN)" >&2
+        usage >&2
+        exit 2
+      fi
+      if [[ ! -f "${SCRIPT_DIR}/${level}/list" ]]; then
+        echo "error: invalid level: ${level}" >&2
+        usage >&2
+        exit 2
+      fi
+      LEVELS+=("${level}")
+    done
+  fi
+fi
+
+TMP_ROOT=$(mktemp -d "${TMPDIR:-/tmp}/pnsolve-check.XXXXXX")
+if [[ -z "${TMP_ROOT}" || ! -d "${TMP_ROOT}" ]]; then
+  echo "error: failed to create temp directory" >&2
+  exit 2
+fi
+
+typeset -i KEEP_TMP=0
+cleanup() {
+  if [[ ${KEEP_TMP} -eq 0 ]]; then
+    rm -rf "${TMP_ROOT}"
+  fi
+}
+trap cleanup EXIT
+
+typeset -i checked=0
+typeset -i diff_count=0
+typeset -i missing_before=0
+typeset -i run_error=0
+typeset -i jd_error=0
+typeset -A diff_params=()
+
+LAST_STATUS="-"
+LAST_BEFORE="-"
+LAST_AFTER="-"
+LAST_DIFF="-"
+LAST_STDERR="-"
+
+if [[ ${SINGLE_MODE} -eq 1 ]]; then
+  run_one_case "${SINGLE_LEVEL}" "${SINGLE_PARAM}"
+  echo "CASE level=${SINGLE_LEVEL} param=${SINGLE_PARAM} status=${LAST_STATUS}"
+  echo "before=${LAST_BEFORE}"
+  echo "after=${LAST_AFTER}"
+  echo "diff=${LAST_DIFF}"
+  echo "stderr=${LAST_STDERR}"
+else
+  for level in "${LEVELS[@]}"; do
+    level_dir="${SCRIPT_DIR}/${level}"
+    list_file="${level_dir}/list"
+    echo "== ${level} =="
+
+    while IFS= read -r param || [[ -n "${param}" ]]; do
+      [[ -z "${param}" ]] && continue
+      run_one_case "${level}" "${param}"
+    done < "${list_file}"
+  done
+fi
+
+echo "checked=${checked} diff=${diff_count} missing_before=${missing_before} run_error=${run_error} jd_error=${jd_error}"
+
+if [[ ${diff_count} -gt 0 ]]; then
+  echo "diff params:"
+  for level in "${LEVELS[@]}"; do
+    if [[ -n "${diff_params[$level]-}" ]]; then
+      echo "  ${level}:"
+      while IFS= read -r p; do
+        [[ -z "${p}" ]] && continue
+        echo "    ${p}"
+      done <<< "${diff_params[$level]}"
+    fi
+  done
+fi
+
+if [[ $((diff_count + missing_before + run_error + jd_error)) -gt 0 ]]; then
+  KEEP_TMP=1
+  echo "tmp artifacts: ${TMP_ROOT}"
+  exit 1
+fi
+
+exit 0
