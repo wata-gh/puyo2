@@ -1,0 +1,32 @@
+{
+  "input": "3r02i01903r02i0190_c1q141__E03",
+  "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacccaaaeeeaaabbbaaacccaaaeeeaaabbbaa",
+  "haipuyo": "rggbbr",
+  "condition": {
+    "q0": 40,
+    "q1": 0,
+    "q2": 3,
+    "text": "3色同時に消す"
+  },
+  "status": "ok",
+  "searched": 10648,
+  "matched": 2,
+  "solutions": [
+    {
+      "hands": "rg02gb00br42",
+      "chains": 4,
+      "score": 5560,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacccaaaeeeaacbbbaaecccaabeeecaebbbba",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "hands": "rg42gb40br02",
+      "chains": 4,
+      "score": 5560,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacccaaaeeeaaabbbcaaccceaceeebabbbbea",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    }
+  ]
+}

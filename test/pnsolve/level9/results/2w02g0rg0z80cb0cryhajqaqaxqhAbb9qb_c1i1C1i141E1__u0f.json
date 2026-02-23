@@ -1,0 +1,64 @@
+{
+  "input": "2w02g0rg0z80cb0cryhajqaqaxqhAbb9qb_c1i1C1i141E1__u0f",
+  "initialField": "aaaaaaaaaaaedaaaaeeaaacceaaadcbaaabdbcaabdccdeebbeeccebecebedbceebddbcbcbbcebc",
+  "haipuyo": "rgyggyygbrby",
+  "condition": {
+    "q0": 30,
+    "q1": 0,
+    "q2": 15,
+    "text": "15連鎖する"
+  },
+  "status": "ok",
+  "searched": 37112693,
+  "matched": 6,
+  "solutions": [
+    {
+      "hands": "rg30yg30gy31yg42br30by11",
+      "chains": 15,
+      "score": 108440,
+      "clear": true,
+      "initialField": "aaabdaaaaceedaaedeeaaecceaaddcbcaebdbcdbbdccdeebbeeccebecebedbceebddbcbcbbcebc",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "hands": "rg30yg30gy31yg42br30by20",
+      "chains": 15,
+      "score": 108440,
+      "clear": true,
+      "initialField": "aaabdaaaaceedaaedeeaaecceaaddcbadebdbccbbdccdeebbeeccebecebedbceebddbcbcbbcebc",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "hands": "rg30yg30gy42yg43br30by11",
+      "chains": 15,
+      "score": 108440,
+      "clear": true,
+      "initialField": "aaabdaaaaceedaaedeeaaecceaaddcbcaebdbcdbbdccdeebbeeccebecebedbceebddbcbcbbcebc",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "hands": "rg30yg30gy42yg43br30by20",
+      "chains": 15,
+      "score": 108440,
+      "clear": true,
+      "initialField": "aaabdaaaaceedaaedeeaaecceaaddcbadebdbccbbdccdeebbeeccebecebedbceebddbcbcbbcebc",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "hands": "rg30yg40gy32yg43br30by11",
+      "chains": 15,
+      "score": 108440,
+      "clear": true,
+      "initialField": "aaabdaaaaceedaaedeeaaecceaaddcbcaebdbcdbbdccdeebbeeccebecebedbceebddbcbcbbcebc",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "hands": "rg30yg40gy32yg43br30by20",
+      "chains": 15,
+      "score": 108440,
+      "clear": true,
+      "initialField": "aaabdaaaaceedaaedeeaaecceaaddcbadebdbccbbdccdeebbeeccebecebedbceebddbcbcbbcebc",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    }
+  ]
+}

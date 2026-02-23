@@ -1,0 +1,24 @@
+{
+  "input": "42024g24qh3z99ryaky_o1q1q1A1__u09",
+  "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaadaeaaaeadeaaeadceebacdcbbbbccdebeedde",
+  "haipuyo": "rbgbgbry",
+  "condition": {
+    "q0": 30,
+    "q1": 0,
+    "q2": 9,
+    "text": "9連鎖する"
+  },
+  "status": "ok",
+  "searched": 234136,
+  "matched": 1,
+  "solutions": [
+    {
+      "hands": "rb42gb32gb32ry00",
+      "chains": 9,
+      "score": 27880,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaeaaaaacadaeaebeadecceddceebbcdcbbbbccdebeedde",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "input": "oa3pajir9hahrar_c1c1c1__E03",
+  "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacabeaccbbeeceeccbbebbeebccbecc",
+  "haipuyo": "rgrgrg",
+  "condition": {
+    "q0": 40,
+    "q1": 0,
+    "q2": 3,
+    "text": "3色同時に消す"
+  },
+  "status": "ok",
+  "searched": 10648,
+  "matched": 4,
+  "solutions": [
+    {
+      "hands": "rg01rg40rg20",
+      "chains": 4,
+      "score": 7160,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaeaaababaeacebebccbbeeceeccbbebbeebccbecc",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaccaa"
+    },
+    {
+      "hands": "rg12rg41rg32",
+      "chains": 4,
+      "score": 7160,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaabaeaecebebccbbeeceeccbbebbeebccbecc",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaccaa"
+    },
+    {
+      "hands": "rg40rg01rg20",
+      "chains": 4,
+      "score": 7160,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaeaaababaeacebebccbbeeceeccbbebbeebccbecc",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaccaa"
+    },
+    {
+      "hands": "rg41rg12rg32",
+      "chains": 4,
+      "score": 7160,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaabaeaecebebccbbeeceeccbbebbeebccbecc",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaccaa"
+    }
+  ]
+}

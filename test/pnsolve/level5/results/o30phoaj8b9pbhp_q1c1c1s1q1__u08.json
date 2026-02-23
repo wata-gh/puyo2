@@ -1,0 +1,48 @@
+{
+  "input": "o30phoaj8b9pbhp_q1c1c1s1q1__u08",
+  "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaacaacbebcabeecbabcbbcbbcebcb",
+  "haipuyo": "gbrgrgbbgb",
+  "condition": {
+    "q0": 30,
+    "q1": 0,
+    "q2": 8,
+    "text": "8連鎖する"
+  },
+  "status": "ok",
+  "searched": 2575764,
+  "matched": 4,
+  "solutions": [
+    {
+      "hands": "gb00rg10rg10bb50gb20",
+      "chains": 8,
+      "score": 20380,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaeaaaacbaaaaeecaaacbecaacbebccbeecbcbcbbcbbcebcb",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaaaa"
+    },
+    {
+      "hands": "gb00rg10rg12bb50gb20",
+      "chains": 8,
+      "score": 20380,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaaaceaaaaeecaaacbecaacbebccbeecbcbcbbcbbcebcb",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaaaa"
+    },
+    {
+      "hands": "gb02rg10rg10bb50gb20",
+      "chains": 8,
+      "score": 20640,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaeaaaaebaaaacecaaacbecaacbebccbeecbcbcbbcbbcebcb",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "hands": "gb02rg10rg12bb50gb20",
+      "chains": 8,
+      "score": 20640,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaaaeeaaaacecaaacbecaacbebccbeecbcbcbbcbbcebcb",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    }
+  ]
+}

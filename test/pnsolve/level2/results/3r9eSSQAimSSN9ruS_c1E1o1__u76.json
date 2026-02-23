@@ -1,0 +1,32 @@
+{
+  "input": "3r9eSSQAimSSN9ruS_c1E1o1__u76",
+  "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacccbbbggggggdddeeeggggggbbbcccggg",
+  "haipuyo": "rgbyrb",
+  "condition": {
+    "q0": 30,
+    "q1": 7,
+    "q2": 6,
+    "text": "6連鎖する"
+  },
+  "status": "ok",
+  "searched": 10648,
+  "matched": 2,
+  "solutions": [
+    {
+      "hands": "rg22by20rb31",
+      "chains": 6,
+      "score": 8680,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaadaaaaacaaaaabbcaaaecccbbbggggggdddeeeggggggbbbcccggg",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "hands": "rg22by20rb32",
+      "chains": 6,
+      "score": 8680,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaadaaaaacbaaaabcaaaaecccbbbggggggdddeeeggggggbbbcccggg",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    }
+  ]
+}

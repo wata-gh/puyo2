@@ -1,0 +1,48 @@
+{
+  "input": "980SN0SS6SS6SSSSSSSSSSSSSSSSSSSS_G1G101G1G101__u03",
+  "initialField": "aaaaaaaaaaaaaabbbaaagggbaaggggagggggaggggggggggggggggggggggggggggggggggggggggg",
+  "haipuyo": "yyyyrryyyyrr",
+  "condition": {
+    "q0": 30,
+    "q1": 0,
+    "q2": 3,
+    "text": "3連鎖する"
+  },
+  "status": "ok",
+  "searched": 410367,
+  "matched": 4,
+  "solutions": [
+    {
+      "hands": "yy00yy01rr40yy10yy11rr30",
+      "chains": 3,
+      "score": 1000,
+      "clear": true,
+      "initialField": "aaabbaaaabbaaadbbaaabggbadggggadggggadggggaggggggggggggggggggggggggggggggggggg",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaagggaaagggaagggggggggggggggggggggggggggggggggg"
+    },
+    {
+      "hands": "yy00yy01rr40yy11yy10rr30",
+      "chains": 3,
+      "score": 1000,
+      "clear": true,
+      "initialField": "aaabbaaaabbaaadbbaaabggbadggggadggggadggggaggggggggggggggggggggggggggggggggggg",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaagggaaagggaagggggggggggggggggggggggggggggggggg"
+    },
+    {
+      "hands": "yy01yy00rr40yy10yy11rr30",
+      "chains": 3,
+      "score": 1000,
+      "clear": true,
+      "initialField": "aaabbaaaabbaaadbbaaabggbadggggadggggadggggaggggggggggggggggggggggggggggggggggg",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaagggaaagggaagggggggggggggggggggggggggggggggggg"
+    },
+    {
+      "hands": "yy01yy00rr40yy11yy10rr30",
+      "chains": 3,
+      "score": 1000,
+      "clear": true,
+      "initialField": "aaabbaaaabbaaadbbaaabggbadggggadggggadggggaggggggggggggggggggggggggggggggggggg",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaagggaaagggaagggggggggggggggggggggggggggggggggg"
+    }
+  ]
+}

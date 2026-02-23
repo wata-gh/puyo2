@@ -1,0 +1,24 @@
+{
+  "input": "S00S00q00jM0qg0AgSSS_C1q1C1__u04",
+  "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaggaaaaggaaaaceaaaaecgaaaceeaaaddeagggggg",
+  "haipuyo": "gygbgy",
+  "condition": {
+    "q0": 30,
+    "q1": 0,
+    "q2": 4,
+    "text": "4連鎖する"
+  },
+  "status": "ok",
+  "searched": 10648,
+  "matched": 1,
+  "solutions": [
+    {
+      "hands": "gy40gb40gy52",
+      "chains": 4,
+      "score": 2280,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaaggeaaaggdaaaceeaaaecgaaaceeeaaddedgggggg",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaagagaaa"
+    }
+  ]
+}

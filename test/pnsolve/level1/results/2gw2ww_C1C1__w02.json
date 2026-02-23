@@ -1,0 +1,24 @@
+{
+  "input": "2gw2ww_C1C1__w02",
+  "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaeeadaaedada",
+  "haipuyo": "gygy",
+  "condition": {
+    "q0": 32,
+    "q1": 0,
+    "q2": 2,
+    "text": "2連鎖＆ぷよ全て消す"
+  },
+  "status": "ok",
+  "searched": 484,
+  "matched": 1,
+  "solutions": [
+    {
+      "hands": "gy33gy30",
+      "chains": 2,
+      "score": 600,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaddaaaeeedaaededa",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    }
+  ]
+}

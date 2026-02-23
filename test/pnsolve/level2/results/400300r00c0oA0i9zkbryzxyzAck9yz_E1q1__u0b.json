@@ -1,0 +1,24 @@
+{
+  "input": "400300r00c0oA0i9zkbryzxyzAck9yz_E1q1__u0b",
+  "initialField": "aaaaaaaaaaaaaaaaadaaaaacaaaaccaaaabdaacaddaaeebbdcedbcccdedcdbdedcddbdedbbdedc",
+  "haipuyo": "bygb",
+  "condition": {
+    "q0": 30,
+    "q1": 0,
+    "q2": 11,
+    "text": "11連鎖する"
+  },
+  "status": "ok",
+  "searched": 477,
+  "matched": 1,
+  "solutions": [
+    {
+      "hands": "by50gb42",
+      "chains": 11,
+      "score": 47080,
+      "clear": true,
+      "initialField": "aaaaadaaaaacaaaaedaaaaccaaaaccaaaabdaacaddaaeebbdcedbcccdedcdbdedcddbdedbbdedc",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaadadc"
+    }
+  ]
+}

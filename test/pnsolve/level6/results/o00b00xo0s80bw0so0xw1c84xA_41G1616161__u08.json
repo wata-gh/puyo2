@@ -1,0 +1,80 @@
+{
+  "input": "o00b00xo0s80bw0so0xw1c84xA_41G1616161__u08",
+  "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaacaaaaabcaaaadbcaaacdbaaabcdaaacdcaaadbdaabbdbaaddbdd",
+  "haipuyo": "bryyyryryr",
+  "condition": {
+    "q0": 30,
+    "q1": 0,
+    "q2": 8,
+    "text": "8連鎖する"
+  },
+  "status": "ok",
+  "searched": 2022292,
+  "matched": 8,
+  "solutions": [
+    {
+      "hands": "br40yy01yr10yr23yr01",
+      "chains": 8,
+      "score": 20660,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaadaaaaacabaaabccaabdbcaabcdbaabbcdaadcdcaaddbdadbbdbadddbdd",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "hands": "br40yy10yr01yr23yr01",
+      "chains": 8,
+      "score": 20660,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaadaaaaacabaaabccaabdbcaabcdbaabbcdaadcdcaaddbdadbbdbadddbdd",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "hands": "br40yy10yr23yr01yr01",
+      "chains": 8,
+      "score": 20660,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaadaaaaacabaaabccaabdbcaabcdbaabbcdaadcdcaaddbdadbbdbadddbdd",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "hands": "br40yy11yr10yr01yr01",
+      "chains": 8,
+      "score": 20660,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaadaaaaacabaaabccaabdbcaabcdbaabbcdaadcdcaaddbdadbbdbadddbdd",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "hands": "br43yy01yr10yr23yr01",
+      "chains": 8,
+      "score": 20660,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaadaaaaacbaaaabccaabdbcaabcdbaabbcdaadcdcaaddbdadbbdbadddbdd",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "hands": "br43yy10yr01yr23yr01",
+      "chains": 8,
+      "score": 20660,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaadaaaaacbaaaabccaabdbcaabcdbaabbcdaadcdcaaddbdadbbdbadddbdd",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "hands": "br43yy10yr23yr01yr01",
+      "chains": 8,
+      "score": 20660,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaadaaaaacbaaaabccaabdbcaabcdbaabbcdaadcdcaaddbdadbbdbadddbdd",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "hands": "br43yy11yr10yr01yr01",
+      "chains": 8,
+      "score": 20660,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaadaaaaacbaaaabccaabdbcaabcdbaabbcdaadcdcaaddbdadbbdbadddbdd",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    }
+  ]
+}

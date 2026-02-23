@@ -1,0 +1,32 @@
+{
+  "input": "x00c01x04NeASS_A1A1__201",
+  "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaadbaaaabdaaabdbaaadgbbgddgggg",
+  "haipuyo": "ryry",
+  "condition": {
+    "q0": 2,
+    "q1": 0,
+    "q2": 1,
+    "text": "ぷよ全て消す"
+  },
+  "status": "ok",
+  "searched": 484,
+  "matched": 2,
+  "solutions": [
+    {
+      "hands": "ry30ry40",
+      "chains": 3,
+      "score": 1560,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaadaaaaabaaaadbaaaabddaabdbbaadgbbgddgggg",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "hands": "ry33ry40",
+      "chains": 3,
+      "score": 1560,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaadbaaaadbaaaabddaabdbbaadgbbgddgggg",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    }
+  ]
+}

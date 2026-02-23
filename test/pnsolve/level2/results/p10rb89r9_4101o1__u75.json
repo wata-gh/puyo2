@@ -1,0 +1,24 @@
+{
+  "input": "p10rb89r9_4101o1__u75",
+  "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacbabaaccbcbabbccbb",
+  "haipuyo": "brrrrb",
+  "condition": {
+    "q0": 30,
+    "q1": 7,
+    "q2": 5,
+    "text": "5連鎖する"
+  },
+  "status": "ok",
+  "searched": 5324,
+  "matched": 1,
+  "solutions": [
+    {
+      "hands": "br12rr01rb01",
+      "chains": 5,
+      "score": 4840,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaaaabaaaabcaaaabbaaaacbabaaccbcbabbccbb",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    }
+  ]
+}

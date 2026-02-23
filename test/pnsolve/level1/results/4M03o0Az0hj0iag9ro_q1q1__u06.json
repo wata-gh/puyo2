@@ -1,0 +1,48 @@
+{
+  "input": "4M03o0Az0hj0iag9ro_q1q1__u06",
+  "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaadgaaaaccaaadddcaaebecaaeebeeabbccca",
+  "haipuyo": "gbgb",
+  "condition": {
+    "q0": 30,
+    "q1": 0,
+    "q2": 6,
+    "text": "6連鎖する"
+  },
+  "status": "ok",
+  "searched": 484,
+  "matched": 4,
+  "solutions": [
+    {
+      "hands": "gb20gb41",
+      "chains": 6,
+      "score": 8680,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaaaaeaaaadgaaaaccaaadddcaaebeceaeebeeabbcccc",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaa"
+    },
+    {
+      "hands": "gb20gb52",
+      "chains": 6,
+      "score": 8680,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaaaaeaaaadgaaaaccaaadddcaaebecaaeebeeebbcccc",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaa"
+    },
+    {
+      "hands": "gb23gb41",
+      "chains": 6,
+      "score": 8680,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaceaaaadgaaaaccaaadddcaaebeceaeebeeabbcccc",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaaa"
+    },
+    {
+      "hands": "gb23gb52",
+      "chains": 6,
+      "score": 8680,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaceaaaadgaaaaccaaadddcaaebecaaeebeeebbcccc",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaaa"
+    }
+  ]
+}

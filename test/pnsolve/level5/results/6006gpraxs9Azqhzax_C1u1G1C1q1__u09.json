@@ -1,0 +1,32 @@
+{
+  "input": "6006gpraxs9Azqhzax_C1u1G1C1q1__u09",
+  "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaagaaaaageacbccbedbcdbbdddcceebdcbedb",
+  "haipuyo": "gyybyygygb",
+  "condition": {
+    "q0": 30,
+    "q1": 0,
+    "q2": 9,
+    "text": "9連鎖する"
+  },
+  "status": "ok",
+  "searched": 2570411,
+  "matched": 2,
+  "solutions": [
+    {
+      "hands": "gy30yb21yy50gy52gb13",
+      "chains": 9,
+      "score": 27880,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaeaaaaadaeacadagddadcgeecbccbedbcdbbdddcceebdcbedb",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaca"
+    },
+    {
+      "hands": "gy33yb30yy50gy52gb13",
+      "chains": 9,
+      "score": 27880,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaeaaaaadaeacadagddadcgeecbccbedbcdbbdddcceebdcbedb",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaca"
+    }
+  ]
+}

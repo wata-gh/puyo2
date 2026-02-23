@@ -1,0 +1,24 @@
+{
+  "input": "E00E30810a20iFiuJOteRPSJFa9Raprqr_M1g141k1__u0c",
+  "initialField": "aaaaaaaaaaaafaaaaafaacaabaabaabeaeaaeefbeecgffgecfbggfgcggfffbbebbgfbecbcccecc",
+  "haipuyo": "rpbgbrpg",
+  "condition": {
+    "q0": 30,
+    "q1": 0,
+    "q2": 12,
+    "text": "12連鎖する"
+  },
+  "status": "ok",
+  "searched": 169788,
+  "matched": 1,
+  "solutions": [
+    {
+      "hands": "rp21bg33br23pg41",
+      "chains": 12,
+      "score": 64240,
+      "clear": true,
+      "initialField": "aaaaaaaaacaafaafaafaccaabbebaabebefeeefbeecgffgecfbggfgcggfffbbebbgfbecbcccecc",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    }
+  ]
+}

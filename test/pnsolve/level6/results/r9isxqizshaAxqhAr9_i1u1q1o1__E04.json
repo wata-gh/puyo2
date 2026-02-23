@@ -1,0 +1,32 @@
+{
+  "input": "r9isxqizshaAxqhAr9_i1u1q1o1__E04",
+  "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaccbbeecddbceeedccdebbedddbceebddccbb",
+  "haipuyo": "ygybgbrb",
+  "condition": {
+    "q0": 40,
+    "q1": 0,
+    "q2": 4,
+    "text": "4色同時に消す"
+  },
+  "status": "ok",
+  "searched": 233856,
+  "matched": 2,
+  "solutions": [
+    {
+      "hands": "yg11yb21gb32rb02",
+      "chains": 6,
+      "score": 23540,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaeaabadcaacdecaaccbbeecddbceeedccdebbedddbceebddccbb",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaaaaeaaaadeeaadd"
+    },
+    {
+      "hands": "yg11yb21gb32rb13",
+      "chains": 6,
+      "score": 23540,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaeaaabdcaacdecaaccbbeecddbceeedccdebbedddbceebddccbb",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaebaaadeeaadd"
+    }
+  ]
+}

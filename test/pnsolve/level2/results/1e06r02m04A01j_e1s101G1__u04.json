@@ -1,0 +1,80 @@
+{
+  "input": "1e06r02m04A01j_e1s101G1__u04",
+  "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbgaaagccaaaeegaaadddaaabec",
+  "haipuyo": "ggbbrryy",
+  "condition": {
+    "q0": 30,
+    "q1": 0,
+    "q2": 4,
+    "text": "4連鎖する"
+  },
+  "status": "ok",
+  "searched": 14641,
+  "matched": 8,
+  "solutions": [
+    {
+      "hands": "gg21bb31rr50yy11",
+      "chains": 4,
+      "score": 2700,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacabaaaecbaaabbgaaagccaaaeegaaddddadebec",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaadebaa"
+    },
+    {
+      "hands": "gg21bb31rr50yy20",
+      "chains": 4,
+      "score": 2760,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacabaaaecbaaabbgaaagccaadeegaaddddaaebec",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaebaa"
+    },
+    {
+      "hands": "gg21bb31rr50yy21",
+      "chains": 4,
+      "score": 2700,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaadaaaaacabaaaecbaaabbgaaagccaaaeegaaddddaaebec",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaadaaaaebaa"
+    },
+    {
+      "hands": "gg21bb40rr50yy11",
+      "chains": 4,
+      "score": 2700,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacbaaaecbaaabbgaaagccaaaeegaaddddadebec",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaadebaa"
+    },
+    {
+      "hands": "gg21bb40rr50yy20",
+      "chains": 4,
+      "score": 2760,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacbaaaecbaaabbgaaagccaadeegaaddddaaebec",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaebaa"
+    },
+    {
+      "hands": "gg21bb40rr50yy21",
+      "chains": 4,
+      "score": 2700,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaadcbaaaecbaaabbgaaagccaaaeegaaddddaaebec",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaadaaaaebaa"
+    },
+    {
+      "hands": "gg30bb31rr50yy20",
+      "chains": 4,
+      "score": 3020,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaaaaeabaaaecbaaabbgaaagccaaaeegaaddddaadbec",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaa"
+    },
+    {
+      "hands": "gg30bb40rr50yy20",
+      "chains": 4,
+      "score": 3020,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaecbaaaecbaaabbgaaagccaaaeegaaddddaadbec",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaa"
+    }
+  ]
+}

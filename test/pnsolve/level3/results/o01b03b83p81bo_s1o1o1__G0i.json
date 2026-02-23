@@ -1,0 +1,24 @@
+{
+  "input": "o01b03b83p81bo_s1o1o1__G0i",
+  "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaaabbcaaacbcbaaccbbaabbcca",
+  "haipuyo": "bbrbrb",
+  "condition": {
+    "q0": 42,
+    "q1": 0,
+    "q2": 18,
+    "text": "ぷよ18個同時に消す"
+  },
+  "status": "ok",
+  "searched": 5324,
+  "matched": 1,
+  "solutions": [
+    {
+      "hands": "bb41rb01rb01",
+      "chains": 2,
+      "score": 3640,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaaaaccaaaabbccaacbcbabccbbabbbccc",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    }
+  ]
+}

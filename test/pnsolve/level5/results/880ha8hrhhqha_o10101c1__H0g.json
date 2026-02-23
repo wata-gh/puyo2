@@ -1,0 +1,40 @@
+{
+  "input": "880ha8hrhhqha_o10101c1__H0g",
+  "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaababaaaebbebaebccebebceebbe",
+  "haipuyo": "rbrrrrrg",
+  "condition": {
+    "q0": 43,
+    "q1": 0,
+    "q2": 16,
+    "text": "ぷよ16個以上同時に消す"
+  },
+  "status": "ok",
+  "searched": 58564,
+  "matched": 3,
+  "solutions": [
+    {
+      "hands": "rb12rr20rr10rg33",
+      "chains": 2,
+      "score": 2690,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaaaabaababcaaebbeebebccebebceebbe",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "hands": "rb23rr11rr10rg33",
+      "chains": 2,
+      "score": 2690,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaaaabaababcaaebbeebebccebebceebbe",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "hands": "rb23rr20rr10rg33",
+      "chains": 2,
+      "score": 2690,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaaaabaababcaaebbeebebccebebceebbe",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    }
+  ]
+}

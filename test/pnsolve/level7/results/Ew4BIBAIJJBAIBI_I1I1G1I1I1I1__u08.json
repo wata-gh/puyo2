@@ -1,0 +1,208 @@
+{
+  "input": "Ew4BIBAIJJBAIBI_I1I1G1I1I1I1__u08",
+  "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaafadaaddffddfddfdffffdfddfddffd",
+  "haipuyo": "pypyyypypypy",
+  "condition": {
+    "q0": 30,
+    "q1": 0,
+    "q2": 8,
+    "text": "8連鎖する"
+  },
+  "status": "ok",
+  "searched": 56614147,
+  "matched": 24,
+  "solutions": [
+    {
+      "hands": "py00py00yy50py22py30py10",
+      "chains": 8,
+      "score": 21820,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaadaaaaafaaaaadafaadfdddadffdfaddffddfddfdffffdfddfddffd",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "hands": "py00py00yy50py30py22py10",
+      "chains": 8,
+      "score": 21820,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaadaaaaafaaaaadafaadfdddadffdfaddffddfddfdffffdfddfddffd",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "hands": "py00py00yy50py33py21py10",
+      "chains": 8,
+      "score": 21820,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaadaaaaafaaaaadafaadfdddadffdfaddffddfddfdffffdfddfddffd",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "hands": "py00py00yy50py33py22py10",
+      "chains": 8,
+      "score": 21820,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaadaaaaafafaaadadaadfddaadffdfaddffddfddfdffffdfddfddffd",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "hands": "py00py22yy50py00py30py10",
+      "chains": 8,
+      "score": 21820,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaadaaaaafaaaaadafaadfdddadffdfaddffddfddfdffffdfddfddffd",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "hands": "py00py22yy50py30py00py10",
+      "chains": 8,
+      "score": 21820,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaadaaaaafaaaaadafaadfdddadffdfaddffddfddfdffffdfddfddffd",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "hands": "py00py30yy50py00py22py10",
+      "chains": 8,
+      "score": 21820,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaadaaaaafaaaaadafaadfdddadffdfaddffddfddfdffffdfddfddffd",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "hands": "py00py30yy50py22py00py10",
+      "chains": 8,
+      "score": 21820,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaadaaaaafaaaaadafaadfdddadffdfaddffddfddfdffffdfddfddffd",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "hands": "py00py33yy50py00py21py10",
+      "chains": 8,
+      "score": 21820,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaadaaaaafaaaaadafaadfdddadffdfaddffddfddfdffffdfddfddffd",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "hands": "py00py33yy50py00py22py10",
+      "chains": 8,
+      "score": 21820,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaadaaaaafafaaadadaadfddaadffdfaddffddfddfdffffdfddfddffd",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "hands": "py00py33yy50py21py00py10",
+      "chains": 8,
+      "score": 21820,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaadaaaaafaaaaadafaadfdddadffdfaddffddfddfdffffdfddfddffd",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "hands": "py00py33yy50py22py00py10",
+      "chains": 8,
+      "score": 21820,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaadaaaaafafaaadadaadfddaadffdfaddffddfddfdffffdfddfddffd",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "hands": "py22py00yy50py00py30py10",
+      "chains": 8,
+      "score": 21820,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaadaaaaafaaaaadafaadfdddadffdfaddffddfddfdffffdfddfddffd",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "hands": "py22py00yy50py30py00py10",
+      "chains": 8,
+      "score": 21820,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaadaaaaafaaaaadafaadfdddadffdfaddffddfddfdffffdfddfddffd",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "hands": "py22py30yy50py00py00py10",
+      "chains": 8,
+      "score": 21820,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaadaaaaafaaaaadafaadfdddadffdfaddffddfddfdffffdfddfddffd",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "hands": "py30py00yy50py00py22py10",
+      "chains": 8,
+      "score": 21820,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaadaaaaafaaaaadafaadfdddadffdfaddffddfddfdffffdfddfddffd",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "hands": "py30py00yy50py22py00py10",
+      "chains": 8,
+      "score": 21820,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaadaaaaafaaaaadafaadfdddadffdfaddffddfddfdffffdfddfddffd",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "hands": "py30py22yy50py00py00py10",
+      "chains": 8,
+      "score": 21820,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaadaaaaafaaaaadafaadfdddadffdfaddffddfddfdffffdfddfddffd",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "hands": "py33py00yy50py00py21py10",
+      "chains": 8,
+      "score": 21820,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaadaaaaafaaaaadafaadfdddadffdfaddffddfddfdffffdfddfddffd",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "hands": "py33py00yy50py00py22py10",
+      "chains": 8,
+      "score": 21820,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaadaaaaafafaaadadaadfddaadffdfaddffddfddfdffffdfddfddffd",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "hands": "py33py00yy50py21py00py10",
+      "chains": 8,
+      "score": 21820,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaadaaaaafaaaaadafaadfdddadffdfaddffddfddfdffffdfddfddffd",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "hands": "py33py00yy50py22py00py10",
+      "chains": 8,
+      "score": 21820,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaadaaaaafafaaadadaadfddaadffdfaddffddfddfdffffdfddfddffd",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "hands": "py33py21yy50py00py00py10",
+      "chains": 8,
+      "score": 21820,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaadaaaaafaaaaadafaadfdddadffdfaddffddfddfdffffdfddfddffd",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "hands": "py33py22yy50py00py00py10",
+      "chains": 8,
+      "score": 21820,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaadaaaaafafaaadadaadfddaadffdfaddffddfddfdffffdfddfddffd",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "input": "w04s04s04s0SSSSSS_s1E1E1E1__u04",
+  "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaadaaaadcdaaadcdaaadcdaagggggggggggg",
+  "haipuyo": "bbbybyby",
+  "condition": {
+    "q0": 30,
+    "q1": 0,
+    "q2": 4,
+    "text": "4連鎖する"
+  },
+  "status": "ok",
+  "searched": 117040,
+  "matched": 1,
+  "solutions": [
+    {
+      "hands": "bb21by52by50by42",
+      "chains": 4,
+      "score": 2340,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaaaadcadadcdacadcdccadcdddgggggggggggg",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaagaaaaaggaaad"
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "input": "3r02i04A02a02a02a03r0SSSSSS_e1e1c1o1__218",
+  "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaacccaaaeeeaaadddaaaebeaaaebeaaaebeaaacccaagggggggggggg",
+  "haipuyo": "ggggrgrb",
+  "condition": {
+    "q0": 2,
+    "q1": 1,
+    "q2": 8,
+    "text": "赤ぷよ全て消す"
+  },
+  "status": "ok",
+  "searched": 52625,
+  "matched": 2,
+  "solutions": [
+    {
+      "hands": "gg41gg50rg31rb31",
+      "chains": 4,
+      "score": 2960,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaabaaaaabaaacccaaaeeeaaadddaaaebeaaaebeaaaebeaaaccccaggggeagggggg",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaaaaeccaagdddag"
+    },
+    {
+      "hands": "gg50gg41rg31rb31",
+      "chains": 4,
+      "score": 2960,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaabaaaaabaaacccaaaeeeaaadddaaaebeaaaebeaaaebeaaaccccaggggeagggggg",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaaaaeccaagdddag"
+    }
+  ]
+}

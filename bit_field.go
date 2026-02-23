@@ -493,11 +493,21 @@ func (bf *BitField) PlacePuyoWithPlacement(placement *PuyoSetPlacement) bool {
 	if placement.AxisX == placement.ChildX && placement.AxisY == placement.ChildY {
 		return false
 	}
-	if bf.canSetColor(placement.AxisX, placement.AxisY) == false || bf.canSetColor(placement.ChildX, placement.ChildY) == false {
+	// Axis puyo can never be placed on the 14th row.
+	if placement.AxisY > 13 {
+		return false
+	}
+	if bf.canSetColor(placement.AxisX, placement.AxisY) == false {
+		return false
+	}
+	if bf.canSetColor(placement.ChildX, placement.ChildY) == false {
 		return false
 	}
 	bf.SetColor(placement.PuyoSet.Axis, placement.AxisX, placement.AxisY)
-	bf.SetColor(placement.PuyoSet.Child, placement.ChildX, placement.ChildY)
+	// Child puyo may pass through row 14 but must not remain on the field.
+	if placement.ChildY <= 13 {
+		bf.SetColor(placement.PuyoSet.Child, placement.ChildX, placement.ChildY)
+	}
 	return true
 }
 

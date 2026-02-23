@@ -1,0 +1,24 @@
+{
+  "input": "6aM1hg6aM1hg6aM1hg6aM1hg6aM_01e1s1s1e101__v07",
+  "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaagbegaabebeaagbegaabebeaagbegaabebeaagbegaabebeaagbega",
+  "haipuyo": "rrggbbbbggrr",
+  "condition": {
+    "q0": 31,
+    "q1": 0,
+    "q2": 7,
+    "text": "7連鎖以上する"
+  },
+  "status": "ok",
+  "searched": 904799,
+  "matched": 1,
+  "solutions": [
+    {
+      "hands": "rr31gg00bb50bb50gg00rr01",
+      "chains": 7,
+      "score": 14540,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaabaaaabeaaabebbaagbegaabebeaagbegaabebeaagbegaabebeabbbeea",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaea"
+    }
+  ]
+}

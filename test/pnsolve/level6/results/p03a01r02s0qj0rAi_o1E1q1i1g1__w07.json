@@ -1,0 +1,24 @@
+{
+  "input": "p03a01r02s0qj0rAi_o1E1q1i1g1__w07",
+  "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacbaaacbeaaabccaaaecdaaceecaaccddee",
+  "haipuyo": "rbbygbygbg",
+  "condition": {
+    "q0": 32,
+    "q1": 0,
+    "q2": 7,
+    "text": "7連鎖＆ぷよ全て消す"
+  },
+  "status": "ok",
+  "searched": 5123536,
+  "matched": 1,
+  "solutions": [
+    {
+      "hands": "rb31by40gb20yg41bg52",
+      "chains": 7,
+      "score": 16500,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaaaaebaaaacbaaacbedaabccdcaecdceceecceccddee",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    }
+  ]
+}

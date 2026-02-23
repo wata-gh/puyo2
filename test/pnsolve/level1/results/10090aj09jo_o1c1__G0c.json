@@ -1,0 +1,24 @@
+{
+  "input": "10090aj09jo_o1c1__G0c",
+  "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaaabbaabeecaabbecca",
+  "haipuyo": "rbrg",
+  "condition": {
+    "q0": 42,
+    "q1": 0,
+    "q2": 12,
+    "text": "ぷよ12個同時に消す"
+  },
+  "status": "ok",
+  "searched": 484,
+  "matched": 1,
+  "solutions": [
+    {
+      "hands": "rb22rg23",
+      "chains": 2,
+      "score": 1360,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaaaabaaaaacbaaaebbaabeecaabbecca",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    }
+  ]
+}

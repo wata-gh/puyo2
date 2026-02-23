@@ -1,0 +1,24 @@
+{
+  "input": "g32g2co1jw2kw1zoiko_s1C161q1i1__w08",
+  "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaeaacaeeaaebdcaabecdaaeeddaabdccaeeedca",
+  "haipuyo": "bbgyyrgbyg",
+  "condition": {
+    "q0": 32,
+    "q1": 0,
+    "q2": 8,
+    "text": "8連鎖＆ぷよ全て消す"
+  },
+  "status": "ok",
+  "searched": 2557942,
+  "matched": 1,
+  "solutions": [
+    {
+      "hands": "bb21gy23yr30gb20yg00",
+      "chains": 8,
+      "score": 22820,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaacbaaaaedaaadeceaacceeaaebdcaabecdaeeeddadbdccaeeedca",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    }
+  ]
+}

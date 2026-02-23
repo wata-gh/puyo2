@@ -1,0 +1,56 @@
+{
+  "input": "rqiNSeijrNSeNSeNSe_u161i1G10161q1__u08",
+  "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaccceeegbggbgeeecccgbggbggbggbggbggbg",
+  "haipuyo": "ybyrygyyrryrgb",
+  "condition": {
+    "q0": 30,
+    "q1": 0,
+    "q2": 8,
+    "text": "8連鎖する"
+  },
+  "status": "ok",
+  "searched": 596757947,
+  "matched": 5,
+  "solutions": [
+    {
+      "hands": "yb32yr30yg43yy00rr31yr21gb23",
+      "chains": 8,
+      "score": 20200,
+      "clear": true,
+      "initialField": "aaabaaaaabaaaaaeaaaaabaaaaadaadaedbadcdcdaccceeegbggbgeeecccgbggbggbggbggbggbg",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaadaaaaadaaaaa"
+    },
+    {
+      "hands": "yb52yr11yg33yy30rr21yr21gb43",
+      "chains": 8,
+      "score": 21900,
+      "clear": true,
+      "initialField": "aaaaaaaaacaaaaabaaaadbaaaabdaaaaedadadbdecccceeegbggbgeeecccgbggbggbggbggbggbg",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaad"
+    },
+    {
+      "hands": "yb52yr11yg33yy30rr30yr22gb43",
+      "chains": 8,
+      "score": 21900,
+      "clear": true,
+      "initialField": "aaaaaaaaacaaaaabaaaadbaaaabdaaaaedadadbdecccceeegbggbgeeecccgbggbggbggbggbggbg",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaad"
+    },
+    {
+      "hands": "yb52yr33yg11yy30rr21yr21gb43",
+      "chains": 8,
+      "score": 21900,
+      "clear": true,
+      "initialField": "aaaaaaaaacaaaaabaaaadbaaaabdaaaaedadadbdecccceeegbggbgeeecccgbggbggbggbggbggbg",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaad"
+    },
+    {
+      "hands": "yb52yr33yg11yy30rr30yr22gb43",
+      "chains": 8,
+      "score": 21900,
+      "clear": true,
+      "initialField": "aaaaaaaaacaaaaabaaaadbaaaabdaaaaedadadbdecccceeegbggbgeeecccgbggbggbggbggbggbg",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaad"
+    }
+  ]
+}

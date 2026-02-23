@@ -1,0 +1,56 @@
+{
+  "input": "5IC5QN4C94NQ69A1QR9AJ_A1I1A1M1M1M1__G7k",
+  "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaffddgafgdgbaddgbbadgbgdagbbddabgdgfbbddff",
+  "haipuyo": "rypyryrprprp",
+  "condition": {
+    "q0": 42,
+    "q1": 7,
+    "q2": 20,
+    "text": "色ぷよ20個同時に消す"
+  },
+  "status": "ok",
+  "searched": 108322181,
+  "matched": 5,
+  "solutions": [
+    {
+      "hands": "ry20py22ry42rp32rp30rp43",
+      "chains": 3,
+      "score": 6160,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaafaaaaadfaaaadfaaafbbaaaffbaaaddfaaadgbbdagbbddabgdgfbbddff",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaadaaaadd"
+    },
+    {
+      "hands": "ry20py22ry43rp32rp30rp43",
+      "chains": 3,
+      "score": 6160,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaafaaaaadfaaaadfaaafbbaaaffbaaaddfaaadgbbdagbbddabgdgfbbddff",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaadaaaadd"
+    },
+    {
+      "hands": "ry20py22ry53rp32rp30rp43",
+      "chains": 3,
+      "score": 6160,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaafaaaaadfaaaadfaaafbbaaaffbaaaddfaaadgbbdagbbddabgdgfbbddff",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaadaaaadd"
+    },
+    {
+      "hands": "ry20py33ry42rp33rp30rp43",
+      "chains": 3,
+      "score": 6160,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaafaaaaadfaaaadfaaafbbaaaffbaaaddfaaadgbbdagbbddabgdgfbbddff",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaadaaaadd"
+    },
+    {
+      "hands": "ry20py33ry53rp33rp30rp43",
+      "chains": 3,
+      "score": 6160,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaafaaaaadfaaaadfaaafbbaaaffbaaaddfaaadgbbdagbbddabgdgfbbddff",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaadaaaadd"
+    }
+  ]
+}

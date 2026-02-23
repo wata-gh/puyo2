@@ -1,0 +1,32 @@
+{
+  "input": "60660SN0Se0NS0eS0_e101e101e101c1c1__w05",
+  "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaagaaagagaagggbaaggbgaagbggaabgggaa",
+  "haipuyo": "ggrrggrrggrrrgrg",
+  "condition": {
+    "q0": 32,
+    "q1": 0,
+    "q2": 5,
+    "text": "5連鎖＆ぷよ全て消す"
+  },
+  "status": "ok",
+  "searched": 833999699,
+  "matched": 2,
+  "solutions": [
+    {
+      "hands": "gg21rr41gg40rr30gg31rr10rg11rg42",
+      "chains": 5,
+      "score": 4840,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaeaaaaabaaababaaabaeaaabegbaagegeagggbeaggbgeagbggeabgggbb",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "hands": "gg40rr31gg21rr41gg41rr10rg11rg41",
+      "chains": 5,
+      "score": 4840,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaeaaababaaabegbaagegeagggbbaggbgbegbggeebgggeb",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    }
+  ]
+}

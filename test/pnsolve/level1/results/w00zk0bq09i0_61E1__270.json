@@ -1,0 +1,24 @@
+{
+  "input": "w00zk0bq09i0_61E1__270",
+  "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaadaaaaadcedaabcceaabbeeaa",
+  "haipuyo": "yrby",
+  "condition": {
+    "q0": 2,
+    "q1": 7,
+    "q2": 0,
+    "text": "色ぷよ全て消す"
+  },
+  "status": "ok",
+  "searched": 484,
+  "matched": 1,
+  "solutions": [
+    {
+      "hands": "yr22by10",
+      "chains": 4,
+      "score": 2700,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaddaaadcbaaadcedaabcceaabbeeaa",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    }
+  ]
+}

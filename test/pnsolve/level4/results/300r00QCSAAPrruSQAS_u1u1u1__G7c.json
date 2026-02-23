@@ -1,0 +1,24 @@
+{
+  "input": "300r00QCSAAPrruSQAS_u1u1u1__G7c",
+  "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaaaccaaaagddgggddddgccccccggggdddgg",
+  "haipuyo": "ybybyb",
+  "condition": {
+    "q0": 42,
+    "q1": 7,
+    "q2": 12,
+    "text": "色ぷよ12個同時に消す"
+  },
+  "status": "ok",
+  "searched": 10648,
+  "matched": 1,
+  "solutions": [
+    {
+      "hands": "yb21yb21yb32",
+      "chains": 2,
+      "score": 1720,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaadaaaaaddaddggcddddgccccccggggdddgg",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacccaaa"
+    }
+  ]
+}

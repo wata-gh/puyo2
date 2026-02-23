@@ -1,0 +1,40 @@
+{
+  "input": "r00z00A00j9riqq9ri_c1E1g1g1__G0h",
+  "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaccaaaadcaaaaddaaaaecbbcceececebbccee",
+  "haipuyo": "rgbybgbg",
+  "condition": {
+    "q0": 42,
+    "q1": 0,
+    "q2": 17,
+    "text": "ぷよ17個同時に消す"
+  },
+  "status": "ok",
+  "searched": 234128,
+  "matched": 3,
+  "solutions": [
+    {
+      "hands": "rg22by22bg40bg43",
+      "chains": 2,
+      "score": 3780,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaaccdaaadcbaaaddeaaaecbeaaeecbaabbccca",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacbaaa"
+    },
+    {
+      "hands": "rg22by22bg43bg42",
+      "chains": 3,
+      "score": 5520,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaaccdaaadcbaaaddeeaaecbbcaeeceeebbccee",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacbaaa"
+    },
+    {
+      "hands": "rg22by22bg53bg43",
+      "chains": 2,
+      "score": 3780,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaaccdaaadcbaaaddeaaaecbeaaeecbaabbccca",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacbaaa"
+    }
+  ]
+}
