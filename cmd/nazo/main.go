@@ -120,6 +120,9 @@ func search(num int, field chan string, puyoSets []puyo2.PuyoSet, wg *sync.WaitG
 			if opt.N > 0 && opt.Color != puyo2.Empty {
 				if sr.RensaResult.Chains > 0 {
 					for n := 1; n <= sr.RensaResult.Chains; n++ {
+						if n > len(sr.RensaResult.NthResults) {
+							continue
+						}
 						nth := sr.RensaResult.NthResult(n)
 						erasedCount := 0
 						for _, erased := range nth.ErasedPuyos {

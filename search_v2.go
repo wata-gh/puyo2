@@ -234,11 +234,16 @@ func colorTableSignature(table map[Color]Color) uint32 {
 }
 
 func (cond *SearchCondition) simulateForNode(bf *BitField, terminal bool) *RensaResult {
+	needsDetail := terminal || cond.EachHandCallback != nil
+
 	switch cond.SimulatePolicy {
 	case SimulatePolicyFastAlways:
+		if needsDetail {
+			return bf.CloneForSimulation().SimulateDetail()
+		}
 		return bf.CloneForSimulation().Simulate()
 	case SimulatePolicyFastIntermediate:
-		if terminal {
+		if needsDetail {
 			return bf.CloneForSimulation().SimulateDetail()
 		}
 		return bf.CloneForSimulation().Simulate()
