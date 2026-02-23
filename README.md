@@ -29,6 +29,18 @@
 3. `go test ./...` で検証する。
 4. PR本文に、更新種別（ライブラリ/ツールチェーン）と検証結果を明記する。
 
+## 探索ベンチ
+
+探索ロジックの計測は、次のコマンドで実行できます。
+
+```bash
+go test -run '^$' -bench '^BenchmarkSearch' -benchmem ./...
+go test -run '^$' -bench '^BenchmarkSearchWithPuyoSetsV2' -benchmem -count=5 ./...
+```
+
+- `BenchmarkSearchPlacementForPos`: 配置処理の比較（疎な盤面/密な盤面）
+- `BenchmarkSearchWithPuyoSetsV2*`: 全展開と枝刈りありの比較
+
 # 使い方
 
 ```
