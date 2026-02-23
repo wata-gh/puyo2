@@ -1,0 +1,32 @@
+{
+  "input": "HHHHHH_w1w1w1__G0a",
+  "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaafcfcfcfcfcfc",
+  "haipuyo": "pbpbpb",
+  "condition": {
+    "q0": 42,
+    "q1": 0,
+    "q2": 10,
+    "text": "ぷよ10個同時に消す"
+  },
+  "status": "ok",
+  "searched": 10648,
+  "matched": 2,
+  "solutions": [
+    {
+      "hands": "pb12pb40pb33",
+      "chains": 2,
+      "score": 1740,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaafaacaaccffafcfcfcfcfcfc",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "hands": "pb40pb12pb33",
+      "chains": 2,
+      "score": 1740,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaafaacaaccffafcfcfcfcfcfc",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    }
+  ]
+}

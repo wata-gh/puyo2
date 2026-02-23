@@ -1,0 +1,24 @@
+{
+  "input": "o03b03i31ar_o1q1__w04",
+  "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaaacbcaaaceeacabbecc",
+  "haipuyo": "rbgb",
+  "condition": {
+    "q0": 32,
+    "q1": 0,
+    "q2": 4,
+    "text": "4連鎖＆ぷよ全て消す"
+  },
+  "status": "ok",
+  "searched": 484,
+  "matched": 1,
+  "solutions": [
+    {
+      "hands": "rb32gb43",
+      "chains": 4,
+      "score": 2460,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaaaabaaaaccaaacbcaaaceeecabbecc",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    }
+  ]
+}

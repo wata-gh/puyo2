@@ -1,0 +1,24 @@
+{
+  "input": "r0rpMbiSiG9l_k1w1k1w1__250",
+  "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaccaacccbgabceeggeefebbef",
+  "haipuyo": "pgpbpgpb",
+  "condition": {
+    "q0": 2,
+    "q1": 5,
+    "q2": 0,
+    "text": "紫ぷよ全て消す"
+  },
+  "status": "ok",
+  "searched": 234256,
+  "matched": 1,
+  "solutions": [
+    {
+      "hands": "pg41pb23pg13pb30",
+      "chains": 4,
+      "score": 3100,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaafeaaacccaaffbcafggeefbbbef",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    }
+  ]
+}

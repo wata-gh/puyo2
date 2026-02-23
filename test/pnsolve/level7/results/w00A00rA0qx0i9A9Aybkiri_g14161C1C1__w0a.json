@@ -1,0 +1,24 @@
+{
+  "input": "w00A00rA0qx0i9A9Aybkiri_g14161C1C1__w0a",
+  "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaadaaaaaddaaaaccddaacedbaaeebbddbbdddebcedeeccee",
+  "haipuyo": "bgbryrgygy",
+  "condition": {
+    "q0": 32,
+    "q1": 0,
+    "q2": 10,
+    "text": "10連鎖＆ぷよ全て消す"
+  },
+  "status": "ok",
+  "searched": 4834010,
+  "matched": 1,
+  "solutions": [
+    {
+      "hands": "bg22br41yr21gy30gy11",
+      "chains": 10,
+      "score": 42560,
+      "clear": true,
+      "initialField": "aaaaaaaadaaaaadaaaaacdaaaaeeaaaadbaaaaddcbaaccddaacedbaeeebbddbbdddebcedeeccee",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    }
+  ]
+}

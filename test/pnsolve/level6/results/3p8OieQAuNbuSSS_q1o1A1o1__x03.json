@@ -1,0 +1,24 @@
+{
+  "input": "3p8OieQAuNbuSSS_q1o1A1o1__x03",
+  "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaccbbageeebggdddcggbbccggggggg",
+  "haipuyo": "gbrbryrb",
+  "condition": {
+    "q0": 33,
+    "q1": 0,
+    "q2": 3,
+    "text": "3連鎖以上＆ぷよ全て消す"
+  },
+  "status": "ok",
+  "searched": 234256,
+  "matched": 1,
+  "solutions": [
+    {
+      "hands": "gb31rb30ry42rb53",
+      "chains": 4,
+      "score": 4360,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaacaaaacbaaaabdaaaaecaaccbbbgeeebggdddcggbbccggggggg",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    }
+  ]
+}

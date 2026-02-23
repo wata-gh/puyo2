@@ -1,0 +1,24 @@
+{
+  "input": "M06804w019cAyi9Arp9cAAihzr99cA_g1E1c1A1A1__u0e",
+  "initialField": "aaaaaaaaaaaaaaaaaagaaaagbaaaaddaaaabbbbddddeeebbddcccbbbbdddddeeebdcccbbbbbddd",
+  "haipuyo": "bgbyrgryry",
+  "condition": {
+    "q0": 30,
+    "q1": 0,
+    "q2": 14,
+    "text": "14連鎖する"
+  },
+  "status": "ok",
+  "searched": 4023528,
+  "matched": 1,
+  "solutions": [
+    {
+      "hands": "bg01by33rg30ry30ry31",
+      "chains": 14,
+      "score": 85480,
+      "clear": true,
+      "initialField": "aaabaaaaadaacaabaagaaeagbaabaddedcdbbbbddddeeebbddcccbbbbdddddeeebdcccbbbbbddd",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    }
+  ]
+}

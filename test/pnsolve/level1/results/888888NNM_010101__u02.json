@@ -1,0 +1,48 @@
+{
+  "input": "888888NNM_010101__u02",
+  "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaababababababagbgbga",
+  "haipuyo": "rrrrrr",
+  "condition": {
+    "q0": 30,
+    "q1": 0,
+    "q2": 2,
+    "text": "2連鎖する"
+  },
+  "status": "ok",
+  "searched": 1331,
+  "matched": 4,
+  "solutions": [
+    {
+      "hands": "rr20rr41rr11",
+      "chains": 2,
+      "score": 500,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaababaaababbaabagbbbgb",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "hands": "rr20rr41rr20",
+      "chains": 2,
+      "score": 360,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaababaaababababagbbbgb",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaaaabaaaaa"
+    },
+    {
+      "hands": "rr41rr20rr11",
+      "chains": 2,
+      "score": 500,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaababaaababbaabagbbbgb",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "hands": "rr41rr20rr20",
+      "chains": 2,
+      "score": 360,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaababaaababababagbbbgb",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaaaabaaaaa"
+    }
+  ]
+}

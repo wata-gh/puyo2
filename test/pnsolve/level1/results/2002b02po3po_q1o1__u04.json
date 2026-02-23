@@ -1,0 +1,24 @@
+{
+  "input": "2002b02po3po_q1o1__u04",
+  "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaeaaaaaebcaaaecbcaaccbca",
+  "haipuyo": "gbrb",
+  "condition": {
+    "q0": 30,
+    "q1": 0,
+    "q2": 4,
+    "text": "4連鎖する"
+  },
+  "status": "ok",
+  "searched": 484,
+  "matched": 1,
+  "solutions": [
+    {
+      "hands": "gb22rb13",
+      "chains": 4,
+      "score": 2280,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabeaaaaecaaaaebcaaaecbcacccbca",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    }
+  ]
+}

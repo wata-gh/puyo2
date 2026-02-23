@@ -1,0 +1,24 @@
+{
+  "input": "Mp6j92mS_o1q1__u03",
+  "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaagacbagecbbaeeggg",
+  "haipuyo": "rbgb",
+  "condition": {
+    "q0": 30,
+    "q1": 0,
+    "q2": 3,
+    "text": "3連鎖する"
+  },
+  "status": "ok",
+  "searched": 484,
+  "matched": 1,
+  "solutions": [
+    {
+      "hands": "rb33gb01",
+      "chains": 3,
+      "score": 1000,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaaacgbcbagecbbeeeggg",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    }
+  ]
+}

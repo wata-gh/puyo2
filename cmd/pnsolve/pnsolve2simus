@@ -1,0 +1,84 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require "json"
+require "optparse"
+require "uri"
+
+DEFAULT_BASE_URL = "https://puyo-rsrch.com"
+LOCAL_BASE_URL = "http://localhost:3000"
+
+def fail_with(message)
+  warn message
+  exit 1
+end
+
+options = {
+  base_url: DEFAULT_BASE_URL
+}
+
+parser = OptionParser.new do |opts|
+  opts.banner = "Usage: pnsolve2simus [--local|-l] [JSON_FILE]"
+  opts.on("-l", "--local", "Use http://localhost:3000 as base URL") do
+    options[:base_url] = LOCAL_BASE_URL
+  end
+end
+
+begin
+  parser.parse!(ARGV)
+rescue OptionParser::ParseError => e
+  fail_with("option error: #{e.message}")
+end
+
+if ARGV.length > 1
+  fail_with("too many arguments\n#{parser}")
+end
+
+input =
+  if ARGV.length == 1
+    path = ARGV[0]
+    begin
+      File.read(path)
+    rescue Errno::ENOENT
+      fail_with("file not found: #{path}")
+    rescue Errno::EACCES
+      fail_with("permission denied: #{path}")
+    end
+  else
+    STDIN.read
+  end
+
+begin
+  payload = JSON.parse(input)
+rescue JSON::ParserError => e
+  fail_with("invalid JSON: #{e.message}")
+end
+
+unless payload.is_a?(Hash)
+  fail_with("top-level JSON must be an object")
+end
+
+root_initial_field = payload["initialField"]
+solutions = payload["solutions"]
+
+if !root_initial_field.is_a?(String) || root_initial_field.empty?
+  fail_with("initialField is missing or empty")
+end
+
+unless solutions.is_a?(Array)
+  fail_with("solutions must be an array")
+end
+
+solutions.each_with_index do |solution, index|
+  unless solution.is_a?(Hash)
+    fail_with("solutions[#{index}] must be an object")
+  end
+
+  hands = solution["hands"]
+  if !hands.is_a?(String) || hands.empty?
+    fail_with("solutions[#{index}].hands is missing or empty")
+  end
+
+  query = URI.encode_www_form(fs: root_initial_field, h: hands)
+  puts "#{options[:base_url]}/simus?#{query}"
+end

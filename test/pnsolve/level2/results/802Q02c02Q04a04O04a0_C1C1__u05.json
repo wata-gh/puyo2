@@ -1,0 +1,48 @@
+{
+  "input": "802Q02c02Q04a04O04a0_C1C1__u05",
+  "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaaaegdaaaebdaaaegdaaadbeaaadgeaaadbeaa",
+  "haipuyo": "gygy",
+  "condition": {
+    "q0": 30,
+    "q1": 0,
+    "q2": 5,
+    "text": "5連鎖する"
+  },
+  "status": "ok",
+  "searched": 484,
+  "matched": 4,
+  "solutions": [
+    {
+      "hands": "gy20gy40",
+      "chains": 5,
+      "score": 4840,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaadaaaaaeaaaaabaaaaegdaaaebdaaaegdaaadbeaaadgedaadbeea",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "hands": "gy20gy42",
+      "chains": 5,
+      "score": 4840,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaadaaaaaeaaaaabaaaaegdaaaebdaaaegdaaadbeaaadgeeaadbeda",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "hands": "gy22gy00",
+      "chains": 5,
+      "score": 4840,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaeaaaaadaaaaabaaaaegdaaaebdaaaegdaaadbeaaddgeaaedbeaa",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "hands": "gy22gy02",
+      "chains": 5,
+      "score": 4840,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaeaaaaadaaaaabaaaaegdaaaebdaaaegdaaadbeaaedgeaaddbeaa",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    }
+  ]
+}

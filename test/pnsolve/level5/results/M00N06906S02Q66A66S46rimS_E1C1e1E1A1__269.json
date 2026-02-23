@@ -1,0 +1,32 @@
+{
+  "input": "M00N06906S02Q66A66S46rimS_E1C1e1E1A1__269",
+  "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaagaaaaagbaaagbbaaagggaaaegdagagddagagggadagcceeeggg",
+  "haipuyo": "bygyggbyry",
+  "condition": {
+    "q0": 2,
+    "q1": 6,
+    "q2": 9,
+    "text": "おじゃまぷよ全て消す"
+  },
+  "status": "ok",
+  "searched": 2355787,
+  "matched": 2,
+  "solutions": [
+    {
+      "hands": "by33gy22gg40by22ry50",
+      "chains": 5,
+      "score": 4840,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaeaaaaaedaaaagbaaacgbaaagbbaacgggaadegdagegddagdgggaddgcceeeggg",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaeeeaaa"
+    },
+    {
+      "hands": "by33gy22gg40by33ry50",
+      "chains": 5,
+      "score": 4840,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaeaaaaaedaaacgbaaacgbaaagbbaaagggaadegdagegddagdgggaddgcceeeggg",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaeeeaaa"
+    }
+  ]
+}

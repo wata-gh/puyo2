@@ -1,0 +1,24 @@
+{
+  "input": "w04o2Aw2jg1rAxcijAAzprq9xakAh99cA_u1o1i1A1__u0g",
+  "initialField": "aaaaaaaaaaaadaaaadcaaedddaaeeceaabccdddbbdeeecdddddccbcccebbdbbeedddebbbbbbddd",
+  "haipuyo": "ybrbygry",
+  "condition": {
+    "q0": 30,
+    "q1": 0,
+    "q2": 16,
+    "text": "16連鎖する"
+  },
+  "status": "ok",
+  "searched": 178163,
+  "matched": 1,
+  "solutions": [
+    {
+      "hands": "yb30rb50yg42ry33",
+      "chains": 16,
+      "score": 117480,
+      "clear": true,
+      "initialField": "aaabacaaacdbdaadedcaaedddaaeeceadbccdddbbdeeecdddddccbcccebbdbbeedddebbbbbbddd",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    }
+  ]
+}

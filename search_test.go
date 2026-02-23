@@ -155,6 +155,87 @@ func TestPlacePuyoWall(t *testing.T) {
 	}
 }
 
+func fillColumnHeightForMawashiTest(bf *BitField, x int, height int) {
+	for y := 1; y <= height; y++ {
+		bf.SetColor(Red, x, y)
+	}
+}
+
+func TestPlacePuyoWall_Consecutive12WallsCanMawashi(t *testing.T) {
+	bf := NewBitField()
+	// heights = [5,11,10,12,12,5]
+	fillColumnHeightForMawashiTest(bf, 0, 5)
+	fillColumnHeightForMawashiTest(bf, 1, 11)
+	fillColumnHeightForMawashiTest(bf, 2, 10)
+	fillColumnHeightForMawashiTest(bf, 3, 12)
+	fillColumnHeightForMawashiTest(bf, 4, 12)
+	fillColumnHeightForMawashiTest(bf, 5, 5)
+
+	puyoSet := PuyoSet{Green, Green}
+	place := bf.SearchPlacementForPos(&puyoSet, [2]int{5, 0})
+	if place == nil {
+		t.Fatalf("placement must be available for consecutive 12 walls: heights=%v", bf.CreateHeights())
+	}
+	placed, _ := bf.PlacePuyo(puyoSet, [2]int{5, 0})
+	if !placed {
+		t.Fatalf("place must succeed for consecutive 12 walls: heights=%v", bf.CreateHeights())
+	}
+}
+
+func TestPlacePuyoWall_Consecutive12WallsWithoutStepBlocked(t *testing.T) {
+	bf := NewBitField()
+	// heights = [5,10,10,12,12,5]
+	fillColumnHeightForMawashiTest(bf, 0, 5)
+	fillColumnHeightForMawashiTest(bf, 1, 10)
+	fillColumnHeightForMawashiTest(bf, 2, 10)
+	fillColumnHeightForMawashiTest(bf, 3, 12)
+	fillColumnHeightForMawashiTest(bf, 4, 12)
+	fillColumnHeightForMawashiTest(bf, 5, 5)
+
+	puyoSet := PuyoSet{Green, Green}
+	place := bf.SearchPlacementForPos(&puyoSet, [2]int{5, 0})
+	if place != nil {
+		t.Fatalf("placement must be blocked without 11-step: heights=%v placement=%+v", bf.CreateHeights(), *place)
+	}
+	placed, _ := bf.PlacePuyo(puyoSet, [2]int{5, 0})
+	if placed {
+		t.Fatalf("place must be blocked without 11-step: heights=%v", bf.CreateHeights())
+	}
+}
+
+func TestPlacePuyoWall_Step6YB53ShouldBePlaceable(t *testing.T) {
+	param := "qg0uswiugPAgPPAOjOSQySSSSSSSSS_q1C1u1q1u1u1__u09"
+	decoded, err := ParseIPSNazoURL(param)
+	if err != nil {
+		t.Fatalf("ParseIPSNazoURL error=%v", err)
+	}
+
+	bf := NewBitFieldWithMattulwanC(decoded.InitialField)
+	hands := ParseSimpleHands("gb01gy10yb52gb43yb32yb53")
+	if len(hands) != 6 {
+		t.Fatalf("unexpected hands len=%d", len(hands))
+	}
+
+	for i, hand := range hands {
+		place := bf.SearchPlacementForPos(&hand.PuyoSet, hand.Position)
+		if place == nil {
+			t.Fatalf("hand[%d] should be placeable: hand=%s heights=%v", i, ToSimpleHands([]Hand{hand}), bf.CreateHeights())
+		}
+		placed, _ := bf.PlacePuyo(hand.PuyoSet, hand.Position)
+		if !placed {
+			t.Fatalf("hand[%d] place failed: hand=%s heights=%v", i, ToSimpleHands([]Hand{hand}), bf.CreateHeights())
+		}
+	}
+
+	matched, metrics := EvaluateIPSNazoCondition(bf, decoded.Condition)
+	if !matched {
+		t.Fatalf("manual hands must satisfy condition. metrics=%+v", metrics)
+	}
+	if metrics.ChainCount != 9 {
+		t.Fatalf("chain count must be 9 but %d", metrics.ChainCount)
+	}
+}
+
 func TestPlacePuyo2(t *testing.T) {
 	bf := NewBitFieldWithMattulwan("a10gca4gca4gc3d2gecebdge3b2gec2e2gdcb2egd2bd2gd2c2dgbdce2gb4egb")
 	bf.ShowDebug()
@@ -353,6 +434,45 @@ func TestSearchPlacementForPos(t *testing.T) {
 	}
 	if place.Frames != 52+19 {
 		t.Fatalf("frames must be 71 but %d.", place.Frames)
+	}
+}
+
+func TestSearchPlacementForPosChildCanBeOnRow14(t *testing.T) {
+	bf := NewBitField()
+	for y := 1; y <= 13; y++ {
+		bf.SetColor(Green, 3, y)
+	}
+
+	place := bf.SearchPlacementForPos(&PuyoSet{Axis: Red, Child: Blue}, [2]int{2, 1})
+	if place == nil {
+		t.Fatal("must not be nil")
+	}
+	if place.AxisY != 1 || place.ChildY != 14 {
+		t.Fatalf("unexpected placement y axis=%d child=%d", place.AxisY, place.ChildY)
+	}
+	if place.Frames != 78 {
+		t.Fatalf("frames must be 78 but %d.", place.Frames)
+	}
+	if bf.PlacePuyoWithPlacement(place) == false {
+		t.Fatal("place must succeed")
+	}
+	if bf.Color(2, 1) != Red {
+		t.Fatalf("axis must remain at (2,1), actual=%v", bf.Color(2, 1))
+	}
+	if bf.Color(3, 14) != Empty {
+		t.Fatalf("child on row 14 must disappear, actual=%v", bf.Color(3, 14))
+	}
+}
+
+func TestSearchPlacementForPosAxisCannotBeOnRow14(t *testing.T) {
+	bf := NewBitField()
+	for y := 1; y <= 13; y++ {
+		bf.SetColor(Green, 2, y)
+	}
+
+	place := bf.SearchPlacementForPos(&PuyoSet{Axis: Red, Child: Blue}, [2]int{2, 0})
+	if place != nil {
+		t.Fatalf("axis on row 14 must be rejected: %+v", place)
 	}
 }
 

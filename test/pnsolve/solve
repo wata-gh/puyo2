@@ -1,0 +1,12 @@
+#!/bin/zsh
+
+cd $1
+echo $1
+
+cat list | while read line
+do
+echo $line; go run ../../../cmd/pnsolve -param $line > results/$line.json
+if [ $? -ne 0 ]; then
+  rm results/$line.json
+fi
+done

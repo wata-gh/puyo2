@@ -1,0 +1,32 @@
+{
+  "input": "M0pzspzcpxcAsrzsz_u1u1o1u161__H0ml",
+  "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaagaaacbdccdcbdcbdcbdbbdddcdccdccddc",
+  "haipuyo": "ybybrbybyr",
+  "condition": {
+    "q0": 43,
+    "q1": 0,
+    "q2": 22,
+    "text": "ぷよ22個以上同時に消す"
+  },
+  "status": "ok",
+  "searched": 5134302,
+  "matched": 2,
+  "solutions": [
+    {
+      "hands": "yb22yb21rb23yb42yr30",
+      "chains": 3,
+      "score": 7400,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaabaaaaadaaaaadaaaaccadacbdbcdcbddbdcbdbbdddcdccdccddc",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "hands": "yb22yb23rb21yb42yr30",
+      "chains": 3,
+      "score": 7400,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaabaaaaadaaaaadaaaaccadacbdbcdcbddbdcbdbbdddcdccdccddc",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    }
+  ]
+}

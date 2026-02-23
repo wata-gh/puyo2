@@ -1,0 +1,32 @@
+{
+  "input": "402A0aj09r0_i1o1__u04",
+  "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaadaaaeddaabeecaabbccaa",
+  "haipuyo": "ygrb",
+  "condition": {
+    "q0": 30,
+    "q1": 0,
+    "q2": 4,
+    "text": "4連鎖する"
+  },
+  "status": "ok",
+  "searched": 484,
+  "matched": 2,
+  "solutions": [
+    {
+      "hands": "yg10rb01",
+      "chains": 4,
+      "score": 2280,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaaaaeaaaaadadaabeddaabeecaabbccaa",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "hands": "yg11rb01",
+      "chains": 4,
+      "score": 2280,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaaaadedaabeddaabeecaabbccaa",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    }
+  ]
+}

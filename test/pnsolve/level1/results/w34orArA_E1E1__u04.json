@@ -1,0 +1,24 @@
+{
+  "input": "w34orArA_E1E1__u04",
+  "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaadaacadcaccddccdd",
+  "haipuyo": "byby",
+  "condition": {
+    "q0": 30,
+    "q1": 0,
+    "q2": 4,
+    "text": "4連鎖する"
+  },
+  "status": "ok",
+  "searched": 484,
+  "matched": 1,
+  "solutions": [
+    {
+      "hands": "by32by53",
+      "chains": 4,
+      "score": 2280,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaadcdcadcdccddccdd",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    }
+  ]
+}

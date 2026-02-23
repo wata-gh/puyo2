@@ -1,0 +1,24 @@
+{
+  "input": "2jo2984yg3rg9cASSSSSS_E141g1i161__x04",
+  "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaeeccaaebbbaaddeeaaccceabbbdddgggggggggggg",
+  "haipuyo": "bybrbgygyr",
+  "condition": {
+    "q0": 33,
+    "q1": 0,
+    "q2": 4,
+    "text": "4連鎖以上＆ぷよ全て消す"
+  },
+  "status": "ok",
+  "searched": 4992972,
+  "matched": 1,
+  "solutions": [
+    {
+      "hands": "by01br11bg21yg50yr02",
+      "chains": 5,
+      "score": 4840,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaccaaaadbaaaaeeaaadebaaabddeaabbbccagggbbagggggg",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    }
+  ]
+}

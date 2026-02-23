@@ -109,6 +109,7 @@ var ChigiriFramesTable = []int{
 	46,
 	48,
 	50,
+	52,
 }
 
 func (bf *BitField) CreateHeights() map[int]int {
@@ -172,15 +173,17 @@ func (bf *BitField) SearchPlacementForPos(puyoSet *PuyoSet, pos [2]int) *PuyoSet
 		// right side
 		if x > 2 {
 			for i := 3; i < x; i++ {
-				// height 13 wall
+				// A 13-high column is a hard wall.
 				if heights[i] >= 13 {
 					return nil
 				}
+				// A 12-high column can still be traversed by mawashi if an 11-high step
+				// exists behind it. Keep searching even across consecutive 12-high walls.
 				if heights[i] == 12 {
-					hasStep := heights[1] == 12 && heights[3] == 12 // hasama-chomu
+					hasStep := heights[1] >= 12 && heights[3] >= 12 // hasama-chomu (12+)
 					if hasStep == false {
 						for j := i - 1; j >= 0; j-- {
-							if heights[j] >= 12 {
+							if heights[j] >= 13 {
 								break
 							}
 							if heights[j] == 11 {
@@ -195,15 +198,17 @@ func (bf *BitField) SearchPlacementForPos(puyoSet *PuyoSet, pos [2]int) *PuyoSet
 			}
 		} else { // left side
 			for i := 1; i >= x; i-- {
-				// height 13 wall
+				// A 13-high column is a hard wall.
 				if heights[i] >= 13 {
 					return nil
 				}
+				// A 12-high column can still be traversed by mawashi if an 11-high step
+				// exists behind it. Keep searching even across consecutive 12-high walls.
 				if heights[i] == 12 {
-					hasStep := heights[1] == 12 && heights[3] == 12 // hasama-chomu
+					hasStep := heights[1] >= 12 && heights[3] >= 12 // hasama-chomu (12+)
 					if hasStep == false {
 						for j := i + 1; j < len(heights); j++ {
-							if heights[j] >= 12 {
+							if heights[j] >= 13 {
 								break
 							}
 							if heights[j] == 11 {
@@ -222,6 +227,7 @@ func (bf *BitField) SearchPlacementForPos(puyoSet *PuyoSet, pos [2]int) *PuyoSet
 		}
 	}
 
+	// Axis puyo can never be placed on the 14th row.
 	if ay > 13 {
 		return nil
 	}
@@ -239,7 +245,13 @@ func (bf *BitField) SearchPlacementForPos(puyoSet *PuyoSet, pos [2]int) *PuyoSet
 	placement.ChildX = cx
 	placement.ChildY = cy
 	placement.Chigiri = ax != cx && ay != cy
+	if placement.AxisX < 0 || placement.AxisX >= len(SetFramesTable[0]) {
+		return nil
+	}
 	if placement.AxisX == placement.ChildX || placement.AxisY == placement.ChildY { // no chigiri rotate 0,1,2,3
+		if placement.AxisY < 0 || placement.AxisY >= len(SetFramesTable) {
+			return nil
+		}
 		placement.Frames = SetFramesTable[placement.AxisY][placement.AxisX]
 	} else { // with chigiri
 		higher := placement.AxisY
@@ -247,6 +259,12 @@ func (bf *BitField) SearchPlacementForPos(puyoSet *PuyoSet, pos [2]int) *PuyoSet
 		if higher < placement.ChildY {
 			higher = placement.ChildY
 			steps = placement.ChildY - placement.AxisY
+		}
+		if higher < 0 || higher >= len(SetFramesTable) {
+			return nil
+		}
+		if steps < 0 || steps >= len(ChigiriFramesTable) {
+			return nil
 		}
 		placement.Frames = SetFramesTable[higher][placement.AxisX] + ChigiriFramesTable[steps]
 	}

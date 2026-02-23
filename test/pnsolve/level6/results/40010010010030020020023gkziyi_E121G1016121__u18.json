@@ -1,0 +1,40 @@
+{
+  "input": "40010010010030020020023gkziyi_E121G1016121__u18",
+  "initialField": "aaaaaaaaaaaaaaaaaaaaadaaaaabaaaaabaaaaabaaaaacaaaaaeaaaaaeaaaaaeaceaeddceedeee",
+  "haipuyo": "bygryyrryrgr",
+  "condition": {
+    "q0": 30,
+    "q1": 1,
+    "q2": 8,
+    "text": "8連鎖する"
+  },
+  "status": "ok",
+  "searched": 20572827,
+  "matched": 3,
+  "solutions": [
+    {
+      "hands": "by40gr50yy50rr40yr41gr40",
+      "chains": 8,
+      "score": 20200,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaadaaaaabbaaaabebaaabddaaacbdaaaebbaaaedeaaaecceaeddceedeee",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "hands": "by40gr50yy50rr41yr42gr40",
+      "chains": 8,
+      "score": 20200,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaadaaaaabbaaaabebaaabddaaacbdaaaebbaaaedeaaaecceaeddceedeee",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "hands": "by40gr53yy40rr50yr50gr40",
+      "chains": 8,
+      "score": 20200,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaadaaaaabbaaaabebaaabddaaacdbaaaebbaaaedeaaaecceaeddceedeee",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    }
+  ]
+}

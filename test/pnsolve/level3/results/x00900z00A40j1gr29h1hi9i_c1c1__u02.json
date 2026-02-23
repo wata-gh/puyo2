@@ -1,0 +1,32 @@
+{
+  "input": "x00900z00A40j1gr29h1hi9i_c1c1__u02",
+  "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaadbaaaabbaaaadcaaaaddadaaecabeaccaebbebabebeebbee",
+  "haipuyo": "rgrg",
+  "condition": {
+    "q0": 30,
+    "q1": 0,
+    "q2": 2,
+    "text": "2連鎖する"
+  },
+  "status": "ok",
+  "searched": 484,
+  "matched": 2,
+  "solutions": [
+    {
+      "hands": "rg50rg11",
+      "chains": 2,
+      "score": 560,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaabaaaadbaaaabbaaaadcaaaaddaaaaecaaaaccaaaaebaaaaeeedaa",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaaaacaaaaecaaaacbadaa"
+    },
+    {
+      "hands": "rg53rg11",
+      "chains": 2,
+      "score": 560,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaabaaaadbaaaabbaaaadcaaaaddaaaaecaaaaccaaaaebaaaaeeedaa",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaaaacaaaaecaaaacbadaa"
+    }
+  ]
+}

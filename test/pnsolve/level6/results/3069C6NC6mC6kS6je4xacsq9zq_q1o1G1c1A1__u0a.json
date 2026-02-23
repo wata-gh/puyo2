@@ -1,0 +1,48 @@
+{
+  "input": "3069C6NC6mC6kS6je4xacsq9zq_q1o1G1c1A1__u0a",
+  "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaacaaagbbdgaggbdgagegdgagedggagecbgaddbbebdcdcebbdcce",
+  "haipuyo": "gbrbyyrgry",
+  "condition": {
+    "q0": 30,
+    "q1": 0,
+    "q2": 10,
+    "text": "10連鎖する"
+  },
+  "status": "ok",
+  "searched": 2072875,
+  "matched": 4,
+  "solutions": [
+    {
+      "hands": "gb40rb42yy11rg43ry00",
+      "chains": 10,
+      "score": 36840,
+      "clear": true,
+      "initialField": "aaaabaaaaabaaaaacaaaaecaaddceaagbbdgaggbdgagegdgagedggdgecbgbddbbebdcdcebbdcce",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "hands": "gb40rb42yy20rg43ry00",
+      "chains": 10,
+      "score": 36840,
+      "clear": true,
+      "initialField": "aaaabaaaaabaaaaacaaadecaaadceaagbbdgaggbdgagegdgagedggdgecbgbddbbebdcdcebbdcce",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "hands": "gb40rb42yy21rg43ry00",
+      "chains": 10,
+      "score": 36840,
+      "clear": true,
+      "initialField": "aaaabaaaaabaaaaecaaaadcaaadceaagbbdgaggbdgagegdgagedggdgecbgbddbbebdcdcebbdcce",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "hands": "gb50rb43yy21rg10ry01",
+      "chains": 10,
+      "score": 36840,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaadadaaaeacacabdcbeagbbdgaggbdgagegdgagedggagecbgbddbbebdcdcebbdcce",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    }
+  ]
+}

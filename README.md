@@ -54,3 +54,90 @@ func main() {
 	fmt.Println(bf.MattulwanEditorUrl())
 }
 ```
+
+## IPS なぞぷよ URL 変換
+
+`ips.karou.jp/simu/pn.html?...` のクエリを `puyo2` 向けの `Initial Field` と `Haipuyo` に変換できます。
+
+### URL を渡す
+
+```bash
+go run ./cmd/pnconv -url 'https://ips.karou.jp/simu/pn.html?800F08J08A0EB_8161__270'
+```
+
+### 生クエリを渡す
+
+```bash
+go run ./cmd/pnconv -param '80080080oM0oM098_4141__u03'
+```
+
+### 出力例
+
+```text
+Initial Field: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaececeacecececececececece
+Haipuyo: gbgbgb
+Condition: 6連鎖する
+ConditionCode: q0=30 q1=0 q2=6
+```
+
+`jjgqqqqqqqqq_q1q1q1__u06`（問2）は URL 実装準拠で `...ecece...` 系の盤面として解釈されます。
+
+## IPS なぞぷよ Solve(JSON)
+
+`pnconv` が変換専用なのに対して、`pnsolve` は実際に探索して条件一致解を JSON で出力します。
+
+### 実行例
+
+```bash
+go run ./cmd/pnsolve -param '800F08J08A0EB_8161__270'
+go run ./cmd/pnsolve -url 'http://ips.karou.jp/simu/pn.html?jjgqqqqqqqqq_q1q1q1__u06'
+```
+
+### 主なオプション
+
+- `-url`: IPS なぞぷよ URL（`-param` より優先）
+- `-param`: クエリ文字列
+- `-disablechigiri`: ちぎり禁止で探索
+- `-pretty=false`: 1行 JSON 出力
+
+### JSON フィールド
+
+- `input`: 入力文字列
+- `initialField`: 初期盤面(Mattulwan 78文字)
+- `haipuyo`: はいぷよ列(`rgbyp`)
+- `condition`: `q0/q1/q2/text`
+- `status`: `ok` / `no_solution` / `search_failed`
+- `error`: `status=search_failed` のときのエラー内容
+- `searched`: 探索した手順数
+- `matched`: 条件一致した解数
+- `solutions[]`: 各解（`hands/chains/score/clear/initialField/finalField`）
+  - `clear` は「条件一致」ではなく「`finalField` が全消し（オールクリア）か」を表します
+
+## pnsolve2simus
+
+`cmd/pnsolve/pnsolve2simus` は `cmd/pnsolve` の JSON 出力を受け取り、`puyo-rsrch-app` の `/simus` URL に変換する Ruby スクリプトです。
+
+### 使い方
+
+`pnsolve` の結果を標準入力から渡す:
+
+```bash
+go run ./cmd/pnsolve -param '800F08J08A0EB_8161__270' -pretty=false | ./cmd/pnsolve/pnsolve2simus
+```
+
+JSON ファイルを引数で渡す:
+
+```bash
+./cmd/pnsolve/pnsolve2simus result.json
+```
+
+ローカル開発用 URL を出す（`http://localhost:3000`）:
+
+```bash
+./cmd/pnsolve/pnsolve2simus --local result.json
+```
+
+### 入出力
+
+- 入力: `pnsolve` の JSON（トップレベル object、`initialField` と `solutions[].hands` が必要）
+- 出力: 解ごとに1行の URL（`https://puyo-rsrch.com/simus?fs=...&h=...`）

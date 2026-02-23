@@ -1,0 +1,24 @@
+{
+  "input": "4004004003003003w02g0j80zc0yh0y9_C1C1G1__u17",
+  "initialField": "aaaaaaaaaaaaaaadaaaaadaaaaadaaaaacaaaaacaaaaacdaaaaeeaaaecbaaadcbdaadeebaadebb",
+  "haipuyo": "gygyyy",
+  "condition": {
+    "q0": 30,
+    "q1": 1,
+    "q2": 7,
+    "text": "7連鎖する"
+  },
+  "status": "ok",
+  "searched": 4774,
+  "matched": 1,
+  "solutions": [
+    {
+      "hands": "gy42gy41yy11",
+      "chains": 7,
+      "score": 15120,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaadaaaaadaaaaadeaaaaceaaaacdaaaacdaaadeeaaaecbdaadcbdaadeebaddebb",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    }
+  ]
+}

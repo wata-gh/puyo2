@@ -78,7 +78,6 @@ func (cond *SearchCondition) SearchPositionV2(hands []Hand) {
 			continue
 		}
 		if bf.PlacePuyoWithPlacement(placement) == false {
-			bf.ShowDebug()
 			panic(fmt.Sprintf("should be able to place. %+v\n", placement))
 		}
 		newHands := make([]Hand, len(hands))

@@ -1,0 +1,24 @@
+{
+  "input": "100310p30p10pp0Sb8_01o1__u05",
+  "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaaaacabaacbacaacbabaacbcbaaggbcba",
+  "haipuyo": "rrrb",
+  "condition": {
+    "q0": 30,
+    "q1": 0,
+    "q2": 5,
+    "text": "5連鎖する"
+  },
+  "status": "ok",
+  "searched": 242,
+  "matched": 1,
+  "solutions": [
+    {
+      "hands": "rr30rb40",
+      "chains": 5,
+      "score": 4840,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaababaaacabaacbacaacbabcacbcbbaggbcba",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    }
+  ]
+}

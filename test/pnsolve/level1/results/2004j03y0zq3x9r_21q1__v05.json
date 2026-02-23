@@ -1,0 +1,24 @@
+{
+  "input": "2004j03y0zq3x9r_21q1__v05",
+  "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaeaaaaadecaaacdeaadcceacdbbbcc",
+  "haipuyo": "grgb",
+  "condition": {
+    "q0": 31,
+    "q1": 0,
+    "q2": 5,
+    "text": "5連鎖以上する"
+  },
+  "status": "ok",
+  "searched": 484,
+  "matched": 1,
+  "solutions": [
+    {
+      "hands": "gr42gb52",
+      "chains": 5,
+      "score": 4840,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaeaaaaadecaeacdeecdccebcdbbbcc",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaeeaaa"
+    }
+  ]
+}

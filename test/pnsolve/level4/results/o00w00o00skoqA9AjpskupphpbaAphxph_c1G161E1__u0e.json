@@ -1,0 +1,32 @@
+{
+  "input": "o00w00o00skoqA9AjpskupphpbaAphxph_c1G161E1__u0e",
+  "initialField": "aaaaaaaaaaaacaaaaadaaaaacaaaaacdedcaceddbbddeccbcdedcgcbcbebcbbcbeddcbebdbcbeb",
+  "haipuyo": "rgyyyrby",
+  "condition": {
+    "q0": 30,
+    "q1": 0,
+    "q2": 14,
+    "text": "14連鎖する"
+  },
+  "status": "ok",
+  "searched": 95519,
+  "matched": 2,
+  "solutions": [
+    {
+      "hands": "rg43yy21yr30by13",
+      "chains": 14,
+      "score": 88460,
+      "clear": true,
+      "initialField": "aaaaaadaabaacaadaadaadaaccdebacdedcaceddbbddeccbcdedcgcbcbebcbbcbeddcbebdbcbeb",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "hands": "rg43yy30yr21by13",
+      "chains": 14,
+      "score": 88460,
+      "clear": true,
+      "initialField": "aaaaaadaabaacaadaadaadaaccdebacdedcaceddbbddeccbcdedcgcbcbebcbbcbeddcbebdbcbeb",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "input": "A09x0c90A_616161__G0d",
+  "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaddaabbdbaabdbbaadd",
+  "haipuyo": "yryryr",
+  "condition": {
+    "q0": 42,
+    "q1": 0,
+    "q2": 13,
+    "text": "ぷよ13個同時に消す"
+  },
+  "status": "ok",
+  "searched": 10648,
+  "matched": 1,
+  "solutions": [
+    {
+      "hands": "yr32yr30yr22",
+      "chains": 2,
+      "score": 2310,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaddadbbdbddbdbbbbdd",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    }
+  ]
+}

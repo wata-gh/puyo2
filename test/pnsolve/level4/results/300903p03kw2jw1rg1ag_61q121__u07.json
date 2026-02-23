@@ -1,0 +1,24 @@
+{
+  "input": "300903p03kw2jw1rg1ag_61q121__u07",
+  "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaaabbaaaccbaaaceddaaeecdaabcceaabbeea",
+  "haipuyo": "yrgbgr",
+  "condition": {
+    "q0": 30,
+    "q1": 0,
+    "q2": 7,
+    "text": "7連鎖する"
+  },
+  "status": "ok",
+  "searched": 10648,
+  "matched": 1,
+  "solutions": [
+    {
+      "hands": "yr30gb40gr01",
+      "chains": 7,
+      "score": 13800,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaabaaaaadaaaaacaaabbbcaaccbeaaceddaaeecdaabcceaebbeea",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    }
+  ]
+}

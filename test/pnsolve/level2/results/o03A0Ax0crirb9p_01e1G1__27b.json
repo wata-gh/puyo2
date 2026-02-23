@@ -1,0 +1,32 @@
+{
+  "input": "o03A0Ax0crirb9p_01e1G1__27b",
+  "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaaacddaadddbaabdcceeccbcbbcb",
+  "haipuyo": "rrggyy",
+  "condition": {
+    "q0": 2,
+    "q1": 7,
+    "q2": 11,
+    "text": "色ぷよ全て消す"
+  },
+  "status": "ok",
+  "searched": 1331,
+  "matched": 2,
+  "solutions": [
+    {
+      "hands": "rr11gg21yy21",
+      "chains": 7,
+      "score": 13800,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacbdaacddeddddbbebdcceeccbcbbcb",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "hands": "rr31gg21yy21",
+      "chains": 7,
+      "score": 13800,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaadbcdddedddbebbdcceeccbcbbcb",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    }
+  ]
+}

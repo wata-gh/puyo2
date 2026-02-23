@@ -1,0 +1,48 @@
+{
+  "input": "3Sg6qM3jg2qo6jM2So_s1s1e1e1s1e1g1g1__w08",
+  "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacggeaagcegaaceceaaececaagecgaaeggca",
+  "haipuyo": "bbbbggggbbggbgbg",
+  "condition": {
+    "q0": 32,
+    "q1": 0,
+    "q2": 8,
+    "text": "8連鎖＆ぷよ全て消す"
+  },
+  "status": "ok",
+  "searched": 837536611,
+  "matched": 4,
+  "solutions": [
+    {
+      "hands": "bb01bb31gg00gg31bb41gg50bg30bg41",
+      "chains": 8,
+      "score": 20200,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaecaaaaccaaaaeeaacaccaacggeaagcegaaceceeeececeegecgeceggcc",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "hands": "bb01bb31gg31gg00bb41gg50bg30bg41",
+      "chains": 8,
+      "score": 20200,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaecaaaaccaaaaeeaacaccaacggeaagcegaaceceeeececeegecgeceggcc",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "hands": "bb31bb01gg00gg31bb41gg50bg30bg41",
+      "chains": 8,
+      "score": 20200,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaecaaaaccaaaaeeaacaccaacggeaagcegaaceceeeececeegecgeceggcc",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "hands": "bb31bb01gg31gg00bb41gg50bg30bg41",
+      "chains": 8,
+      "score": 20200,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaecaaaaccaaaaeeaacaccaacggeaagcegaaceceeeececeegecgeceggcc",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    }
+  ]
+}

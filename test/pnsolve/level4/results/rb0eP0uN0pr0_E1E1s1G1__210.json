@@ -1,0 +1,48 @@
+{
+  "input": "rb0eP0uN0pr0_E1E1s1G1__210",
+  "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaccbcaabggcaacggbaacbccaa",
+  "haipuyo": "bybybbyy",
+  "condition": {
+    "q0": 2,
+    "q1": 1,
+    "q2": 0,
+    "text": "赤ぷよ全て消す"
+  },
+  "status": "ok",
+  "searched": 58564,
+  "matched": 4,
+  "solutions": [
+    {
+      "hands": "by11by43bb40yy20",
+      "chains": 3,
+      "score": 1000,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaaaccdaaabgdaaacgddaacbbbaa",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaaaa"
+    },
+    {
+      "hands": "by11by43bb40yy21",
+      "chains": 3,
+      "score": 1000,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaaaccaaaabgddaacgddaacbbbaa",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaaaa"
+    },
+    {
+      "hands": "by43by11bb40yy20",
+      "chains": 3,
+      "score": 1000,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaaaccdaaabgdaaacgddaacbbbaa",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaaaa"
+    },
+    {
+      "hands": "by43by11bb40yy21",
+      "chains": 3,
+      "score": 1000,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaaaccaaaabgddaacgddaacbbbaa",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaaaa"
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "input": "p0Akixbqrb9kykibANbu_61o1q1i1__260",
+  "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacbaaddedeedbbcceccbcbbeddeedeebcddgbbccg",
+  "haipuyo": "yrrbgbyg",
+  "condition": {
+    "q0": 2,
+    "q1": 6,
+    "q2": 0,
+    "text": "おじゃまぷよ全て消す"
+  },
+  "status": "ok",
+  "searched": 232392,
+  "matched": 1,
+  "solutions": [
+    {
+      "hands": "yr11rb42gb01yg52",
+      "chains": 5,
+      "score": 7120,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaababdaacbceacedeeebbcceccbcbbeddeedeebcddgbbccg",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaaaaedaaaadeaaadbceaabbcca"
+    }
+  ]
+}

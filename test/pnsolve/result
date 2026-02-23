@@ -1,0 +1,10 @@
+#!/bin/zsh
+
+echo $1
+cd $1
+
+for f in results/*.json
+do
+cat $f | jq '. | select(.status != "ok")'
+done
+

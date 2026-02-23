@@ -1,0 +1,15 @@
+{
+  "input": "600100d00F00cM0xE0d80Fw0eJ8FIEdeB_M1A1M1I1A1A1__w78",
+  "initialField": "aaaaaaaaaaaaagaaaaabaaaabfaaaafbaaaabdgaaadbfaaabfbaaafbdaaabgffbafbfdfabfbgdf",
+  "haipuyo": "rpryrppyryry",
+  "condition": {
+    "q0": 32,
+    "q1": 7,
+    "q2": 8,
+    "text": "8連鎖＆色ぷよ全て消す"
+  },
+  "status": "no_solution",
+  "searched": 49725066,
+  "matched": 0,
+  "solutions": []
+}

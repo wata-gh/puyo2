@@ -1,0 +1,64 @@
+{
+  "input": "cccbbbaaa_A1A1A1q1q1G1__H7d",
+  "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabdbdbdbcbcbcbebebe",
+  "haipuyo": "ryryrygbgbyy",
+  "condition": {
+    "q0": 43,
+    "q1": 7,
+    "q2": 13,
+    "text": "色ぷよ13個以上同時に消す"
+  },
+  "status": "ok",
+  "searched": 56684416,
+  "matched": 6,
+  "solutions": [
+    {
+      "hands": "ry12ry41ry33gb20gb40yy31",
+      "chains": 3,
+      "score": 4560,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaaabedaaaddbadbdbdddbcbcccbebeee",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "hands": "ry12ry41ry33gb40gb20yy31",
+      "chains": 3,
+      "score": 4560,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaaabedaaaddbadbdbdddbcbcccbebeee",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "hands": "ry41ry12ry33gb20gb40yy31",
+      "chains": 3,
+      "score": 4560,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaaabedaaaddbadbdbdddbcbcccbebeee",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "hands": "ry41ry12ry33gb40gb20yy31",
+      "chains": 3,
+      "score": 4560,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaaabedaaaddbadbdbdddbcbcccbebeee",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "hands": "ry41ry33ry12gb20gb40yy31",
+      "chains": 3,
+      "score": 4560,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaaabedaaaddbadbdbdddbcbcccbebeee",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "hands": "ry41ry33ry12gb40gb20yy31",
+      "chains": 3,
+      "score": 4560,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaaabedaaaddbadbdbdddbcbcccbebeee",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    }
+  ]
+}

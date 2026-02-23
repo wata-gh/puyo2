@@ -1,0 +1,24 @@
+{
+  "input": "r00u00j9riqq9ri_e1s1c1s1__G7f",
+  "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaccaaaacgaaaaecbbcceececebbccee",
+  "haipuyo": "ggbbrgbb",
+  "condition": {
+    "q0": 42,
+    "q1": 7,
+    "q2": 15,
+    "text": "色ぷよ15個同時に消す"
+  },
+  "status": "ok",
+  "searched": 29282,
+  "matched": 1,
+  "solutions": [
+    {
+      "hands": "gg20bb20rg31bb41",
+      "chains": 4,
+      "score": 7780,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaaaacaaacceacacgebececbbcceececebbccee",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaaa"
+    }
+  ]
+}

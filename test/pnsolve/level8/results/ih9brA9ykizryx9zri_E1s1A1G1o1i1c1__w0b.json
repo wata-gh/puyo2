@@ -1,0 +1,32 @@
+{
+  "input": "ih9brA9ykizryx9zri_E1s1A1G1o1i1c1__w0b",
+  "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaeeebbbbcccddbbdeedeedcccdedbbbdcccee",
+  "haipuyo": "bybbryyyrbygrg",
+  "condition": {
+    "q0": 32,
+    "q1": 0,
+    "q2": 11,
+    "text": "11連鎖＆ぷよ全て消す"
+  },
+  "status": "ok",
+  "searched": 583399653,
+  "matched": 2,
+  "solutions": [
+    {
+      "hands": "by52bb01ry21yy11rb01yg11rg43",
+      "chains": 11,
+      "score": 59760,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaadaaaaaceaaabddeacccbdbdeeebbbbcccddbbdeedeedcccdedbbbdcccee",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "hands": "by52bb01ry23yy21rb01yg11rg43",
+      "chains": 11,
+      "score": 59760,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaadaaaaaceaaabddeacccbdbdeeebbbbcccddbbdeedeedcccdedbbbdcccee",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "input": "swosogpajihr_E1s1c1g1__u07",
+  "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacddacacdcaeacbbeeceeebcc",
+  "haipuyo": "bybbrgbg",
+  "condition": {
+    "q0": 30,
+    "q1": 0,
+    "q2": 7,
+    "text": "7連鎖する"
+  },
+  "status": "ok",
+  "searched": 117128,
+  "matched": 2,
+  "solutions": [
+    {
+      "hands": "by10bb31rg33bg53",
+      "chains": 7,
+      "score": 13800,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaadaaeaaceacacddbcacdcceccbbeeceeebcc",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "hands": "by13bb31rg33bg53",
+      "chains": 7,
+      "score": 13800,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaeadceacacddbcacdcceccbbeeceeebcc",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    }
+  ]
+}

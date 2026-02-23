@@ -1,0 +1,24 @@
+{
+  "input": "30w3sw2h82z84zorsA_C1o1E1__x05",
+  "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaadaaccddaaeebbaaedcbaaddccacccddd",
+  "haipuyo": "gyrbby",
+  "condition": {
+    "q0": 33,
+    "q1": 0,
+    "q2": 5,
+    "text": "5連鎖以上＆ぷよ全て消す"
+  },
+  "status": "ok",
+  "searched": 10648,
+  "matched": 1,
+  "solutions": [
+    {
+      "hands": "gy11rb22by00",
+      "chains": 5,
+      "score": 6600,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaaaecaaaacdadaaccddaaeebbadedcbacddccacccddd",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    }
+  ]
+}

@@ -1,0 +1,64 @@
+{
+  "input": "190eS8eS8N9MSSMSNNSNNSSNSSe_010101__210",
+  "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaabbbaabgggbabgggbagbbbgagggggagggbgbgggbgbgggggbggggbg",
+  "haipuyo": "rrrrrr",
+  "condition": {
+    "q0": 2,
+    "q1": 1,
+    "q2": 0,
+    "text": "赤ぷよ全て消す"
+  },
+  "status": "ok",
+  "searched": 1331,
+  "matched": 6,
+  "solutions": [
+    {
+      "hands": "rr00rr00rr41",
+      "chains": 2,
+      "score": 700,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaaaabaaaaabaaaaagbgggbgbgggbgbgggggbggggbg",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaggaaaaggaaaagggaaagggaaa"
+    },
+    {
+      "hands": "rr00rr01rr41",
+      "chains": 2,
+      "score": 700,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaaaabaaaaabaaaaagbgggbgbgggbgbgggggbggggbg",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaggaaaaggaaaagggaaagggaaa"
+    },
+    {
+      "hands": "rr00rr10rr41",
+      "chains": 2,
+      "score": 700,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaaaabaaaaabagaaagbgggbgbgggbgbgggggbggggbg",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaagaaaaaggaaaaggaaaagggaaagggaaa"
+    },
+    {
+      "hands": "rr01rr00rr41",
+      "chains": 2,
+      "score": 700,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaaaabaaaaabaaaaagbgggbgbgggbgbgggggbggggbg",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaggaaaaggaaaagggaaagggaaa"
+    },
+    {
+      "hands": "rr01rr01rr41",
+      "chains": 2,
+      "score": 700,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaaaabaaaaabaaaaagbgggbgbgggbgbgggggbggggbg",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaggaaaaggaaaagggaaagggaaa"
+    },
+    {
+      "hands": "rr01rr10rr41",
+      "chains": 2,
+      "score": 700,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaaaabaaaaabagaaagbgggbgbgggbgbgggggbggggbg",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaagaaaaaggaaaaggaaaagggaaagggaaa"
+    }
+  ]
+}

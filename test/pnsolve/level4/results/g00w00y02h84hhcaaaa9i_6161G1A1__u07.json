@@ -1,0 +1,48 @@
+{
+  "input": "g00w00y02h84hhcaaaa9i_6161G1A1__u07",
+  "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaeaaaaadaaaaadeaaaeebbaadebebbdbebebebebbee",
+  "haipuyo": "yryryyry",
+  "condition": {
+    "q0": 30,
+    "q1": 0,
+    "q2": 7,
+    "text": "7連鎖する"
+  },
+  "status": "ok",
+  "searched": 117038,
+  "matched": 4,
+  "solutions": [
+    {
+      "hands": "yr12yr20yy21ry53",
+      "chains": 7,
+      "score": 15760,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaeddaaadbbaabdedaaeebbdddebebbdbebebebebbee",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaaabdaaa"
+    },
+    {
+      "hands": "yr20yr12yy21ry53",
+      "chains": 7,
+      "score": 15760,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaeddaaadbbaabdedaaeebbdddebebbdbebebebebbee",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaaabdaaa"
+    },
+    {
+      "hands": "yr23yr11yy21ry53",
+      "chains": 7,
+      "score": 15760,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaeddaaadbbaabdedaaeebbdddebebbdbebebebebbee",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaaabdaaa"
+    },
+    {
+      "hands": "yr23yr33yy11ry53",
+      "chains": 7,
+      "score": 15760,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaeddaaadbbaabdedaaeebbdddebebbdbebebebebbee",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaaabdaaa"
+    }
+  ]
+}

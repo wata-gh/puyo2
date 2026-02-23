@@ -1,0 +1,24 @@
+{
+  "input": "800F08J08A0EB_8161__270",
+  "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaaaafbaabaffaabaddaafadf",
+  "haipuyo": "pryr",
+  "condition": {
+    "q0": 2,
+    "q1": 7,
+    "q2": 0,
+    "text": "色ぷよ全て消す"
+  },
+  "status": "ok",
+  "searched": 484,
+  "matched": 1,
+  "solutions": [
+    {
+      "hands": "pr31yr30",
+      "chains": 3,
+      "score": 1840,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaaaabaaaaafbaabbffaabdddaaffdf",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    }
+  ]
+}

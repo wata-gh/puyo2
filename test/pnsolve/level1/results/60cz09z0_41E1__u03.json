@@ -1,0 +1,24 @@
+{
+  "input": "60cz09z0_41E1__u03",
+  "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaagaabddcaabbdcaa",
+  "haipuyo": "brby",
+  "condition": {
+    "q0": 30,
+    "q1": 0,
+    "q2": 3,
+    "text": "3連鎖する"
+  },
+  "status": "ok",
+  "searched": 484,
+  "matched": 1,
+  "solutions": [
+    {
+      "hands": "br12by22",
+      "chains": 3,
+      "score": 1000,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaccaaaabdgaabddcaabbdcaa",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    }
+  ]
+}

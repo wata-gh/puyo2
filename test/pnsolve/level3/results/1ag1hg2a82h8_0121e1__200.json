@@ -1,0 +1,24 @@
+{
+  "input": "1ag1hg2a82h8_0121e1__200",
+  "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbeeaabebeaaebebaaeebba",
+  "haipuyo": "rrgrgg",
+  "condition": {
+    "q0": 2,
+    "q1": 0,
+    "q2": 0,
+    "text": "ぷよ全て消す"
+  },
+  "status": "ok",
+  "searched": 2662,
+  "matched": 1,
+  "solutions": [
+    {
+      "hands": "rr30gr10gg31",
+      "chains": 4,
+      "score": 3800,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaeaaababaaaeabeaabbeeaabebeaaebebaaeebba",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    }
+  ]
+}

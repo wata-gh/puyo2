@@ -1,0 +1,24 @@
+{
+  "input": "100100100234r4pz4haxcikrAipc_o101o1o1o1__u1b",
+  "initialField": "aaaaaaaaaaaaaaaaaaaaaaabaaaaabaaaaabaaaaaeacadccadcbdcadebbedbbdeeedccddeecbbd",
+  "haipuyo": "rbrrrbrbrb",
+  "condition": {
+    "q0": 30,
+    "q1": 1,
+    "q2": 11,
+    "text": "11連鎖する"
+  },
+  "status": "ok",
+  "searched": 2535997,
+  "matched": 1,
+  "solutions": [
+    {
+      "hands": "rb10rr10rb22rb22rb31",
+      "chains": 11,
+      "score": 47500,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaabaaababbaabaccaababbbceaccdccadcbdcadebbedbbdeeedccddeecbbd",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaadaa"
+    }
+  ]
+}

@@ -1,0 +1,64 @@
+{
+  "input": "1804w02gwP8r9rsAb_s1c1o1q1u1E1__u08",
+  "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbaaaaddaaaaeeadagcbaccbbcccdddbc",
+  "haipuyo": "bbrgrbgbybby",
+  "condition": {
+    "q0": 30,
+    "q1": 0,
+    "q2": 8,
+    "text": "8連鎖する"
+  },
+  "status": "ok",
+  "searched": 56286181,
+  "matched": 6,
+  "solutions": [
+    {
+      "hands": "bb21rg41rb52gb52yb31by11",
+      "chains": 8,
+      "score": 20460,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaadcaaaacbeaaabbcaadddbaaceecdcgcbeccbbcccdddbc",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "hands": "bb21rg41rb52gb52yb42by11",
+      "chains": 8,
+      "score": 20460,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaadaaaaacaaaacbeaaabbcaadddbaaceecdcgcbeccbbcccdddbc",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "hands": "bb21rg41rb52gb52yb53by11",
+      "chains": 8,
+      "score": 20460,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacdaaacbeaaabbcaadddbaaceecdcgcbeccbbcccdddbc",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "hands": "bb30rg41rb52gb52yb31by11",
+      "chains": 8,
+      "score": 21260,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaadaaaaaccaaaacbeaaabbcaaaddbaadeecdcgcbeccbbcccdddbc",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "hands": "bb30rg41rb52gb52yb42by11",
+      "chains": 8,
+      "score": 21260,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaadaaaaccaaaacbeaaabbcaaaddbaadeecdcgcbeccbbcccdddbc",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "hands": "bb30rg41rb52gb52yb53by11",
+      "chains": 8,
+      "score": 21260,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaccdaaacbeaaabbcaaaddbaadeecdcgcbeccbbcccdddbc",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    }
+  ]
+}

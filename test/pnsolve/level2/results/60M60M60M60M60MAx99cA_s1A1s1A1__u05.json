@@ -1,0 +1,32 @@
+{
+  "input": "60M60M60M60M60MAx99cA_s1A1s1A1__u05",
+  "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaagaagaagaagaagaagaagaagaagaagadddbbbbbbddd",
+  "haipuyo": "bbrybbry",
+  "condition": {
+    "q0": 30,
+    "q1": 0,
+    "q2": 5,
+    "text": "5連鎖する"
+  },
+  "status": "ok",
+  "searched": 58380,
+  "matched": 2,
+  "solutions": [
+    {
+      "hands": "bb21ry21bb20ry02",
+      "chains": 5,
+      "score": 4840,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaagaagaagcagaagcagabgbdgadgccgadddbbbbbbddd",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaagaaaaaga"
+    },
+    {
+      "hands": "bb21ry21bb30ry50",
+      "chains": 5,
+      "score": 4840,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaagaagaagacgaagacgaagbdgdagccgbdddbbbbbbddd",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaagaaaaagaaaa"
+    }
+  ]
+}

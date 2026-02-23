@@ -1,0 +1,24 @@
+{
+  "input": "80080080oM0oM098_4141__u03",
+  "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaaaabaaaaabaaacagaaacagaaabbba",
+  "haipuyo": "brbr",
+  "condition": {
+    "q0": 30,
+    "q1": 0,
+    "q2": 3,
+    "text": "3連鎖する"
+  },
+  "status": "ok",
+  "searched": 484,
+  "matched": 1,
+  "solutions": [
+    {
+      "hands": "br30br41",
+      "chains": 3,
+      "score": 1000,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaaaabaaaaabaaaaabaaacbgaaaccgaaabbbb",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    }
+  ]
+}

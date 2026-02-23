@@ -1,0 +1,24 @@
+{
+  "input": "3o6Si69a_g141__w03",
+  "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaccaagggeeagbbbe",
+  "haipuyo": "bgbr",
+  "condition": {
+    "q0": 32,
+    "q1": 0,
+    "q2": 3,
+    "text": "3連鎖＆ぷよ全て消す"
+  },
+  "status": "ok",
+  "searched": 484,
+  "matched": 1,
+  "solutions": [
+    {
+      "hands": "bg30br22",
+      "chains": 3,
+      "score": 1000,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaeaaaaccaaaabccaagggeeagbbbe",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    }
+  ]
+}

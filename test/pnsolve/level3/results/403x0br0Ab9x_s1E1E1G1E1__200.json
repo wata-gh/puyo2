@@ -1,0 +1,32 @@
+{
+  "input": "403x0br0Ab9x_s1E1E1G1E1__200",
+  "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaadaaacdbaabcccaaddbcbbdb",
+  "haipuyo": "bbbybyyyby",
+  "condition": {
+    "q0": 2,
+    "q1": 0,
+    "q2": 0,
+    "text": "ぷよ全て消す"
+  },
+  "status": "ok",
+  "searched": 1288368,
+  "matched": 2,
+  "solutions": [
+    {
+      "hands": "bb30by02by41yy20by33",
+      "chains": 3,
+      "score": 3100,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaaaddddcccdbdcbcccdcddbcbbdb",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "hands": "bb30by41by02yy20by33",
+      "chains": 3,
+      "score": 3100,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaaaddddcccdbdcbcccdcddbcbbdb",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    }
+  ]
+}

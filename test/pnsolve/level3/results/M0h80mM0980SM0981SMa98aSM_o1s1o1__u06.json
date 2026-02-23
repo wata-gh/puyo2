@@ -1,0 +1,24 @@
+{
+  "input": "M0h80mM0980SM0981SMa98aSM_o1s1o1__u06",
+  "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaagaaaebbaaaeggaaabbbaaagggaaabbbaabgggabebbbabeggga",
+  "haipuyo": "rbbbrb",
+  "condition": {
+    "q0": 30,
+    "q1": 0,
+    "q2": 6,
+    "text": "6連鎖する"
+  },
+  "status": "ok",
+  "searched": 5208,
+  "matched": 1,
+  "solutions": [
+    {
+      "hands": "rb32bb20rb01",
+      "chains": 6,
+      "score": 8680,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaacbaaaaccgaaaebbaaaeggaaabbbaaagggaacbbbabbgggabebbbabeggga",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    }
+  ]
+}
