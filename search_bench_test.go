@@ -41,7 +41,7 @@ func runSearchBench(b *testing.B, benchCase searchBenchCase, dedup DedupMode, po
 	b.ReportMetric(float64(totalUnique)/float64(b.N), "unique_states/op")
 }
 
-func BenchmarkSearchWithPuyoSetsV2(b *testing.B) {
+func BenchmarkSearchWithPuyoSetsV2Modes(b *testing.B) {
 	benchCases := []searchBenchCase{
 		{
 			name:    "3_same",
