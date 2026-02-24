@@ -1,0 +1,72 @@
+{
+  "input": "9yrcyjipAjpcAbixbqrk9qkx_A1i1q1q1614121E1__u0f",
+  "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbdeccbddeeceecbddeccbbdddbceedbbcceccedbbceeddb",
+  "haipuyo": "ryyggbgbyrbrgrby",
+  "condition": {
+    "q0": 30,
+    "q1": 0,
+    "q2": 15,
+    "text": "15連鎖する"
+  },
+  "status": "ok",
+  "searched": 35332146248,
+  "matched": 7,
+  "solutions": [
+    {
+      "hands": "ry41yg52gb01gb31yr22br12gr33by43",
+      "chains": 15,
+      "score": 100840,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaacbaadabdaceecbacdbbddbcbddecceecbddeccbbdddbceedbbcceccedbbceeddb",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "hands": "ry41yg52gb10gb31yr22br12gr33by43",
+      "chains": 15,
+      "score": 100840,
+      "clear": true,
+      "initialField": "aaaaaaacaaaaabbaadacdaceaebacdbbddbcbddecceecbddeccbbdddbceedbbcceccedbbceeddb",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "hands": "ry41yg52gb13gb31yr22br12gr33by43",
+      "chains": 15,
+      "score": 100840,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaacbaadabdacecebacdbbddbcbddecceecbddeccbbdddbceedbbcceccedbbceeddb",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "hands": "ry41yg52gb31gb01yr22br12gr33by43",
+      "chains": 15,
+      "score": 100840,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaacbaadabdaceecbacdbbddbcbddecceecbddeccbbdddbceedbbcceccedbbceeddb",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "hands": "ry41yg52gb31gb10yr22br12gr33by43",
+      "chains": 15,
+      "score": 100840,
+      "clear": true,
+      "initialField": "aaaaaaacaaaaabbaadacdaceaebacdbbddbcbddecceecbddeccbbdddbceedbbcceccedbbceeddb",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "hands": "ry41yg52gb31gb13yr22br12gr33by43",
+      "chains": 15,
+      "score": 100840,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaacbaadabdacecebacdbbddbcbddecceecbddeccbbdddbceedbbcceccedbbceeddb",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "hands": "ry41yg52gb31gb31yr22br11gr01by21",
+      "chains": 15,
+      "score": 100840,
+      "clear": true,
+      "initialField": "aaaaaaaacaaaaabaadabdaceecbacdbbddbcbddecceecbddeccbbdddbceedbbcceccedbbceeddb",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    }
+  ]
+}
