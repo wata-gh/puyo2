@@ -26,6 +26,9 @@ type options struct {
 	Color          puyo2.Color
 	N              int
 	DisableChigiri bool
+	StopOnChain    bool
+	DedupMode      puyo2.DedupMode
+	SimulatePolicy puyo2.SimulatePolicy
 	Hands          string
 }
 
@@ -96,6 +99,10 @@ func search(num int, field chan string, puyoSets []puyo2.PuyoSet, wg *sync.WaitG
 		}
 		params := strings.Split(param, " ")
 		cond := puyo2.NewSearchConditionWithBFAndPuyoSets(puyo2.NewBitFieldWithMattulwanC(params[0]), puyoSets)
+		cond.DisableChigiri = opt.DisableChigiri
+		cond.DedupMode = opt.DedupMode
+		cond.SimulatePolicy = opt.SimulatePolicy
+		cond.StopOnChain = opt.StopOnChain
 		cond.EachHandCallback = func(sr *puyo2.SearchResult) bool {
 			searchedCount[num]++
 			if opt.AllClear && sr.RensaResult.BitField.IsEmpty() {
@@ -113,6 +120,9 @@ func search(num int, field chan string, puyoSets []puyo2.PuyoSet, wg *sync.WaitG
 			if opt.N > 0 && opt.Color != puyo2.Empty {
 				if sr.RensaResult.Chains > 0 {
 					for n := 1; n <= sr.RensaResult.Chains; n++ {
+						if n > len(sr.RensaResult.NthResults) {
+							continue
+						}
 						nth := sr.RensaResult.NthResult(n)
 						erasedCount := 0
 						for _, erased := range nth.ErasedPuyos {
@@ -158,6 +168,9 @@ func run(param *string, opt *options) {
 		}
 		cond := puyo2.NewSearchConditionWithBFAndPuyoSets(puyo2.NewBitFieldWithMattulwanC(*param), puyoSets[0:1])
 		cond.DisableChigiri = opt.DisableChigiri
+		cond.DedupMode = opt.DedupMode
+		cond.SimulatePolicy = opt.SimulatePolicy
+		cond.StopOnChain = opt.StopOnChain
 		cond.BitField.ShowDebug()
 
 		cond.LastCallback = func(sr *puyo2.SearchResult) {
@@ -201,14 +214,19 @@ func main() {
 	var chainStr string
 	var clearColor string
 	var color string
+	var dedupMode string
+	var simulatePolicy string
 	param := flag.String("param", "a78", "puyofu")
 	flag.StringVar(&opt.Hands, "hands", "", "hands")
 	flag.StringVar(&chainStr, "chains", "", "chains")
 	flag.StringVar(&clearColor, "clear", "", "clear color(r,g,b,y,p)")
 	flag.StringVar(&color, "color", "", "color(r,g,b,y,p)")
+	flag.StringVar(&dedupMode, "dedup", puyo2.DedupModeOff.String(), "dedup mode(off,same_pair_order,state,state_mirror). same_pair_order is effective only with -stop-on-chain")
+	flag.StringVar(&simulatePolicy, "simulate", puyo2.SimulatePolicyDetailAlways.String(), "simulate policy(detail_always,fast_intermediate,fast_always)")
 	flag.IntVar(&opt.N, "n", 0, "puyo count")
 	flag.BoolVar(&opt.AllClear, "allclear", false, "allclear")
 	flag.BoolVar(&opt.DisableChigiri, "disablechigiri", false, "disable chigiri")
+	flag.BoolVar(&opt.StopOnChain, "stop-on-chain", false, "stop branch when chain occurs")
 	flag.Parse()
 	if strings.Contains(chainStr, "+") {
 		chains := strings.Replace(chainStr, "+", "", -1)
@@ -228,6 +246,17 @@ func main() {
 	}
 	opt.ClearColor = str2Color(clearColor)
 	opt.Color = str2Color(color)
+	var err error
+	opt.DedupMode, err = puyo2.ParseDedupMode(dedupMode)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "%v\n", err)
+		return
+	}
+	opt.SimulatePolicy, err = puyo2.ParseSimulatePolicy(simulatePolicy)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "%v\n", err)
+		return
+	}
 
 	run(param, &opt)
 	p := message.NewPrinter(language.Japanese)

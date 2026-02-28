@@ -361,6 +361,17 @@ func (bf *BitField) Clone() *BitField {
 	return bitField
 }
 
+// CloneForSimulation avoids copying conversion tables because simulation only mutates bit matrices.
+func (bf *BitField) CloneForSimulation() *BitField {
+	bitField := new(BitField)
+	bitField.M[0] = bf.M[0]
+	bitField.M[1] = bf.M[1]
+	bitField.M[2] = bf.M[2]
+	bitField.Table = bf.Table
+	bitField.Colors = bf.Colors
+	return bitField
+}
+
 func (bf *BitField) Color(x int, y int) Color {
 	idx := x >> 2
 	pos := x&3*16 + y
@@ -649,7 +660,7 @@ func (bf *BitField) SimulateDetail() *RensaResult {
 		coef := CalcRensaBonusCoef(RensaBonus(result.Chains), longBonusCoef, colorBonusCoef)
 		result.AddErased(numErased)
 		result.AddScore(10 * numErased * coef)
-		heights := bf.CreateHeights()
+		heights := bf.createHeightsArray()
 		result.Quick = true
 		for x, height := range heights {
 			col := vanished.ShiftedColBits(x)

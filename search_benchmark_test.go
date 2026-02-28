@@ -54,7 +54,7 @@ func BenchmarkSearchPositionV2(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		leafCount = 0
-		cond.SearchPositionV2([]Hand{})
+		cond.SearchPositionV2([]Hand{}, 0)
 		totalLeaves += leafCount
 	}
 	benchmarkSearchLeafSink = totalLeaves

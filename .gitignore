@@ -19,3 +19,5 @@
 .DS_Store
 cmd/dfield/dfield
 cmd/nazo/nazo
+
+bench-results

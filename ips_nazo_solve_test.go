@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"os/exec"
+	"sort"
 	"strings"
 	"testing"
 )
@@ -144,6 +145,40 @@ func runPNSolve(t *testing.T, args ...string) (string, string, error) {
 	return stdout.String(), stderr.String(), err
 }
 
+func decodePNSolveOutput(t *testing.T, stdout string) pnsolveOutput {
+	t.Helper()
+	var out pnsolveOutput
+	if err := json.Unmarshal([]byte(stdout), &out); err != nil {
+		t.Fatalf("invalid json: %v\n%s", err, stdout)
+	}
+	return out
+}
+
+func handsSet(out pnsolveOutput) map[string]struct{} {
+	set := map[string]struct{}{}
+	for _, s := range out.Solutions {
+		set[s.Hands] = struct{}{}
+	}
+	return set
+}
+
+func sortedHands(out pnsolveOutput) []string {
+	hands := make([]string, 0, len(out.Solutions))
+	for _, s := range out.Solutions {
+		hands = append(hands, s.Hands)
+	}
+	sort.Strings(hands)
+	return hands
+}
+
+func orderedHands(out pnsolveOutput) []string {
+	hands := make([]string, 0, len(out.Solutions))
+	for _, s := range out.Solutions {
+		hands = append(hands, s.Hands)
+	}
+	return hands
+}
+
 func TestPNSolveCommandJSON(t *testing.T) {
 	param := "800F08J08A0EB_8161__270"
 	stdout, stderr, err := runPNSolve(t, "-param", param)
@@ -210,6 +245,212 @@ func TestPNSolveCommandCompactJSON(t *testing.T) {
 	}
 	if out.Status != "ok" && out.Status != "no_solution" {
 		t.Fatalf("status=%s is invalid", out.Status)
+	}
+}
+
+func TestPNSolveCommandDefaultMatchesExplicitOptimizationFlags(t *testing.T) {
+	param := "800F08J08A0EB_8161__270"
+	stdoutDefault, stderrDefault, err := runPNSolve(t, "-param", param, "-pretty=false")
+	if err != nil {
+		t.Fatalf("default pnsolve error=%v stderr=%s", err, stderrDefault)
+	}
+	if stderrDefault != "" {
+		t.Fatalf("unexpected default stderr: %s", stderrDefault)
+	}
+
+	stdoutExplicit, stderrExplicit, err := runPNSolve(
+		t,
+		"-param", param,
+		"-pretty=false",
+		"-dedup", "same_pair_order",
+		"-simulate", "fast_intermediate",
+	)
+	if err != nil {
+		t.Fatalf("explicit pnsolve error=%v stderr=%s", err, stderrExplicit)
+	}
+	if stderrExplicit != "" {
+		t.Fatalf("unexpected explicit stderr: %s", stderrExplicit)
+	}
+	if stdoutDefault != stdoutExplicit {
+		t.Fatalf("default output must equal explicit optimization output.\ndefault=%s\nexplicit=%s", stdoutDefault, stdoutExplicit)
+	}
+}
+
+func TestPNSolveCommandCompatibilityModeRuns(t *testing.T) {
+	param := "800F08J08A0EB_8161__270"
+	stdout, stderr, err := runPNSolve(
+		t,
+		"-param", param,
+		"-pretty=false",
+		"-dedup", "off",
+		"-simulate", "detail_always",
+	)
+	if err != nil {
+		t.Fatalf("compatibility mode pnsolve error=%v stderr=%s", err, stderr)
+	}
+	if stderr != "" {
+		t.Fatalf("unexpected stderr: %s", stderr)
+	}
+
+	out := decodePNSolveOutput(t, stdout)
+	if out.Status != "ok" && out.Status != "no_solution" {
+		t.Fatalf("status=%s is invalid", out.Status)
+	}
+	if out.Matched != len(out.Solutions) {
+		t.Fatalf("matched=%d solutions=%d", out.Matched, len(out.Solutions))
+	}
+}
+
+func TestPNSolveCommandSamePairOrderDisabledWithoutStopOnChain(t *testing.T) {
+	param := "jjgqqqqqqqqq_q1q1q1__u06"
+	stdoutSamePair, stderrSamePair, err := runPNSolve(
+		t,
+		"-param", param,
+		"-pretty=false",
+		"-dedup", "same_pair_order",
+		"-simulate", "detail_always",
+	)
+	if err != nil {
+		t.Fatalf("same_pair_order pnsolve error=%v stderr=%s", err, stderrSamePair)
+	}
+	if stderrSamePair != "" {
+		t.Fatalf("unexpected same_pair_order stderr: %s", stderrSamePair)
+	}
+
+	stdoutOff, stderrOff, err := runPNSolve(
+		t,
+		"-param", param,
+		"-pretty=false",
+		"-dedup", "off",
+		"-simulate", "detail_always",
+	)
+	if err != nil {
+		t.Fatalf("dedup off pnsolve error=%v stderr=%s", err, stderrOff)
+	}
+	if stderrOff != "" {
+		t.Fatalf("unexpected dedup off stderr: %s", stderrOff)
+	}
+	if stdoutSamePair != stdoutOff {
+		t.Fatalf("same_pair_order must behave as off when stop-on-chain=false.\nsame_pair=%s\noff=%s", stdoutSamePair, stdoutOff)
+	}
+	outSamePair := decodePNSolveOutput(t, stdoutSamePair)
+	if outSamePair.Matched != len(outSamePair.Solutions) {
+		t.Fatalf("same_pair_order matched=%d solutions=%d", outSamePair.Matched, len(outSamePair.Solutions))
+	}
+	if outSamePair.Matched != 4 {
+		t.Fatalf("same_pair_order matched=%d want 4", outSamePair.Matched)
+	}
+
+	stdoutExpanded, stderrExpanded, err := runPNSolve(
+		t,
+		"-param", param,
+		"-pretty=false",
+		"-dedup", "same_pair_order",
+		"-simulate", "detail_always",
+		"-expand-equivalent-hands",
+	)
+	if err != nil {
+		t.Fatalf("expanded pnsolve error=%v stderr=%s", err, stderrExpanded)
+	}
+	if stderrExpanded != "" {
+		t.Fatalf("unexpected expanded stderr: %s", stderrExpanded)
+	}
+	if stdoutExpanded != stdoutSamePair {
+		t.Fatalf("expand-equivalent-hands must be no-op when same_pair_order is inactive.\nbase=%s\nexpanded=%s", stdoutSamePair, stdoutExpanded)
+	}
+}
+
+func TestPNSolveCommandExpandEquivalentHandsNoOpForDedupOff(t *testing.T) {
+	param := "800F08J08A0EB_8161__270"
+	stdoutBase, stderrBase, err := runPNSolve(
+		t,
+		"-param", param,
+		"-pretty=false",
+		"-dedup", "off",
+		"-simulate", "detail_always",
+	)
+	if err != nil {
+		t.Fatalf("base pnsolve error=%v stderr=%s", err, stderrBase)
+	}
+	if stderrBase != "" {
+		t.Fatalf("unexpected base stderr: %s", stderrBase)
+	}
+
+	stdoutExpanded, stderrExpanded, err := runPNSolve(
+		t,
+		"-param", param,
+		"-pretty=false",
+		"-dedup", "off",
+		"-simulate", "detail_always",
+		"-expand-equivalent-hands",
+	)
+	if err != nil {
+		t.Fatalf("expanded pnsolve error=%v stderr=%s", err, stderrExpanded)
+	}
+	if stderrExpanded != "" {
+		t.Fatalf("unexpected expanded stderr: %s", stderrExpanded)
+	}
+	if stdoutBase != stdoutExpanded {
+		t.Fatalf("expand-equivalent-hands must be no-op for dedup off.\nbase=%s\nexpanded=%s", stdoutBase, stdoutExpanded)
+	}
+}
+
+func TestPNSolveCommandExpandEquivalentHandsSearchFailedNoOp(t *testing.T) {
+	param := "o00800c00b00j00z35xx4yxiqr9aticBIbrA_G1A1__u0b"
+	stdoutBase, stderrBase, err := runPNSolve(
+		t,
+		"-param", param,
+		"-pretty=false",
+	)
+	if err != nil {
+		t.Fatalf("base pnsolve error=%v stderr=%s", err, stderrBase)
+	}
+	if stderrBase != "" {
+		t.Fatalf("unexpected base stderr: %s", stderrBase)
+	}
+
+	stdoutExpanded, stderrExpanded, err := runPNSolve(
+		t,
+		"-param", param,
+		"-pretty=false",
+		"-expand-equivalent-hands",
+	)
+	if err != nil {
+		t.Fatalf("expanded pnsolve error=%v stderr=%s", err, stderrExpanded)
+	}
+	if stderrExpanded != "" {
+		t.Fatalf("unexpected expanded stderr: %s", stderrExpanded)
+	}
+	base := decodePNSolveOutput(t, stdoutBase)
+	expanded := decodePNSolveOutput(t, stdoutExpanded)
+	if base.Status != "search_failed" || expanded.Status != "search_failed" {
+		t.Fatalf("status must be search_failed. base=%s expanded=%s", base.Status, expanded.Status)
+	}
+	if base.Matched != 0 || expanded.Matched != 0 || len(base.Solutions) != 0 || len(expanded.Solutions) != 0 {
+		t.Fatalf("search_failed output must have no solutions. base=%+v expanded=%+v", base, expanded)
+	}
+	if !strings.Contains(base.Error, "should be able to place.") || !strings.Contains(expanded.Error, "should be able to place.") {
+		t.Fatalf("search_failed error message changed unexpectedly. base=%q expanded=%q", base.Error, expanded.Error)
+	}
+}
+
+func TestPNSolveCommandInvalidDedupFlag(t *testing.T) {
+	_, stderr, err := runPNSolve(t, "-param", "800F08J08A0EB_8161__270", "-dedup", "x")
+	if err == nil {
+		t.Fatal("pnsolve must fail for invalid dedup mode")
+	}
+	if !strings.Contains(stderr, "unknown dedup mode") {
+		t.Fatalf("stderr must include unknown dedup mode: %s", stderr)
+	}
+}
+
+func TestPNSolveCommandInvalidSimulateFlag(t *testing.T) {
+	_, stderr, err := runPNSolve(t, "-param", "800F08J08A0EB_8161__270", "-simulate", "x")
+	if err == nil {
+		t.Fatal("pnsolve must fail for invalid simulate policy")
+	}
+	if !strings.Contains(stderr, "unknown simulate policy") {
+		t.Fatalf("stderr must include unknown simulate policy: %s", stderr)
 	}
 }
 

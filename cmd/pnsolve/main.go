@@ -89,10 +89,16 @@ func main() {
 	var paramInput string
 	var disableChigiri bool
 	var pretty bool
+	var dedupMode string
+	var simulatePolicy string
+	var expandEquivalentHands bool
 
 	flag.StringVar(&urlInput, "url", "", "IPSなぞぷよのURL")
 	flag.StringVar(&paramInput, "param", "", "IPSなぞぷよのクエリ文字列")
 	flag.BoolVar(&disableChigiri, "disablechigiri", false, "disable chigiri placements")
+	flag.StringVar(&dedupMode, "dedup", puyo2.DedupModeSamePairOrder.String(), "dedup mode(off,same_pair_order,state,state_mirror). same_pair_order is effective only when stop-on-chain is enabled")
+	flag.StringVar(&simulatePolicy, "simulate", puyo2.SimulatePolicyFastIntermediate.String(), "simulate policy(detail_always,fast_intermediate,fast_always)")
+	flag.BoolVar(&expandEquivalentHands, "expand-equivalent-hands", false, "expand equivalent hands pruned by same_pair_order dedup")
 	flag.BoolVar(&pretty, "pretty", true, "pretty print JSON")
 	flag.Parse()
 
@@ -112,6 +118,16 @@ func main() {
 	decoded, err := puyo2.ParseIPSNazoURL(input)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "parse error: %v\n", err)
+		os.Exit(1)
+	}
+	parsedDedupMode, err := puyo2.ParseDedupMode(dedupMode)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "%v\n", err)
+		os.Exit(1)
+	}
+	parsedSimulatePolicy, err := puyo2.ParseSimulatePolicy(simulatePolicy)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "%v\n", err)
 		os.Exit(1)
 	}
 
@@ -145,6 +161,9 @@ func main() {
 	} else {
 		cond := puyo2.NewSearchConditionWithBFAndPuyoSets(initial, puyoSets)
 		cond.DisableChigiri = disableChigiri
+		cond.DedupMode = parsedDedupMode
+		cond.SimulatePolicy = parsedSimulatePolicy
+		cond.StopOnChain = false
 		cond.LastCallback = func(sr *puyo2.SearchResult) {
 			out.Searched++
 			if sr == nil {
@@ -172,6 +191,9 @@ func main() {
 			out.Solutions = []solveSolutionJSON{}
 			out.Matched = 0
 		} else {
+			if expandEquivalentHands && parsedDedupMode == puyo2.DedupModeSamePairOrder && cond.StopOnChain && len(out.Solutions) > 0 {
+				out.Solutions = expandEquivalentHandsSolutions(initial, decoded.Condition, puyoSets, parsedSimulatePolicy, out.Solutions)
+			}
 			out.Matched = len(out.Solutions)
 		}
 	}

@@ -178,3 +178,43 @@ func TestSearchWithPuyoSets(t *testing.T) {
 	// 	t.Fatal("can not solve a7baca3baba3daea3eada3cada3bada3eaca3daca3dada3daca3eaca3daba2")
 	// }
 }
+
+func TestSearchWithPuyoSetsV2FastIntermediateCallbackCanReadNthResult(t *testing.T) {
+	cond := NewSearchConditionWithBFAndPuyoSets(
+		NewBitFieldWithMattulwan("a78"),
+		[]PuyoSet{{Red, Red}, {Red, Red}, {Red, Red}},
+	)
+	cond.SimulatePolicy = SimulatePolicyFastIntermediate
+	cond.EachHandCallback = func(sr *SearchResult) bool {
+		for n := 1; n <= sr.RensaResult.Chains; n++ {
+			_ = sr.RensaResult.NthResult(n)
+		}
+		return true
+	}
+
+	defer func() {
+		if r := recover(); r != nil {
+			t.Fatalf("must not panic when callback accesses nth result in fast_intermediate: %v", r)
+		}
+	}()
+	cond.SearchWithPuyoSetsV2()
+}
+
+func TestSearchConditionFastAlwaysTerminalUsesDetailSimulation(t *testing.T) {
+	bf := NewBitFieldWithMattulwan("a54ea3eaebdece3bd2eb2dc3")
+	cond := NewSearchCondition()
+	cond.SimulatePolicy = SimulatePolicyFastAlways
+
+	got := cond.simulateForNode(bf, true)
+	want := bf.CloneForSimulation().SimulateDetail()
+
+	if got.Chains != want.Chains {
+		t.Fatalf("chains mismatch. got=%d want=%d", got.Chains, want.Chains)
+	}
+	if got.Score != want.Score {
+		t.Fatalf("score mismatch. got=%d want=%d", got.Score, want.Score)
+	}
+	if len(got.NthResults) != len(want.NthResults) {
+		t.Fatalf("nth result length mismatch. got=%d want=%d", len(got.NthResults), len(want.NthResults))
+	}
+}
