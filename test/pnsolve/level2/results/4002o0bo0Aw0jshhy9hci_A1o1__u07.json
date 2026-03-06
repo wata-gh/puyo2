@@ -16,7 +16,7 @@
       "hands": "ry30rb50",
       "chains": 7,
       "score": 14220,
-      "clear": true,
+      "clear": false,
       "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaadaaaaaecaaabccdacdddbabeccdebebdebbebbdee",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabac"
     },
@@ -24,7 +24,7 @@
       "hands": "ry30rb53",
       "chains": 7,
       "score": 14220,
-      "clear": true,
+      "clear": false,
       "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaadaaaaaecaaabccdaadddbcbeccdebebdebbebbdee",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabca"
     }

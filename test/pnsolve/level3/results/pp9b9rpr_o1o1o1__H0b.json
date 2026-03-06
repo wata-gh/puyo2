@@ -16,7 +16,7 @@
       "hands": "rb21rb20rb11",
       "chains": 3,
       "score": 3070,
-      "clear": true,
+      "clear": false,
       "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaaaacaaaaabaaaaabcaaabcbcbbbbcbbcccbcc",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacc"
     },
@@ -24,7 +24,7 @@
       "hands": "rb21rb21rb11",
       "chains": 3,
       "score": 3070,
-      "clear": true,
+      "clear": false,
       "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaaaabcaaaabcaaabcbcbbbbcbbcccbcc",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacc"
     }

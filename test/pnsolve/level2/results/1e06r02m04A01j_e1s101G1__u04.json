@@ -16,7 +16,7 @@
       "hands": "gg21bb31rr50yy11",
       "chains": 4,
       "score": 2700,
-      "clear": true,
+      "clear": false,
       "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacabaaaecbaaabbgaaagccaaaeegaaddddadebec",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaadebaa"
     },
@@ -24,7 +24,7 @@
       "hands": "gg21bb31rr50yy20",
       "chains": 4,
       "score": 2760,
-      "clear": true,
+      "clear": false,
       "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacabaaaecbaaabbgaaagccaadeegaaddddaaebec",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaebaa"
     },
@@ -32,7 +32,7 @@
       "hands": "gg21bb31rr50yy21",
       "chains": 4,
       "score": 2700,
-      "clear": true,
+      "clear": false,
       "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaadaaaaacabaaaecbaaabbgaaagccaaaeegaaddddaaebec",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaadaaaaebaa"
     },
@@ -40,7 +40,7 @@
       "hands": "gg21bb40rr50yy11",
       "chains": 4,
       "score": 2700,
-      "clear": true,
+      "clear": false,
       "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacbaaaecbaaabbgaaagccaaaeegaaddddadebec",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaadebaa"
     },
@@ -48,7 +48,7 @@
       "hands": "gg21bb40rr50yy20",
       "chains": 4,
       "score": 2760,
-      "clear": true,
+      "clear": false,
       "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacbaaaecbaaabbgaaagccaadeegaaddddaaebec",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaebaa"
     },
@@ -56,7 +56,7 @@
       "hands": "gg21bb40rr50yy21",
       "chains": 4,
       "score": 2700,
-      "clear": true,
+      "clear": false,
       "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaadcbaaaecbaaabbgaaagccaaaeegaaddddaaebec",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaadaaaaebaa"
     },
@@ -64,7 +64,7 @@
       "hands": "gg30bb31rr50yy20",
       "chains": 4,
       "score": 3020,
-      "clear": true,
+      "clear": false,
       "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaaaaeabaaaecbaaabbgaaagccaaaeegaaddddaadbec",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaa"
     },
@@ -72,7 +72,7 @@
       "hands": "gg30bb40rr50yy20",
       "chains": 4,
       "score": 3020,
-      "clear": true,
+      "clear": false,
       "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaecbaaaecbaaabbgaaagccaaaeegaaddddaadbec",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaa"
     }

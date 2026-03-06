@@ -9,14 +9,14 @@
     "text": "おじゃまぷよ全て消す"
   },
   "status": "ok",
-  "searched": 2032934,
+  "searched": 2035991,
   "matched": 1,
   "solutions": [
     {
       "hands": "yy30yb30bb10gg50yg41yb00",
       "chains": 7,
       "score": 20680,
-      "clear": true,
+      "clear": false,
       "initialField": "aaaadaaaacgaacadgaacgdgaaggdgaaggggecdggcedgcdgedebbecdgcdgcdcbbdcgcbedggceedg",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaaadcdaa"
     }

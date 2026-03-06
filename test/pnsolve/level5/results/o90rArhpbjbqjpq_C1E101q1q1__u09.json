@@ -16,7 +16,7 @@
       "hands": "gy31by42rr31gb10gb41",
       "chains": 9,
       "score": 27880,
-      "clear": true,
+      "clear": false,
       "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaeaaaaabaaaabcaacaedacebbdcccddccebcbbcecbcceeccbce",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaaa"
     }

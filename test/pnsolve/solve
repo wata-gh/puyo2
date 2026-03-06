@@ -1,12 +1,124 @@
 #!/bin/zsh
 
-cd $1
-echo $1
+setopt pipefail
+setopt nounset
 
-cat list | while read line
-do
-echo $line; go run ../../../cmd/pnsolve -param $line > results/$line.json
-if [ $? -ne 0 ]; then
-  rm results/$line.json
+usage() {
+  cat <<'USAGE'
+Usage:
+  test/pnsolve/solve level1 [level2 ...]
+  test/pnsolve/solve /path/to/leveldir [...]
+  test/pnsolve/solve -bin PATH level1 [level2 ...]
+
+Options:
+  -bin <PATH>       Use an existing pnsolve binary instead of building target/debug/pnsolve.
+  -h, --help        Show this help.
+USAGE
+}
+
+resolve_level_dir() {
+  local input="$1"
+  if [[ -d "${input}" && -f "${input}/list" ]]; then
+    print -r -- "${input:A}"
+    return
+  fi
+
+  local candidate="${SCRIPT_DIR}/${input}"
+  if [[ -d "${candidate}" && -f "${candidate}/list" ]]; then
+    print -r -- "${candidate:A}"
+    return
+  fi
+
+  echo "error: invalid level path or name: ${input}" >&2
+  exit 2
+}
+
+resolve_pnsolve_bin() {
+  if [[ -n "${BIN_OVERRIDE}" ]]; then
+    PN_SOLVE_BIN="${BIN_OVERRIDE:A}"
+    if [[ ! -x "${PN_SOLVE_BIN}" ]]; then
+      echo "error: pnsolve binary is not executable: ${PN_SOLVE_BIN}" >&2
+      exit 2
+    fi
+    return
+  fi
+
+  if ! command -v cargo >/dev/null 2>&1; then
+    echo "error: cargo command is required when -bin is not specified" >&2
+    exit 2
+  fi
+
+  if ! (cd "${REPO_ROOT}" && cargo build -q -p puyo2 --bin pnsolve); then
+    echo "error: failed to build pnsolve with cargo" >&2
+    exit 2
+  fi
+
+  PN_SOLVE_BIN="${REPO_ROOT}/target/debug/pnsolve"
+  if [[ ! -x "${PN_SOLVE_BIN}" ]]; then
+    echo "error: built pnsolve binary not found: ${PN_SOLVE_BIN}" >&2
+    exit 2
+  fi
+}
+
+SCRIPT_DIR=${0:A:h}
+REPO_ROOT=${SCRIPT_DIR:h:h}
+
+if [[ ! -f "${REPO_ROOT}/Cargo.toml" ]]; then
+  echo "error: repository root not found from script path: ${REPO_ROOT}" >&2
+  exit 2
 fi
+
+BIN_OVERRIDE=""
+typeset -a TARGETS=()
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    -h|--help)
+      usage
+      exit 0
+      ;;
+    -bin)
+      if [[ $# -lt 2 ]]; then
+        echo "error: -bin requires a value" >&2
+        usage >&2
+        exit 2
+      fi
+      BIN_OVERRIDE="$2"
+      shift 2
+      ;;
+    -*)
+      echo "error: unknown option: $1" >&2
+      usage >&2
+      exit 2
+      ;;
+    *)
+      TARGETS+=("$1")
+      shift
+      ;;
+  esac
+done
+
+if [[ ${#TARGETS[@]} -eq 0 ]]; then
+  echo "error: at least one level name or path is required" >&2
+  usage >&2
+  exit 2
+fi
+
+resolve_pnsolve_bin
+
+for target in "${TARGETS[@]}"; do
+  level_dir=$(resolve_level_dir "${target}")
+  echo "${level_dir}"
+  mkdir -p "${level_dir}/results"
+
+  while IFS= read -r line || [[ -n "${line}" ]]; do
+    [[ -z "${line}" ]] && continue
+    echo "${line}"
+    if ! (
+      cd "${REPO_ROOT}" && \
+      "${PN_SOLVE_BIN}" -param "${line}" > "${level_dir}/results/${line}.json"
+    ); then
+      rm -f "${level_dir}/results/${line}.json"
+    fi
+  done < "${level_dir}/list"
 done

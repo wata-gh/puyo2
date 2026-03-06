@@ -16,7 +16,7 @@
       "hands": "bb21ry21bb20ry02",
       "chains": 5,
       "score": 4840,
-      "clear": true,
+      "clear": false,
       "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaagaagaagcagaagcagabgbdgadgccgadddbbbbbbddd",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaagaaaaaga"
     },
@@ -24,7 +24,7 @@
       "hands": "bb21ry21bb30ry50",
       "chains": 5,
       "score": 4840,
-      "clear": true,
+      "clear": false,
       "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaagaagaagacgaagacgaagbdgdagccgbdddbbbbbbddd",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaagaaaaagaaaa"
     }

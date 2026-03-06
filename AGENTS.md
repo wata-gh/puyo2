@@ -1,41 +1,40 @@
 # Repository Guidelines
 
 ## Project Structure & Module Organization
-- The root `puyo2` package holds the core engine: bit-field operations (`bit_field*.go`), search logic (`search*.go`, `search_v2.go`), shape processing (`shape_bit_field*.go`), scoring (`score.go`), and shared helpers.
-- Tests are colocated with source files as `*_test.go`.
-- Command-line tools live under `cmd/`.
-- `cmd/dfield` renders field images.
-- `cmd/dpuyo` draws sprite assets.
-- `cmd/nazo` runs puzzle/search exploration.
-- CI is defined in `.github/workflows/go.yml`.
+- The workspace root is a virtual Cargo workspace. The actual package is `crates/puyo2`.
+- Core library code lives under `crates/puyo2/src/`:
+  - engine and search modules in `*.rs`
+  - CLI binaries in `crates/puyo2/src/bin/*.rs`
+- Integration tests live under `crates/puyo2/tests/`.
+- CI is defined in `.github/workflows/rust.yml`.
 
 ## Build, Test, and Development Commands
-- `go build ./...` builds the library and all commands.
-- `go test ./...` runs the full test suite.
-- `go test -run TestPlacePuyo ./...` runs a focused test while iterating.
-- `go test -bench . ./...` runs benchmarks for hot paths.
-- `go run ./cmd/nazo -param a78 -hands rgby` runs the search CLI.
-- `go run ./cmd/dfield -param a78 -out field.png` exports a field image.
+- `cargo build --workspace --all-targets` builds the library and all binaries.
+- `cargo test --workspace` runs the full Rust test suite.
+- `cargo test --workspace search_v2_opt` runs a focused subset while iterating.
+- `cargo run -p puyo2 --bin nazo -- -param a78 -hands rgby` runs the search CLI.
+- `cargo run -p puyo2 --bin dfield -- -param a78 -out field.png` exports a field image.
 
 ## Coding Style & Naming Conventions
-- Use standard Go style and run `gofmt` on changed files.
-- Keep core code in `package puyo2`; command entry points use `package main`.
-- File names follow `snake_case.go` (for example, `shape_bit_field_export.go`).
-- Exported identifiers use `PascalCase`; internal helpers use `camelCase`.
+- Use standard Rust style and run `cargo fmt --all`.
+- Keep library code in the `puyo2` crate; binaries stay under `src/bin`.
+- File names follow `snake_case.rs`.
+- Exported types use `PascalCase`; functions and modules use `snake_case`.
 - Keep functions focused and avoid mixing search, rendering, and parsing concerns in one function.
 
 ## Testing Guidelines
-- Add tests next to implementation in `*_test.go` with `TestXxx`/`BenchmarkXxx` names.
+- Add integration tests under `crates/puyo2/tests/`.
+- Prefer small unit tests near implementation when the logic is local and isolated.
 - Prefer deterministic Mattulwan field strings in test fixtures.
 - For bug fixes, add a regression test that fails before the fix and passes after it.
-- CI currently enforces passing `go test ./...` (no explicit coverage threshold), so maintain or improve coverage in touched code.
+- CI currently enforces passing `cargo test --workspace`, so maintain or improve coverage in touched code.
 
 ## Commit & Pull Request Guidelines
 - Match existing history: short imperative commit subjects like `Fix bug`, `Add utils`, or `Refactor`.
 - Keep commits scoped; separate refactors from behavior changes.
 - PRs should target `main`.
 - Include what changed and why.
-- Include validation steps (for example `go test ./...`).
+- Include validation steps (for example `cargo test --workspace`).
 - Link issue(s) when available.
 - Add sample output or an image when rendering/output behavior changes.
 

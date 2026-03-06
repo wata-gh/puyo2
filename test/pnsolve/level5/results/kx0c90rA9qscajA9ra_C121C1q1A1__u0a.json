@@ -16,7 +16,7 @@
       "hands": "gy32gr43gy40gb01ry50",
       "chains": 10,
       "score": 38220,
-      "clear": true,
+      "clear": false,
       "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaabaaaaaeaaecaddaeddbedbdbbebccddbbcecdbdbeecddbbccbe",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaa"
     },
@@ -24,7 +24,7 @@
       "hands": "gy32gr43gy40gb23ry50",
       "chains": 10,
       "score": 39180,
-      "clear": true,
+      "clear": false,
       "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaabaaaaaeaaaceddaeddbedbdbbebccddbbcecdbdbeecddbbccbe",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaa"
     },
@@ -32,7 +32,7 @@
       "hands": "gy43gr30gy40gb01ry50",
       "chains": 10,
       "score": 38220,
-      "clear": true,
+      "clear": false,
       "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaabaaaaaeaaecaddaeddbedbdbbebccddbbcecdbdbeecddbbccbe",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaa"
     },
@@ -40,7 +40,7 @@
       "hands": "gy43gr30gy40gb23ry50",
       "chains": 10,
       "score": 39180,
-      "clear": true,
+      "clear": false,
       "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaabaaaaaeaaaceddaeddbedbdbbebccddbbcecdbdbeecddbbccbe",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaa"
     }

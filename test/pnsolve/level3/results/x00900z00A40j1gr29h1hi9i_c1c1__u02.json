@@ -16,7 +16,7 @@
       "hands": "rg50rg11",
       "chains": 2,
       "score": 560,
-      "clear": true,
+      "clear": false,
       "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaabaaaadbaaaabbaaaadcaaaaddaaaaecaaaaccaaaaebaaaaeeedaa",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaaaacaaaaecaaaacbadaa"
     },
@@ -24,7 +24,7 @@
       "hands": "rg53rg11",
       "chains": 2,
       "score": 560,
-      "clear": true,
+      "clear": false,
       "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaabaaaadbaaaabbaaaadcaaaaddaaaaecaaaaccaaaaebaaaaeeedaa",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaaaacaaaaecaaaacbadaa"
     }

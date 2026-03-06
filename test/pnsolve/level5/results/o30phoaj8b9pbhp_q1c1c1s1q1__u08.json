@@ -16,7 +16,7 @@
       "hands": "gb00rg10rg10bb50gb20",
       "chains": 8,
       "score": 20380,
-      "clear": true,
+      "clear": false,
       "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaeaaaacbaaaaeecaaacbecaacbebccbeecbcbcbbcbbcebcb",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaaaa"
     },
@@ -24,7 +24,7 @@
       "hands": "gb00rg10rg12bb50gb20",
       "chains": 8,
       "score": 20380,
-      "clear": true,
+      "clear": false,
       "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaaaceaaaaeecaaacbecaacbebccbeecbcbcbbcbbcebcb",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaaaa"
     },
