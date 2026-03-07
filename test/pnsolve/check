@@ -10,12 +10,13 @@ usage() {
 Usage:
   test/pnsolve/check
   test/pnsolve/check level1 [level2 ...]
-  test/pnsolve/check -level levelN -param PARAM [-show-diff]
+  test/pnsolve/check -level levelN -param PARAM [-show-diff] [-bin PATH]
 
 Options:
   -level <levelN>   Compare a single case in the specified level.
   -param <PARAM>    Param string for single-case mode.
   -show-diff        Print full jd diff output on DIFF.
+  -bin <PATH>       Use an existing pnsolve binary instead of building target/debug/pnsolve.
   -h, --help        Show this help.
 
 Description:
@@ -36,6 +37,33 @@ append_diff_param() {
     diff_params[$level]="${param}"
   else
     diff_params[$level]+=$'\n'"${param}"
+  fi
+}
+
+resolve_pnsolve_bin() {
+  if [[ -n "${BIN_OVERRIDE}" ]]; then
+    PN_SOLVE_BIN="${BIN_OVERRIDE:A}"
+    if [[ ! -x "${PN_SOLVE_BIN}" ]]; then
+      echo "error: pnsolve binary is not executable: ${PN_SOLVE_BIN}" >&2
+      exit 2
+    fi
+    return
+  fi
+
+  if ! command -v cargo >/dev/null 2>&1; then
+    echo "error: cargo command is required when -bin is not specified" >&2
+    exit 2
+  fi
+
+  if ! (cd "${REPO_ROOT}" && cargo build -q -p puyo2 --bin pnsolve); then
+    echo "error: failed to build pnsolve with cargo" >&2
+    exit 2
+  fi
+
+  PN_SOLVE_BIN="${REPO_ROOT}/target/debug/pnsolve"
+  if [[ ! -x "${PN_SOLVE_BIN}" ]]; then
+    echo "error: built pnsolve binary not found: ${PN_SOLVE_BIN}" >&2
+    exit 2
   fi
 }
 
@@ -69,7 +97,10 @@ run_one_case() {
     return
   fi
 
-  if ! (cd "${REPO_ROOT}" && go run ./cmd/pnsolve -param "${param}" -pretty=false -expand-equivalent-hands >"${after}" 2>"${run_err_file}"); then
+  if ! (
+    cd "${REPO_ROOT}" && \
+    "${PN_SOLVE_BIN}" -param "${param}" -pretty=false -expand-equivalent-hands >"${after}" 2>"${run_err_file}"
+  ); then
     echo "RUN_ERROR ${level} ${param} (stderr: ${run_err_file})"
     ((run_error++))
     LAST_STATUS="RUN_ERROR"
@@ -139,6 +170,7 @@ run_one_case() {
 typeset -a POSITIONAL=()
 SINGLE_LEVEL=""
 SINGLE_PARAM=""
+BIN_OVERRIDE=""
 typeset -i SHOW_DIFF=0
 
 while [[ $# -gt 0 ]]; do
@@ -169,6 +201,15 @@ while [[ $# -gt 0 ]]; do
       SINGLE_PARAM="$2"
       shift 2
       ;;
+    -bin)
+      if [[ $# -lt 2 ]]; then
+        echo "error: -bin requires a value" >&2
+        usage >&2
+        exit 2
+      fi
+      BIN_OVERRIDE="$2"
+      shift 2
+      ;;
     -*)
       echo "error: unknown option: $1" >&2
       usage >&2
@@ -189,10 +230,6 @@ if ! command -v jq >/dev/null 2>&1; then
   echo "error: jq command is required" >&2
   exit 2
 fi
-if ! command -v go >/dev/null 2>&1; then
-  echo "error: go command is required" >&2
-  exit 2
-fi
 
 SCRIPT_DIR=${0:A:h}
 REPO_ROOT=${SCRIPT_DIR:h:h}
@@ -201,10 +238,12 @@ if [[ ! -d "${SCRIPT_DIR}" ]]; then
   echo "error: script directory not found: ${SCRIPT_DIR}" >&2
   exit 2
 fi
-if [[ ! -f "${REPO_ROOT}/go.mod" ]]; then
+if [[ ! -f "${REPO_ROOT}/Cargo.toml" ]]; then
   echo "error: repository root not found from script path: ${REPO_ROOT}" >&2
   exit 2
 fi
+
+resolve_pnsolve_bin
 
 typeset -i SINGLE_MODE=0
 if [[ -n "${SINGLE_LEVEL}" || -n "${SINGLE_PARAM}" ]]; then
