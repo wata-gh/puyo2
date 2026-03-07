@@ -55,6 +55,15 @@ fn equal_chain_matches_go() {
 }
 
 #[test]
+fn rensa_will_occur_matches_go() {
+    let chainable = BitField::from_mattulwan("a54ea3eaebdece3bd2eb2dc3");
+    assert!(chainable.rensa_will_occur());
+
+    let not_chainable = BitField::from_mattulwan("a78");
+    assert!(!not_chainable.rensa_will_occur());
+}
+
+#[test]
 fn from_mattulwan_and_haipuyo_keeps_purple_mapping() {
     let mut field = BitField::from_mattulwan_and_haipuyo("ba77", "pprr").unwrap();
     assert_eq!(field.color(0, 13), Color::Red);

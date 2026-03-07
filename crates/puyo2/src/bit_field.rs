@@ -393,6 +393,15 @@ impl BitField {
         vanished.or(ojama)
     }
 
+    pub fn rensa_will_occur(&self) -> bool {
+        for &color in &self.colors {
+            if self.bits(color).mask_field12().has_vanishing_bits() {
+                return true;
+            }
+        }
+        false
+    }
+
     pub fn flip_horizontal(&mut self) -> &mut Self {
         let mut m = [[0u64; 2]; 3];
         for (i, plane) in self.m.iter().enumerate() {
@@ -604,7 +613,7 @@ impl BitField {
                 erased_puyos: Vec::new(),
             };
 
-            for color in self.colors.clone() {
+            for &color in &self.colors {
                 let vb = self.bits(color).mask_field12().find_vanishing_bits();
                 if !vb.is_empty() {
                     num_colors += 1;

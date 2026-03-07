@@ -189,6 +189,41 @@ impl FieldBits {
         vanishing.expand1(*self)
     }
 
+    pub fn has_vanishing_bits(&self) -> bool {
+        let r4 = self.m[0] & 0xffff000000000000;
+        let r5 = self.m[1] & 0xffff;
+        let u = [self.m[0] & (self.m[0] << 1), self.m[1] & (self.m[1] << 1)];
+        let d = [self.m[0] & (self.m[0] >> 1), self.m[1] & (self.m[1] >> 1)];
+        let l = [
+            self.m[0] & ((self.m[0] >> 16) | (r5 << 48)),
+            self.m[1] & (self.m[1] >> 16),
+        ];
+        let r = [
+            self.m[0] & (self.m[0] << 16),
+            self.m[1] & ((self.m[1] << 16) | (r4 >> 48)),
+        ];
+
+        let ud_and = [u[0] & d[0], u[1] & d[1]];
+        let lr_and = [l[0] & r[0], l[1] & r[1]];
+        let ud_or = [u[0] | d[0], u[1] | d[1]];
+        let lr_or = [l[0] | r[0], l[1] | r[1]];
+        let threes = [
+            (ud_and[0] & lr_or[0]) | (lr_and[0] & ud_or[0]),
+            (ud_and[1] & lr_or[1]) | (lr_and[1] & ud_or[1]),
+        ];
+        let twos = [
+            ud_and[0] | lr_and[0] | (ud_or[0] & lr_or[0]),
+            ud_and[1] | lr_and[1] | (ud_or[1] & lr_or[1]),
+        ];
+        let two_d = [(twos[0] >> 1) & twos[0], (twos[1] >> 1) & twos[1]];
+        let two_l = [
+            ((twos[0] >> 16) | ((twos[1] & 0xffff) << 48)) & twos[0],
+            (twos[1] >> 16) & twos[1],
+        ];
+
+        (threes[0] | two_d[0] | two_l[0]) != 0 || (threes[1] | two_d[1] | two_l[1]) != 0
+    }
+
     pub fn iterate_bit_with_masking<F>(&self, mut callback: F)
     where
         F: FnMut(Self) -> Self,
