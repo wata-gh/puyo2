@@ -1,8 +1,60 @@
 mod common;
 
-use std::{collections::HashMap, thread, time::Duration};
+use std::{
+    collections::HashMap,
+    io::{BufRead, BufReader, Read},
+    process::Child,
+    sync::mpsc::{self, Receiver},
+    thread,
+    time::{Duration, Instant},
+};
 
 use crate::common::{output_strings, run_bin, spawn_bin_with_env};
+
+fn spawn_line_reader<R>(reader: R) -> Receiver<String>
+where
+    R: Read + Send + 'static,
+{
+    let (sender, receiver) = mpsc::channel();
+    thread::spawn(move || {
+        for line in BufReader::new(reader).lines() {
+            match line {
+                Ok(line) => {
+                    if sender.send(line).is_err() {
+                        break;
+                    }
+                }
+                Err(_) => break,
+            }
+        }
+    });
+    receiver
+}
+
+fn wait_for_line<F>(
+    receiver: &Receiver<String>,
+    seen: &mut Vec<String>,
+    timeout: Duration,
+    predicate: F,
+) -> Option<String>
+where
+    F: Fn(&str) -> bool,
+{
+    let deadline = Instant::now() + timeout;
+    loop {
+        let remaining = deadline.checked_duration_since(Instant::now())?;
+        let line = receiver.recv_timeout(remaining).ok()?;
+        seen.push(line.clone());
+        if predicate(&line) {
+            return Some(line);
+        }
+    }
+}
+
+fn finish_child(child: &mut Child) {
+    let _ = child.kill();
+    let _ = child.wait();
+}
 
 fn lines(text: &str) -> Vec<&str> {
     text.lines().filter(|line| !line.is_empty()).collect()
@@ -298,8 +350,21 @@ fn nazo_sighup_prints_progress_line() {
         &["-param", "a78", "-hands", "rrrrrrrrrrrr", "-dedup", "off"],
         &[],
     );
+    let stdout = child.stdout.take().expect("child stdout must be piped");
+    let stderr = child.stderr.take().expect("child stderr must be piped");
+    let stdout_lines = spawn_line_reader(stdout);
+    let stderr_lines = spawn_line_reader(stderr);
+    let mut seen_stdout = Vec::new();
+    let mut seen_stderr = Vec::new();
 
-    thread::sleep(Duration::from_millis(500));
+    let ready = wait_for_line(
+        &stdout_lines,
+        &mut seen_stdout,
+        Duration::from_secs(5),
+        |line| line.starts_with("cpus: "),
+    );
+    assert!(ready.is_some(), "stdout={}", seen_stdout.join("\n"),);
+
     let pid = child.id().to_string();
     let status = std::process::Command::new("kill")
         .args(["-HUP", &pid])
@@ -307,15 +372,13 @@ fn nazo_sighup_prints_progress_line() {
         .expect("failed to send sighup");
     assert!(status.success());
 
-    thread::sleep(Duration::from_millis(500));
-    let _ = child.kill();
-    let output = child.wait_with_output().expect("failed to wait on child");
-    let (_, stderr) = output_strings(&output);
-
-    assert!(
-        stderr
-            .lines()
-            .any(|line| line.starts_with('[') && line.contains('/') && line.contains('%')),
-        "{stderr}"
+    let progress = wait_for_line(
+        &stderr_lines,
+        &mut seen_stderr,
+        Duration::from_secs(5),
+        |line| line.starts_with('[') && line.contains('/') && line.contains('%'),
     );
+    finish_child(&mut child);
+
+    assert!(progress.is_some(), "stderr={}", seen_stderr.join("\n"));
 }
