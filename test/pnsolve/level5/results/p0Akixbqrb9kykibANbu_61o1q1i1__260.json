@@ -8,8 +8,17 @@
     "q2": 0,
     "text": "おじゃまぷよ全て消す"
   },
-  "status": "no_solution",
-  "searched": 158365,
-  "matched": 0,
-  "solutions": []
+  "status": "ok",
+  "searched": 232392,
+  "matched": 1,
+  "solutions": [
+    {
+      "hands": "yr11rb42gb01yg52",
+      "chains": 5,
+      "score": 7120,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaababdaacbceacedeeebbcceccbcbbeddeedeebcddgbbccg",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaaaaedaaaadeaaadbceaabbcca"
+    }
+  ]
 }

@@ -9,14 +9,14 @@
     "text": "11連鎖する"
   },
   "status": "ok",
-  "searched": 309,
+  "searched": 477,
   "matched": 1,
   "solutions": [
     {
       "hands": "by50gb42",
       "chains": 11,
       "score": 47080,
-      "clear": false,
+      "clear": true,
       "initialField": "aaaaadaaaaacaaaaedaaaaccaaaaccaaaabdaacaddaaeebbdcedbcccdedcdbdedcddbdedbbdedc",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaadadc"
     }

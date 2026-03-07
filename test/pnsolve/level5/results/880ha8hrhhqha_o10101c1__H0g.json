@@ -8,8 +8,33 @@
     "q2": 16,
     "text": "ぷよ16個以上同時に消す"
   },
-  "status": "no_solution",
-  "searched": 1412,
-  "matched": 0,
-  "solutions": []
+  "status": "ok",
+  "searched": 58564,
+  "matched": 3,
+  "solutions": [
+    {
+      "hands": "rb12rr20rr10rg33",
+      "chains": 2,
+      "score": 2690,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaaaabaababcaaebbeebebccebebceebbe",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "hands": "rb23rr11rr10rg33",
+      "chains": 2,
+      "score": 2690,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaaaabaababcaaebbeebebccebebceebbe",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "hands": "rb23rr20rr10rg33",
+      "chains": 2,
+      "score": 2690,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaaaabaababcaaebbeebebccebebceebbe",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    }
+  ]
 }

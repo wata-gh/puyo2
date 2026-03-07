@@ -9,14 +9,14 @@
     "text": "ぷよ11個以上同時に消す"
   },
   "status": "ok",
-  "searched": 5314,
+  "searched": 10648,
   "matched": 2,
   "solutions": [
     {
       "hands": "rb21rb20rb11",
       "chains": 3,
       "score": 3070,
-      "clear": false,
+      "clear": true,
       "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaaaacaaaaabaaaaabcaaabcbcbbbbcbbcccbcc",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacc"
     },
@@ -24,7 +24,7 @@
       "hands": "rb21rb21rb11",
       "chains": 3,
       "score": 3070,
-      "clear": false,
+      "clear": true,
       "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaaaabcaaaabcaaabcbcbbbbcbbcccbcc",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacc"
     }

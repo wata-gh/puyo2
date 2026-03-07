@@ -9,14 +9,14 @@
     "text": "6連鎖する"
   },
   "status": "ok",
-  "searched": 358,
+  "searched": 484,
   "matched": 1,
   "solutions": [
     {
       "hands": "bg52yg42",
       "chains": 6,
       "score": 8680,
-      "clear": false,
+      "clear": true,
       "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaaaaeaaaadbaaaaeegaeaeeggbdcbbeggcbbbggcbeeddgg",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaae"
     }

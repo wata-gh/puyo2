@@ -9,14 +9,14 @@
     "text": "4連鎖する"
   },
   "status": "ok",
-  "searched": 1226,
+  "searched": 2662,
   "matched": 3,
   "solutions": [
     {
       "hands": "yy41bb11yb00",
       "chains": 4,
       "score": 2280,
-      "clear": false,
+      "clear": true,
       "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaadccdadcdccddgddgccc",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaac"
     },
@@ -24,7 +24,7 @@
       "hands": "yy41bb11yb02",
       "chains": 4,
       "score": 2280,
-      "clear": false,
+      "clear": true,
       "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaddcdadccccddgddgccc",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaac"
     },
@@ -32,7 +32,7 @@
       "hands": "yy41bb11yb13",
       "chains": 4,
       "score": 2280,
-      "clear": false,
+      "clear": true,
       "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaadcaadacdadccccddgddgccc",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaac"
     }

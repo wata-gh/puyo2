@@ -9,14 +9,14 @@
     "text": "10連鎖する"
   },
   "status": "ok",
-  "searched": 48712,
+  "searched": 114682,
   "matched": 2,
   "solutions": [
     {
       "hands": "rb21rb20bb41rb43",
       "chains": 10,
       "score": 45680,
-      "clear": false,
+      "clear": true,
       "initialField": "aaaaaaaaaaaaaaaaaaaaaaacdaaaaddacabdbabccbbdbcdbbdccdbcbddbcccbbccbbddbbddccdd",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaadd"
     },
@@ -24,7 +24,7 @@
       "hands": "rb33rb30bb01rb11",
       "chains": 10,
       "score": 45680,
-      "clear": false,
+      "clear": true,
       "initialField": "aaaaaaaaaaaaaaaaaacaaaaadaaaaddbacadbccbabbdcbdbbdccdbcbddbcccbbccbbddbbddccdd",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaddaaaa"
     }

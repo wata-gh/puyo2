@@ -9,14 +9,14 @@
     "text": "5連鎖する"
   },
   "status": "ok",
-  "searched": 158,
+  "searched": 242,
   "matched": 1,
   "solutions": [
     {
       "hands": "bb11br01",
       "chains": 5,
       "score": 4840,
-      "clear": false,
+      "clear": true,
       "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaaaacccaaabebcaabbedaaeebbaccccba",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaada"
     }

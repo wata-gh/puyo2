@@ -9,14 +9,14 @@
     "text": "10連鎖する"
   },
   "status": "ok",
-  "searched": 53954,
+  "searched": 115894,
   "matched": 4,
   "solutions": [
     {
       "hands": "gg30gy40by20bg43",
       "chains": 10,
       "score": 37580,
-      "clear": false,
+      "clear": true,
       "initialField": "aaaaaaaaaaaaaaaacaaaaadaaaaaeaaaaacaedaeccccdeddcdceedddecdeebcdeeeebcddbbccde",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaeaaaadcaae"
     },
@@ -24,7 +24,7 @@
       "hands": "gg30gy41by20bg43",
       "chains": 10,
       "score": 36840,
-      "clear": false,
+      "clear": true,
       "initialField": "aaaaaaaaaaaaaaaaaaaaaacaaaaaeaaaaacdedaeccccdeddcdceedddecdeebcdeeeebcddbbccde",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaeaaaadcdae"
     },
@@ -32,7 +32,7 @@
       "hands": "gg30gy53by20bg43",
       "chains": 10,
       "score": 37580,
-      "clear": false,
+      "clear": true,
       "initialField": "aaaaaaaaaaaaaaaaaaaaaacaaaaadaaaaaceedaeccccdeddcdceedddecdeebcdeeeebcddbbccde",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaeaaaadcaae"
     },
@@ -40,7 +40,7 @@
       "hands": "gg31gy31by20bg43",
       "chains": 10,
       "score": 37580,
-      "clear": false,
+      "clear": true,
       "initialField": "aaaaaaaaaaaaaaaacaaaaadaaaaaeaaaaacaedaeccccdeddcdceedddecdeebcdeeeebcddbbccde",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaeaaaadcaae"
     }

@@ -9,14 +9,14 @@
     "text": "5連鎖する"
   },
   "status": "ok",
-  "searched": 7435,
+  "searched": 12721,
   "matched": 4,
   "solutions": [
     {
       "hands": "gg01yy21gg10yy00",
       "chains": 5,
       "score": 4900,
-      "clear": false,
+      "clear": true,
       "initialField": "aaaaaaaaaaaaaaaaaaaaadgaaeaggaaeadgaaedgdaaggddadggggadddgdaedggddggdggggddggg",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaagaaaaagg"
     },
@@ -24,7 +24,7 @@
       "hands": "gg01yy21gg10yy01",
       "chains": 5,
       "score": 5100,
-      "clear": false,
+      "clear": true,
       "initialField": "aaaaaaaaaaaaaaaaaaadadgaaeaggaaeadgaaedgdaaggddaaggggadddgdaedggddggdggggddggg",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaagaaaaagg"
     },
@@ -32,7 +32,7 @@
       "hands": "gg10yy21gg01yy00",
       "chains": 5,
       "score": 4900,
-      "clear": false,
+      "clear": true,
       "initialField": "aaaaaaaaaaaaaaaaaaaaadgaaeaggaaeadgaaedgdaaggddadggggadddgdaedggddggdggggddggg",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaagaaaaagg"
     },
@@ -40,7 +40,7 @@
       "hands": "gg10yy21gg01yy01",
       "chains": 5,
       "score": 5100,
-      "clear": false,
+      "clear": true,
       "initialField": "aaaaaaaaaaaaaaaaaaadadgaaeaggaaeadgaaedgdaaggddaaggggadddgdaedggddggdggggddggg",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaagaaaaagg"
     }

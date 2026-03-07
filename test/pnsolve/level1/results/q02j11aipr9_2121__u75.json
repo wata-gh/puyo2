@@ -9,14 +9,14 @@
     "text": "5連鎖する"
   },
   "status": "ok",
-  "searched": 379,
+  "searched": 484,
   "matched": 1,
   "solutions": [
     {
       "hands": "gr10gr43",
       "chains": 5,
       "score": 4840,
-      "clear": false,
+      "clear": true,
       "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaababaaaeceaaaeecebabbeeecbccbb",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaaaa"
     }

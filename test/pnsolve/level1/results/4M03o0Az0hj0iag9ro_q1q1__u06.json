@@ -9,14 +9,14 @@
     "text": "6連鎖する"
   },
   "status": "ok",
-  "searched": 379,
+  "searched": 484,
   "matched": 4,
   "solutions": [
     {
       "hands": "gb20gb41",
       "chains": 6,
       "score": 8680,
-      "clear": false,
+      "clear": true,
       "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaaaaeaaaadgaaaaccaaadddcaaebeceaeebeeabbcccc",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaa"
     },
@@ -24,7 +24,7 @@
       "hands": "gb20gb52",
       "chains": 6,
       "score": 8680,
-      "clear": false,
+      "clear": true,
       "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaaaaeaaaadgaaaaccaaadddcaaebecaaeebeeebbcccc",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaa"
     },
@@ -32,7 +32,7 @@
       "hands": "gb23gb41",
       "chains": 6,
       "score": 8680,
-      "clear": false,
+      "clear": true,
       "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaceaaaadgaaaaccaaadddcaaebeceaeebeeabbcccc",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaaa"
     },
@@ -40,7 +40,7 @@
       "hands": "gb23gb52",
       "chains": 6,
       "score": 8680,
-      "clear": false,
+      "clear": true,
       "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaceaaaadgaaaaccaaadddcaaebecaaeebeeebbcccc",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaaa"
     }

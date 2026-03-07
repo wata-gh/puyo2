@@ -8,8 +8,25 @@
     "q2": 0,
     "text": "ぷよ全て消す"
   },
-  "status": "no_solution",
-  "searched": 147827,
-  "matched": 0,
-  "solutions": []
+  "status": "ok",
+  "searched": 233696,
+  "matched": 2,
+  "solutions": [
+    {
+      "hands": "ry10ry43rg20ry22",
+      "chains": 4,
+      "score": 4330,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaadaabagdaacagdadcbgbacdbgbacdbgbbcdgggdggg",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "hands": "ry43ry10rg20ry22",
+      "chains": 4,
+      "score": 4330,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaadaabagdaacagdadcbgbacdbgbacdbgbbcdgggdggg",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    }
+  ]
 }

@@ -9,14 +9,14 @@
     "text": "5連鎖する"
   },
   "status": "ok",
-  "searched": 32489,
+  "searched": 58544,
   "matched": 2,
   "solutions": [
     {
       "hands": "gg11gr33bg20gg01",
       "chains": 5,
       "score": 4840,
-      "clear": false,
+      "clear": true,
       "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaeaaaaaeeaaaadcaaaadbaaaeeeaaabbeaaabdcegadccgga",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaga"
     },
@@ -24,7 +24,7 @@
       "hands": "gg21gr11bg20gg01",
       "chains": 5,
       "score": 4840,
-      "clear": false,
+      "clear": true,
       "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaeaaaaaeeaaaadcaaaadbaaaeeeaaabbeaaabdcegadccgga",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaga"
     }

@@ -9,14 +9,14 @@
     "text": "9連鎖する"
   },
   "status": "ok",
-  "searched": 1912625,
+  "searched": 2570411,
   "matched": 2,
   "solutions": [
     {
       "hands": "gy30yb21yy50gy52gb13",
       "chains": 9,
       "score": 27880,
-      "clear": false,
+      "clear": true,
       "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaeaaaaadaeacadagddadcgeecbccbedbcdbbdddcceebdcbedb",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaca"
     },
@@ -24,7 +24,7 @@
       "hands": "gy33yb30yy50gy52gb13",
       "chains": 9,
       "score": 27880,
-      "clear": false,
+      "clear": true,
       "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaeaaaaadaeacadagddadcgeecbccbedbcdbbdddcceebdcbedb",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaca"
     }

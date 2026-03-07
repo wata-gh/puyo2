@@ -9,14 +9,14 @@
     "text": "3色同時に消す"
   },
   "status": "ok",
-  "searched": 3235,
+  "searched": 10648,
   "matched": 4,
   "solutions": [
     {
       "hands": "rg01rg40rg20",
       "chains": 4,
       "score": 7160,
-      "clear": false,
+      "clear": true,
       "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaeaaababaeacebebccbbeeceeccbbebbeebccbecc",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaccaa"
     },
@@ -24,7 +24,7 @@
       "hands": "rg12rg41rg32",
       "chains": 4,
       "score": 7160,
-      "clear": false,
+      "clear": true,
       "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaabaeaecebebccbbeeceeccbbebbeebccbecc",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaccaa"
     },
@@ -32,7 +32,7 @@
       "hands": "rg40rg01rg20",
       "chains": 4,
       "score": 7160,
-      "clear": false,
+      "clear": true,
       "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaeaaababaeacebebccbbeeceeccbbebbeebccbecc",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaccaa"
     },
@@ -40,7 +40,7 @@
       "hands": "rg41rg12rg32",
       "chains": 4,
       "score": 7160,
-      "clear": false,
+      "clear": true,
       "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaabaeaecebebccbbeeceeccbbebbeebccbecc",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaccaa"
     }

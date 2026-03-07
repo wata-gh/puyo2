@@ -8,8 +8,17 @@
     "q2": 0,
     "text": "紫ぷよ全て消す"
   },
-  "status": "no_solution",
-  "searched": 116404,
-  "matched": 0,
-  "solutions": []
+  "status": "ok",
+  "searched": 234256,
+  "matched": 1,
+  "solutions": [
+    {
+      "hands": "pg41pb23pg13pb30",
+      "chains": 4,
+      "score": 3100,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaafeaaacccaaffbcafggeefbbbef",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    }
+  ]
 }

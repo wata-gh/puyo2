@@ -9,14 +9,14 @@
     "text": "4連鎖する"
   },
   "status": "ok",
-  "searched": 8023,
+  "searched": 10648,
   "matched": 1,
   "solutions": [
     {
       "hands": "gy40gb40gy52",
       "chains": 4,
       "score": 2280,
-      "clear": false,
+      "clear": true,
       "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaaggeaaaggdaaaceeaaaecgaaaceeeaaddedgggggg",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaagagaaa"
     }

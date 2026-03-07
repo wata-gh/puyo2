@@ -8,8 +8,17 @@
     "q2": 12,
     "text": "色ぷよ12個同時に消す"
   },
-  "status": "no_solution",
-  "searched": 232,
-  "matched": 0,
-  "solutions": []
+  "status": "ok",
+  "searched": 484,
+  "matched": 1,
+  "solutions": [
+    {
+      "hands": "yb22yb20",
+      "chains": 1,
+      "score": 1080,
+      "clear": true,
+      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacdaaaaddaaaaccadcccdaddddda",
+      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacdaaaadda"
+    }
+  ]
 }
