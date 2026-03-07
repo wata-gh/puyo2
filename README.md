@@ -2,24 +2,57 @@
 
 Rust で実装した、ぷよぷよ通の解析ライブラリと CLI 群です。
 
+## Install
+
+推奨導線は Git install です。必要な binary だけを個別に入れます。
+
+```bash
+cargo install --git https://github.com/wata-gh/puyo2 --locked -p puyo2 --bin pnsolve
+cargo install --git https://github.com/wata-gh/puyo2 --locked -p puyo2 --bin pnconv
+cargo install --git https://github.com/wata-gh/puyo2 --locked -p puyo2 --bin nazo
+```
+
+利用できる binary:
+
+- `dfield`
+- `dpuyo`
+- `nazo`
+- `pnconv`
+- `pnsolve`
+- `pnsolve2simus`
+
+GitHub Releases では prebuilt archive も配布します。archive には binary と install note のみを含み、sprite assets は同梱しません。
+
+## Assets
+
+画像出力は `puyos.png`、`puyos_transparent.png`、`puyos_shape.png` を使います。
+
+- `PUYO2_CONFIG` が設定されていれば、そのディレクトリを優先して参照します
+- 未設定の場合は作業ディレクトリ直下の `images/` を参照します
+
+`dfield` と `dpuyo` を install 後に使う場合も、この external assets 前提は変わりません。
+
 ## Project Layout
 
 - `crates/puyo2/src/lib.rs`: 公開 library crate `puyo2`
 - `crates/puyo2/src/bin/*.rs`: CLI binaries
-  - `dfield`
-  - `dpuyo`
-  - `nazo`
-  - `pnconv`
-  - `pnsolve`
-  - `pnsolve2simus`
 - `crates/puyo2/tests/*.rs`: library と CLI の integration tests
 - `.github/workflows/rust.yml`: Rust build/test CI
+- `.github/workflows/release.yml`: release archive packaging
 
 ## Build And Test
 
 ```bash
 cargo build --workspace --all-targets
 cargo test --workspace
+```
+
+個別 install のローカル確認:
+
+```bash
+tmpdir="$(mktemp -d)"
+cargo install --path crates/puyo2 --locked --root "$tmpdir" --bin pnsolve
+"$tmpdir/bin/pnsolve" -param '800F08J08A0EB_8161__270' -pretty=false
 ```
 
 ## Example Commands
@@ -32,12 +65,14 @@ cargo run -p puyo2 --bin nazo -- -param a78 -hands rgby
 cargo run -p puyo2 --bin dfield -- -param a78 -out field.png
 ```
 
-## Assets
+## Library Use
 
-画像出力は `puyos.png`、`puyos_transparent.png`、`puyos_shape.png` を使います。
+library として使う場合は source dependency 前提です。
 
-- `PUYO2_CONFIG` が設定されていれば、そのディレクトリを優先して参照します
-- 未設定の場合は repo 直下の `images/` を参照します
+```toml
+[dependencies]
+puyo2 = { git = "https://github.com/wata-gh/puyo2", package = "puyo2" }
+```
 
 ## pnconv
 

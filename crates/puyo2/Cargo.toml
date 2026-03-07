@@ -3,6 +3,19 @@ name = "puyo2"
 version = "0.1.0"
 edition = "2024"
 rust-version = "1.94"
+description = "Puyo Puyo Tsu analysis library and CLI suite in Rust"
+license = "MIT"
+repository = "https://github.com/wata-gh/puyo2"
+homepage = "https://github.com/wata-gh/puyo2"
+readme = "README.md"
+keywords = ["puyo", "puzzle", "cli", "solver", "parser"]
+categories = ["command-line-utilities", "games", "parser-implementations"]
+include = [
+    "Cargo.toml",
+    "README.md",
+    "LICENSE",
+    "src/**",
+]
 
 [dependencies]
 chrono = "0.4"

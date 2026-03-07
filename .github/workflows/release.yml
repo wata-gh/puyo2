@@ -1,0 +1,160 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-release:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            target: x86_64-unknown-linux-gnu
+          - os: macos-13
+            target: x86_64-apple-darwin
+          - os: macos-14
+            target: aarch64-apple-darwin
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Set up Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.target }}
+
+      - name: Build release binaries
+        run: cargo build -p puyo2 --release --bins --target "${{ matrix.target }}"
+
+      - name: Create temporary sprite assets
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import pathlib
+          import struct
+          import zlib
+
+          TILE = 32
+          WIDTH_TILES = 20
+          HEIGHT_TILES = 16
+          OUT = pathlib.Path("dist-assets")
+          OUT.mkdir(exist_ok=True)
+
+          def write_png(path: pathlib.Path, transparent: bool, shape: bool) -> None:
+              width = WIDTH_TILES * TILE
+              height = HEIGHT_TILES * TILE
+              rows = []
+              for y in range(height):
+                  row = bytearray([0])
+                  tile_y = y // TILE
+                  for x in range(width):
+                      tile_x = x // TILE
+                      if shape:
+                          rgba = (
+                              (tile_x * 13 + 7) & 0xFF,
+                              (tile_y * 19 + 9) & 0xFF,
+                              40,
+                              255,
+                          )
+                      elif transparent:
+                          rgba = (
+                              (tile_x * 11 + 3) & 0xFF,
+                              (tile_y * 17 + 5) & 0xFF,
+                              120,
+                              96,
+                          )
+                      else:
+                          rgba = (
+                              (tile_x * 11 + 3) & 0xFF,
+                              (tile_y * 17 + 5) & 0xFF,
+                              220,
+                              255,
+                          )
+                      row.extend(bytes(rgba))
+                  rows.append(bytes(row))
+              raw = b"".join(rows)
+              compressor = zlib.compressobj()
+              compressed = compressor.compress(raw) + compressor.flush()
+
+              def chunk(tag: bytes, payload: bytes) -> bytes:
+                  return (
+                      struct.pack(">I", len(payload))
+                      + tag
+                      + payload
+                      + struct.pack(">I", zlib.crc32(tag + payload) & 0xFFFFFFFF)
+                  )
+
+              png = bytearray(b"\x89PNG\r\n\x1a\n")
+              png.extend(chunk(b"IHDR", struct.pack(">IIBBBBB", width, height, 8, 6, 0, 0, 0)))
+              png.extend(chunk(b"IDAT", compressed))
+              png.extend(chunk(b"IEND", b""))
+              path.write_bytes(png)
+
+          write_png(OUT / "puyos.png", transparent=False, shape=False)
+          write_png(OUT / "puyos_transparent.png", transparent=True, shape=False)
+          write_png(OUT / "puyos_shape.png", transparent=False, shape=True)
+          PY
+
+      - name: Smoke check binaries
+        shell: bash
+        env:
+          PUYO2_CONFIG: ${{ github.workspace }}/dist-assets
+        run: |
+          set -euo pipefail
+          BIN_DIR="target/${{ matrix.target }}/release"
+          "$BIN_DIR/pnconv" -param '80080080oM0oM098_4141__u03' >/dev/null
+          "$BIN_DIR/pnsolve" -param '800F08J08A0EB_8161__270' -pretty=false >/dev/null
+          printf '%s\n' '{"initialField":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","solutions":[{"hands":"rg12"}]}' | "$BIN_DIR/pnsolve2simus" >/dev/null
+          "$BIN_DIR/nazo" --help >/dev/null 2>/dev/null
+          "$BIN_DIR/dfield" -param 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaececeacecececececececece' -out "$RUNNER_TEMP/field.png" >/dev/null
+          printf 'rg\n' | "$BIN_DIR/dpuyo" -width 2 -height 1 "$RUNNER_TEMP/dpuyo.png" >/dev/null
+
+      - name: Package archive
+        shell: bash
+        run: |
+          set -euo pipefail
+          TAG="${GITHUB_REF_NAME:-manual}"
+          TARGET="${{ matrix.target }}"
+          ARCHIVE_ROOT="puyo2-${TAG}-${TARGET}"
+          BIN_DIR="target/${TARGET}/release"
+          mkdir -p "$ARCHIVE_ROOT"
+          cp "$BIN_DIR/dfield" "$ARCHIVE_ROOT/"
+          cp "$BIN_DIR/dpuyo" "$ARCHIVE_ROOT/"
+          cp "$BIN_DIR/nazo" "$ARCHIVE_ROOT/"
+          cp "$BIN_DIR/pnconv" "$ARCHIVE_ROOT/"
+          cp "$BIN_DIR/pnsolve" "$ARCHIVE_ROOT/"
+          cp "$BIN_DIR/pnsolve2simus" "$ARCHIVE_ROOT/"
+          cp packaging/README-install.txt "$ARCHIVE_ROOT/"
+          cp LICENSE "$ARCHIVE_ROOT/"
+          tar -czf "${ARCHIVE_ROOT}.tar.gz" "$ARCHIVE_ROOT"
+          shasum -a 256 "${ARCHIVE_ROOT}.tar.gz" > "${ARCHIVE_ROOT}.tar.gz.sha256"
+
+      - name: Upload release artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-${{ matrix.target }}
+          path: |
+            puyo2-${{ github.ref_name || 'manual' }}-${{ matrix.target }}.tar.gz
+            puyo2-${{ github.ref_name || 'manual' }}-${{ matrix.target }}.tar.gz.sha256
+
+  publish-release:
+    needs: build-release
+    if: startsWith(github.ref, 'refs/tags/')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download release artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: release-artifacts
+
+      - name: Publish GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: release-artifacts/**/*.{tar.gz,sha256}
