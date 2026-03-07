@@ -8,17 +8,8 @@
     "q2": 6,
     "text": "6連鎖する"
   },
-  "status": "ok",
-  "searched": 14572,
-  "matched": 1,
-  "solutions": [
-    {
-      "hands": "rr00rr00rr11rr41",
-      "chains": 6,
-      "score": 8680,
-      "clear": true,
-      "initialField": "aaaaaaaaaaaaaaaaaaaaaabaabbbgabggggagggggabgbgbabgbgbbbgbgbggbgbgbgbgbgbgbgbgb",
-      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-    }
-  ]
+  "status": "no_solution",
+  "searched": 482,
+  "matched": 0,
+  "solutions": []
 }

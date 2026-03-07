@@ -2,7 +2,7 @@ mod common;
 
 use serde::Deserialize;
 
-use puyo2::parse_ips_nazo_url;
+use puyo2::{BitField, parse_ips_nazo_url, parse_simple_hands};
 
 use crate::common::{output_strings, run_bin, run_bin_with_env};
 
@@ -47,6 +47,34 @@ fn decode_output(stdout: &str) -> SolveOutputJson {
 
 fn is_all_clear_field(field: &str) -> bool {
     field.chars().all(|ch| ch == 'a')
+}
+
+fn assert_solution_replays_with_last_hand_chain(param: &str, solution: &SolveSolutionJson) {
+    let decoded = parse_ips_nazo_url(param).unwrap();
+    let hands = parse_simple_hands(&solution.hands).unwrap();
+    let mut field =
+        BitField::from_mattulwan_and_haipuyo(&decoded.initial_field, &decoded.haipuyo).unwrap();
+
+    for (index, hand) in hands.iter().enumerate() {
+        let (placed, _) = field.place_puyo(hand.puyo_set, hand.position);
+        assert!(placed, "hand must be placeable: {}", solution.hands);
+
+        let before_simulate = field.mattulwan_editor_param();
+        let mut simulation = field.clone_for_simulation();
+        let result = simulation.simulate_detail();
+        let after_simulate = result.bit_field.as_ref().unwrap().mattulwan_editor_param();
+
+        if index + 1 == hands.len() {
+            assert!(result.chains > 0, "last hand must trigger a chain");
+            assert_eq!(before_simulate, solution.initial_field);
+            assert_eq!(after_simulate, solution.final_field);
+            assert_eq!(result.chains, solution.chains);
+            assert_eq!(result.score, solution.score);
+        } else {
+            assert_eq!(result.chains, 0, "prefix must not chain before last hand");
+            field = result.bit_field.unwrap();
+        }
+    }
 }
 
 #[test]
@@ -321,6 +349,102 @@ fn pnsolve_parallel_search_failed_json_matches_go_contract() {
     let output = run_bin_with_env(
         "pnsolve",
         &["-param", param, "-pretty=false"],
+        None,
+        &[("PUYO2_PNSOLVE_JOBS", "4")],
+    );
+    let (stdout, stderr) = output_strings(&output);
+
+    assert!(output.status.success(), "stderr={stderr}");
+    assert!(stderr.is_empty());
+
+    let out = decode_output(&stdout);
+    assert_eq!(out.status, "search_failed");
+    assert!(!out.error.is_empty());
+    assert_eq!(out.matched, 0);
+    assert!(out.solutions.is_empty());
+}
+
+#[test]
+fn pnsolve_expand_equivalent_hands_is_not_noop() {
+    let param = "3k03k03k01903k03k03k0190_G1s101__278";
+    let normal = run_bin("pnsolve", &["-param", param, "-pretty=false"], None);
+    let expanded = run_bin(
+        "pnsolve",
+        &["-param", param, "-pretty=false", "-expand-equivalent-hands"],
+        None,
+    );
+
+    let normal_out = decode_output(&output_strings(&normal).0);
+    let expanded_out = decode_output(&output_strings(&expanded).0);
+
+    assert_eq!(normal_out.status, "ok");
+    assert_eq!(normal_out.matched, 2);
+    assert_eq!(expanded_out.status, "no_solution");
+    assert_eq!(expanded_out.matched, 0);
+    assert_ne!(normal_out.searched, expanded_out.searched);
+}
+
+#[test]
+fn pnsolve_expand_equivalent_hands_returns_stop_on_chain_solutions() {
+    let param = "1hgaaaaaaaaa_c1c1c1__u06";
+    let output = run_bin(
+        "pnsolve",
+        &["-param", param, "-pretty=false", "-expand-equivalent-hands"],
+        None,
+    );
+    let (stdout, stderr) = output_strings(&output);
+
+    assert!(output.status.success(), "stderr={stderr}");
+    assert!(stderr.is_empty());
+
+    let out = decode_output(&stdout);
+    assert_eq!(out.status, "ok");
+    assert_eq!(out.matched, 4);
+    assert_eq!(
+        out.solutions
+            .iter()
+            .map(|solution| solution.hands.clone())
+            .collect::<Vec<_>>(),
+        vec![
+            "rg12rg21rg41".to_string(),
+            "rg21rg12rg41".to_string(),
+            "rg21rg40rg01".to_string(),
+            "rg40rg21rg01".to_string(),
+        ]
+    );
+
+    for solution in &out.solutions {
+        assert_solution_replays_with_last_hand_chain(param, solution);
+    }
+}
+
+#[test]
+fn pnsolve_expand_equivalent_hands_parallel_matches_single_worker() {
+    let param = "1hgaaaaaaaaa_c1c1c1__u06";
+    let single = run_bin_with_env(
+        "pnsolve",
+        &["-param", param, "-pretty=false", "-expand-equivalent-hands"],
+        None,
+        &[("PUYO2_PNSOLVE_JOBS", "1")],
+    );
+    let parallel = run_bin_with_env(
+        "pnsolve",
+        &["-param", param, "-pretty=false", "-expand-equivalent-hands"],
+        None,
+        &[("PUYO2_PNSOLVE_JOBS", "4")],
+    );
+
+    assert_eq!(output_strings(&single).1, "");
+    assert_eq!(output_strings(&parallel).1, "");
+    assert_eq!(output_strings(&single).0, output_strings(&parallel).0);
+}
+
+#[test]
+fn pnsolve_expand_equivalent_hands_search_failed_stays_json() {
+    let param = "o00800c00b00j00z35xx4yxiqr9aticBIbrA_G1A1__u0b";
+    let output = run_bin_with_env(
+        "pnsolve",
+        &["-param", param, "-pretty=false", "-expand-equivalent-hands"],
         None,
         &[("PUYO2_PNSOLVE_JOBS", "4")],
     );

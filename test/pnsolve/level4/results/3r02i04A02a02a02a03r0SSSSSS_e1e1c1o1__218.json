@@ -8,25 +8,8 @@
     "q2": 8,
     "text": "赤ぷよ全て消す"
   },
-  "status": "ok",
-  "searched": 52628,
-  "matched": 2,
-  "solutions": [
-    {
-      "hands": "gg41gg50rg31rb31",
-      "chains": 4,
-      "score": 2960,
-      "clear": false,
-      "initialField": "aaaaaaaaaaaaaaabaaaaabaaacccaaaeeeaaadddaaaebeaaaebeaaaebeaaaccccaggggeagggggg",
-      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaaaaeccaagdddag"
-    },
-    {
-      "hands": "gg50gg41rg31rb31",
-      "chains": 4,
-      "score": 2960,
-      "clear": false,
-      "initialField": "aaaaaaaaaaaaaaabaaaaabaaacccaaaeeeaaadddaaaebeaaaebeaaaebeaaaccccaggggeagggggg",
-      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaaaaeccaagdddag"
-    }
-  ]
+  "status": "no_solution",
+  "searched": 13783,
+  "matched": 0,
+  "solutions": []
 }

@@ -8,57 +8,8 @@
     "q2": 0,
     "text": "赤ぷよ全て消す"
   },
-  "status": "ok",
-  "searched": 1331,
-  "matched": 6,
-  "solutions": [
-    {
-      "hands": "rr00rr00rr41",
-      "chains": 2,
-      "score": 700,
-      "clear": false,
-      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaaaabaaaaabaaaaagbgggbgbgggbgbgggggbggggbg",
-      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaggaaaaggaaaagggaaagggaaa"
-    },
-    {
-      "hands": "rr00rr01rr41",
-      "chains": 2,
-      "score": 700,
-      "clear": false,
-      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaaaabaaaaabaaaaagbgggbgbgggbgbgggggbggggbg",
-      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaggaaaaggaaaagggaaagggaaa"
-    },
-    {
-      "hands": "rr00rr10rr41",
-      "chains": 2,
-      "score": 700,
-      "clear": false,
-      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaaaabaaaaabagaaagbgggbgbgggbgbgggggbggggbg",
-      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaagaaaaaggaaaaggaaaagggaaagggaaa"
-    },
-    {
-      "hands": "rr01rr00rr41",
-      "chains": 2,
-      "score": 700,
-      "clear": false,
-      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaaaabaaaaabaaaaagbgggbgbgggbgbgggggbggggbg",
-      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaggaaaaggaaaagggaaagggaaa"
-    },
-    {
-      "hands": "rr01rr01rr41",
-      "chains": 2,
-      "score": 700,
-      "clear": false,
-      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaaaabaaaaabaaaaagbgggbgbgggbgbgggggbggggbg",
-      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaggaaaaggaaaagggaaagggaaa"
-    },
-    {
-      "hands": "rr01rr10rr41",
-      "chains": 2,
-      "score": 700,
-      "clear": false,
-      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaaaabaaaaabagaaagbgggbgbgggbgbgggggbggggbg",
-      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaagaaaaaggaaaaggaaaagggaaagggaaa"
-    }
-  ]
+  "status": "no_solution",
+  "searched": 11,
+  "matched": 0,
+  "solutions": []
 }

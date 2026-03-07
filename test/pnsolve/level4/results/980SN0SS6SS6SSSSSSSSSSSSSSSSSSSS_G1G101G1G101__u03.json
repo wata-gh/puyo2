@@ -8,41 +8,8 @@
     "q2": 3,
     "text": "3連鎖する"
   },
-  "status": "ok",
-  "searched": 455166,
-  "matched": 4,
-  "solutions": [
-    {
-      "hands": "yy00yy01rr40yy10yy11rr30",
-      "chains": 3,
-      "score": 1000,
-      "clear": false,
-      "initialField": "aaabbaaaabbaaadbbaaabggbadggggadggggadggggaggggggggggggggggggggggggggggggggggg",
-      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaagggaaagggaagggggggggggggggggggggggggggggggggg"
-    },
-    {
-      "hands": "yy00yy01rr40yy11yy10rr30",
-      "chains": 3,
-      "score": 1000,
-      "clear": false,
-      "initialField": "aaabbaaaabbaaadbbaaabggbadggggadggggadggggaggggggggggggggggggggggggggggggggggg",
-      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaagggaaagggaagggggggggggggggggggggggggggggggggg"
-    },
-    {
-      "hands": "yy01yy00rr40yy10yy11rr30",
-      "chains": 3,
-      "score": 1000,
-      "clear": false,
-      "initialField": "aaabbaaaabbaaadbbaaabggbadggggadggggadggggaggggggggggggggggggggggggggggggggggg",
-      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaagggaaagggaagggggggggggggggggggggggggggggggggg"
-    },
-    {
-      "hands": "yy01yy00rr40yy11yy10rr30",
-      "chains": 3,
-      "score": 1000,
-      "clear": false,
-      "initialField": "aaabbaaaabbaaadbbaaabggbadggggadggggadggggaggggggggggggggggggggggggggggggggggg",
-      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaagggaaagggaagggggggggggggggggggggggggggggggggg"
-    }
-  ]
+  "status": "no_solution",
+  "searched": 18834,
+  "matched": 0,
+  "solutions": []
 }

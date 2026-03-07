@@ -8,41 +8,8 @@
     "q2": 15,
     "text": "色ぷよ15個同時に消す"
   },
-  "status": "ok",
-  "searched": 1117,
-  "matched": 4,
-  "solutions": [
-    {
-      "hands": "rr10rr41rr50",
-      "chains": 3,
-      "score": 3290,
-      "clear": false,
-      "initialField": "aaaaaaaaaabaaaabgaaaabgaaaabgaabbgbaagbgbaabgbgaabgbgaagbgbaagbgbbabgbgbabgbgb",
-      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaga"
-    },
-    {
-      "hands": "rr10rr50rr41",
-      "chains": 3,
-      "score": 3290,
-      "clear": false,
-      "initialField": "aaaaaaaaaabaaaabgaaaabgaaaabgaabbgbaagbgbaabgbgaabgbgaagbgbaagbgbbabgbgbabgbgb",
-      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaga"
-    },
-    {
-      "hands": "rr41rr10rr50",
-      "chains": 3,
-      "score": 3290,
-      "clear": false,
-      "initialField": "aaaaaaaaaabaaaabgaaaabgaaaabgaabbgbaagbgbaabgbgaabgbgaagbgbaagbgbbabgbgbabgbgb",
-      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaga"
-    },
-    {
-      "hands": "rr50rr10rr41",
-      "chains": 3,
-      "score": 3290,
-      "clear": false,
-      "initialField": "aaaaaaaaaabaaaabgaaaabgaaaabgaabbgbaagbgbaabgbgaabgbgaagbgbaagbgbbabgbgbabgbgb",
-      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaga"
-    }
-  ]
+  "status": "no_solution",
+  "searched": 55,
+  "matched": 0,
+  "solutions": []
 }

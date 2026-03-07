@@ -8,25 +8,8 @@
     "q2": 2,
     "text": "2連鎖する"
   },
-  "status": "ok",
-  "searched": 484,
-  "matched": 2,
-  "solutions": [
-    {
-      "hands": "rg50rg11",
-      "chains": 2,
-      "score": 560,
-      "clear": false,
-      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaabaaaadbaaaabbaaaadcaaaaddaaaaecaaaaccaaaaebaaaaeeedaa",
-      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaaaacaaaaecaaaacbadaa"
-    },
-    {
-      "hands": "rg53rg11",
-      "chains": 2,
-      "score": 560,
-      "clear": false,
-      "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaabaaaadbaaaabbaaaadcaaaaddaaaaecaaaaccaaaaebaaaaeeedaa",
-      "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaaaacaaaaecaaaacbadaa"
-    }
-  ]
+  "status": "no_solution",
+  "searched": 316,
+  "matched": 0,
+  "solutions": []
 }

@@ -73,7 +73,8 @@ cargo run -p puyo2 --bin pnsolve -- -url 'http://ips.karou.jp/simu/pn.html?jjgqq
 - `-param`: クエリ文字列
 - `-disablechigiri`: ちぎり禁止で探索
 - `-pretty=false`: 1行 JSON 出力
-- `-expand-equivalent-hands`: 現状は parity のため no-op
+- `-expand-equivalent-hands`: 停止連鎖ベースの exhaustive expansion を行います
+  - 内部では `stop_on_chain=true` と `dedup=off` を使います
 
 JSON フィールド:
 

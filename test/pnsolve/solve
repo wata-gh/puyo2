@@ -116,7 +116,7 @@ for target in "${TARGETS[@]}"; do
     echo "${line}"
     if ! (
       cd "${REPO_ROOT}" && \
-      "${PN_SOLVE_BIN}" -param "${line}" > "${level_dir}/results/${line}.json"
+      "${PN_SOLVE_BIN}" -param "${line}" -expand-equivalent-hands > "${level_dir}/results/${line}.json"
     ); then
       rm -f "${level_dir}/results/${line}.json"
     fi
