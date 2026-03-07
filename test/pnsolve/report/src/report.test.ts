@@ -288,3 +288,19 @@ test("http routes return dashboard and level detail", async () => {
     server.stop(true);
   }
 });
+
+test("artifact report loads even when manifest repoRoot is unavailable", async () => {
+  const artifactRoot = await createSampleArtifact();
+  const manifestPath = path.join(artifactRoot, "manifest.json");
+  const manifest = JSON.parse(await fs.readFile(manifestPath, "utf8")) as Record<string, unknown>;
+  manifest.repoRoot = "/no/such/repo-root";
+  await fs.writeFile(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`);
+
+  const report = await loadArtifactReport(artifactRoot);
+  const dashboard = buildDashboardView(report);
+  const level1 = getLevelView(dashboard, "level1");
+
+  expect(level1).not.toBeNull();
+  expect(level1?.checkedCases).toBe(3);
+  expect(level1?.cases.some((caseView) => caseView.param.length > 0)).toBe(true);
+});

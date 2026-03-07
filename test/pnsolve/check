@@ -541,8 +541,16 @@ else
   done
 fi
 
-write_manifest
-publish_artifacts
+if ! write_manifest; then
+  echo "error: failed to write artifact manifest" >&2
+  KEEP_TMP=1
+  exit 2
+fi
+if ! publish_artifacts; then
+  echo "error: failed to publish artifacts to ${OUT_DIR_ABS}" >&2
+  KEEP_TMP=1
+  exit 2
+fi
 
 echo "checked=${checked} diff=${diff_count} missing_before=${missing_before} run_error=${run_error} jd_error=${jd_error}"
 

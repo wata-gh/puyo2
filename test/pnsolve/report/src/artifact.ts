@@ -122,6 +122,18 @@ async function readLevelParams(repoRoot: string, level: string): Promise<string[
   }
 }
 
+async function pathExists(targetPath: string): Promise<boolean> {
+  try {
+    await fs.access(targetPath);
+    return true;
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code === "ENOENT") {
+      return false;
+    }
+    throw error;
+  }
+}
+
 async function loadCaseArtifacts(artifactRoot: string, level: string, param: string): Promise<CaseArtifacts | null> {
   const caseDir = path.join(artifactRoot, "levels", level, "cases", param);
   const metaPath = path.join(caseDir, "meta.json");
@@ -166,15 +178,15 @@ export async function loadArtifactReport(artifactRootInput: string): Promise<Art
   const manifestPath = path.join(artifactRoot, "manifest.json");
   const manifest = await readJsonFile<ArtifactManifest>(manifestPath);
   const repoRoot = path.resolve(manifest.repoRoot);
-
-  const allRepoLevels = await listLevelNames(repoRoot);
-  const levelNames = Array.from(new Set([...allRepoLevels, ...manifest.executedLevels])).sort((left, right) =>
-    left.localeCompare(right, undefined, { numeric: true }),
-  );
+  const repoHasLists = await pathExists(path.join(repoRoot, "test/pnsolve"));
+  const allRepoLevels = repoHasLists ? await listLevelNames(repoRoot) : [];
+  const levelNames = Array.from(new Set([...allRepoLevels, ...manifest.executedLevels])).sort((left, right) => {
+    return left.localeCompare(right, undefined, { numeric: true });
+  });
 
   const levels: LevelArtifacts[] = [];
   for (const level of levelNames) {
-    const levelParams = await readLevelParams(repoRoot, level);
+    const levelParams = repoHasLists ? await readLevelParams(repoRoot, level) : [];
     const artifactParams = await listArtifactCaseParams(artifactRoot, level);
     const orderedParams = Array.from(new Set([...levelParams, ...artifactParams]));
     const cases = new Map<string, CaseArtifacts>();
