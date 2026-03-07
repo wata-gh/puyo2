@@ -2,6 +2,7 @@ use std::{
     cell::{Cell, RefCell},
     collections::HashSet,
     env, fs,
+    hint::black_box,
     path::PathBuf,
     rc::Rc,
     time::{Duration, Instant},
@@ -144,6 +145,54 @@ fn print_usage() {
 fn benchmark_cases(min_sample: Duration) -> Vec<BenchCaseResult> {
     let mut results = Vec::new();
 
+    results.push(run_bench_case(
+        "BenchmarkBitFieldClone/EmptyField",
+        min_sample,
+        {
+            let field = BitField::new();
+            move || {
+                let cloned = black_box(field).clone();
+                black_box(cloned);
+                BenchMetrics::default()
+            }
+        },
+    ));
+    results.push(run_bench_case(
+        "BenchmarkBitFieldCloneForSimulation/DenseField",
+        min_sample,
+        {
+            let field = BitField::from_mattulwan("a16ca5ga4cgca3g3a3g3a3g3cacg4ag5cg16");
+            move || {
+                let cloned = black_box(field).clone_for_simulation();
+                black_box(cloned);
+                BenchMetrics::default()
+            }
+        },
+    ));
+    results.push(run_bench_case(
+        "BenchmarkBitFieldDropVanished",
+        min_sample,
+        {
+            let field = BitField::from_mattulwan("a54ea3eaebdece3bd2eb2dc3");
+            let vanished = field.find_vanishing_bits();
+            move || {
+                let mut cloned = black_box(field);
+                let vanished = black_box(vanished);
+                cloned.drop_vanished(vanished);
+                black_box(cloned);
+                BenchMetrics::default()
+            }
+        },
+    ));
+    results.push(run_bench_case("BenchmarkBitFieldSimulate", min_sample, {
+        let field = BitField::from_mattulwan("a54ea3eaebdece3bd2eb2dc3");
+        move || {
+            let mut cloned = black_box(field);
+            let result = cloned.simulate();
+            black_box(result);
+            BenchMetrics::default()
+        }
+    }));
     results.push(run_bench_case(
         "BenchmarkSearchPlacementForPos/EmptyField",
         min_sample,
@@ -490,7 +539,7 @@ where
 
 fn create_search_state_key(bit_field: &BitField) -> SearchStateKey {
     SearchStateKey {
-        m: bit_field.m,
+        m: *bit_field.matrix(),
         table_sig: color_table_signature(bit_field),
     }
 }
@@ -507,7 +556,7 @@ fn color_table_signature(bit_field: &BitField) -> u32 {
     .into_iter()
     .enumerate()
     {
-        signature |= ((bit_field.table[color.idx()] as u32) & 0xf) << (index * 4);
+        signature |= ((bit_field.color_table()[color.idx()] as u32) & 0xf) << (index * 4);
     }
     signature
 }

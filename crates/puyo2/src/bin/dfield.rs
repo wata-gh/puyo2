@@ -38,21 +38,8 @@ fn exp_hands(param: &str, hands_str: &str, path: &str) {
     let mut bit_field = BitField::from_mattulwan(param);
     let hands = parse_simple_hands(hands_str).unwrap_or_else(|err| panic!("{err}"));
     for hand in &hands {
-        let mut converted = bit_field.table[hand.puyo_set.axis.idx()];
-        if converted == Color::Empty {
-            bit_field.table[hand.puyo_set.axis.idx()] = hand.puyo_set.axis;
-        }
-        converted = bit_field.table[hand.puyo_set.child.idx()];
-        if converted == Color::Empty {
-            bit_field.table[hand.puyo_set.child.idx()] = hand.puyo_set.child;
-        }
-    }
-    if bit_field.table[Color::Purple.idx()] == Color::Purple {
-        for color in [Color::Red, Color::Blue, Color::Yellow, Color::Green] {
-            if bit_field.table[color.idx()] == Color::Empty {
-                bit_field.table[Color::Purple.idx()] = color;
-            }
-        }
+        bit_field.register_color(hand.puyo_set.axis);
+        bit_field.register_color(hand.puyo_set.child);
     }
     bit_field
         .export_hands_simulate_image(&hands, path)

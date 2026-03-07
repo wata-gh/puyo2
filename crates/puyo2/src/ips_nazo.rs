@@ -83,7 +83,7 @@ pub fn evaluate_ips_nazo_condition(
         let mut chain_places = [0usize; 8];
         let mut any_erased = false;
 
-        for color in bit_field.colors.clone() {
+        for &color in bit_field.colors() {
             let Some(color_index) = color_to_ips_nazo_index(color) else {
                 continue;
             };
