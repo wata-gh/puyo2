@@ -133,6 +133,15 @@ fn find_vanishing_bits_matches_go() {
 }
 
 #[test]
+fn has_vanishing_bits_matches_go() {
+    let chainable = BitField::from_mattulwan("a54ea3eaebdece3bd2eb2dc3");
+    assert!(chainable.bits(Color::Green).has_vanishing_bits());
+
+    let not_chainable = BitField::from_mattulwan("a78");
+    assert!(!not_chainable.bits(Color::Red).has_vanishing_bits());
+}
+
+#[test]
 fn iterate_bit_with_masking_matches_go() {
     let mut bits = FieldBits::new();
     bits.set_onebit(0, 4);

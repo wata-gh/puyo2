@@ -122,6 +122,12 @@ fn search_position_v2(
             panic!("should be able to place. {placement:?}");
         }
 
+        if runtime.stop_on_chain && !is_terminal_depth && runtime.each_hand_callback.is_none() {
+            if before_simulate.rensa_will_occur() {
+                continue;
+            }
+        }
+
         let mut new_hands = hands.clone();
         new_hands.push(Hand {
             puyo_set,
