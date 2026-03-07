@@ -11,3 +11,4 @@
 
 bench-results
 target/
+test/pnsolve/artifacts/

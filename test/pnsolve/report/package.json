@@ -1,0 +1,10 @@
+{
+  "name": "pnsolve-report",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "bun run server.ts",
+    "dev": "bun run --watch server.ts",
+    "test": "bun test"
+  }
+}

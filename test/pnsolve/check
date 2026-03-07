@@ -4,19 +4,21 @@ setopt pipefail
 setopt nounset
 
 readonly NORMALIZE_FILTER='del(.searched) | (if has("solutions") then .solutions |= map(del(.clear)) else . end)'
+readonly ARTIFACT_FORMAT_VERSION=1
 
 usage() {
   cat <<'USAGE'
 Usage:
   test/pnsolve/check
   test/pnsolve/check level1 [level2 ...]
-  test/pnsolve/check -level levelN -param PARAM [-show-diff] [-bin PATH]
+  test/pnsolve/check -level levelN -param PARAM [-show-diff] [-bin PATH] [-out-dir DIR]
 
 Options:
   -level <levelN>   Compare a single case in the specified level.
   -param <PARAM>    Param string for single-case mode.
   -show-diff        Print full jd diff output on DIFF.
   -bin <PATH>       Use an existing pnsolve binary instead of building target/debug/pnsolve.
+  -out-dir <DIR>    Persist comparison artifacts for the HTML report.
   -h, --help        Show this help.
 
 Description:
@@ -38,6 +40,158 @@ append_diff_param() {
   else
     diff_params[$level]+=$'\n'"${param}"
   fi
+}
+
+copy_if_exists() {
+  local src="$1"
+  local dest="$2"
+  if [[ -f "${src}" ]]; then
+    cp "${src}" "${dest}"
+    return 0
+  fi
+  return 1
+}
+
+artifact_rel_path() {
+  local level="$1"
+  local param="$2"
+  local file_name="$3"
+  print -r -- "levels/${level}/cases/${param}/${file_name}"
+}
+
+write_case_meta() {
+  local level="$1"
+  local param="$2"
+  local case_status="$3"
+  local case_dir="$4"
+  local before_rel="$5"
+  local after_rel="$6"
+  local before_norm_rel="$7"
+  local after_norm_rel="$8"
+  local diff_rel="$9"
+  local stderr_rel="${10}"
+
+  jq -n \
+    --arg level "${level}" \
+    --arg param "${param}" \
+    --arg status "${case_status}" \
+    --arg beforePath "${before_rel}" \
+    --arg afterPath "${after_rel}" \
+    --arg beforeNormalizedPath "${before_norm_rel}" \
+    --arg afterNormalizedPath "${after_norm_rel}" \
+    --arg diffPath "${diff_rel}" \
+    --arg stderrPath "${stderr_rel}" \
+    '
+      {
+        level: $level,
+        param: $param,
+        status: $status,
+        beforePath: (if $beforePath == "" then null else $beforePath end),
+        afterPath: (if $afterPath == "" then null else $afterPath end),
+        beforeNormalizedPath: (if $beforeNormalizedPath == "" then null else $beforeNormalizedPath end),
+        afterNormalizedPath: (if $afterNormalizedPath == "" then null else $afterNormalizedPath end),
+        diffPath: (if $diffPath == "" then null else $diffPath end),
+        stderrPath: (if $stderrPath == "" then null else $stderrPath end)
+      }
+    ' > "${case_dir}/meta.json"
+}
+
+persist_case_artifacts() {
+  local level="$1"
+  local param="$2"
+  local case_status="$3"
+  local before="$4"
+  local after="$5"
+  local before_cmp="$6"
+  local after_cmp="$7"
+  local diff_file="$8"
+  local stderr_file="$9"
+
+  [[ -z "${ARTIFACT_TMP_ROOT}" ]] && return
+
+  local case_dir="${ARTIFACT_TMP_ROOT}/levels/${level}/cases/${param}"
+  local before_rel=""
+  local after_rel=""
+  local before_norm_rel=""
+  local after_norm_rel=""
+  local diff_rel=""
+  local stderr_rel=""
+
+  mkdir -p "${case_dir}"
+
+  if copy_if_exists "${before}" "${case_dir}/before.raw.json"; then
+    before_rel=$(artifact_rel_path "${level}" "${param}" "before.raw.json")
+  fi
+  if copy_if_exists "${after}" "${case_dir}/after.raw.json"; then
+    after_rel=$(artifact_rel_path "${level}" "${param}" "after.raw.json")
+  fi
+  if copy_if_exists "${before_cmp}" "${case_dir}/before.normalized.json"; then
+    before_norm_rel=$(artifact_rel_path "${level}" "${param}" "before.normalized.json")
+  fi
+  if copy_if_exists "${after_cmp}" "${case_dir}/after.normalized.json"; then
+    after_norm_rel=$(artifact_rel_path "${level}" "${param}" "after.normalized.json")
+  fi
+  if copy_if_exists "${diff_file}" "${case_dir}/diff.jd"; then
+    diff_rel=$(artifact_rel_path "${level}" "${param}" "diff.jd")
+  fi
+  if copy_if_exists "${stderr_file}" "${case_dir}/stderr.txt"; then
+    stderr_rel=$(artifact_rel_path "${level}" "${param}" "stderr.txt")
+  fi
+
+  write_case_meta \
+    "${level}" \
+    "${param}" \
+    "${case_status}" \
+    "${case_dir}" \
+    "${before_rel}" \
+    "${after_rel}" \
+    "${before_norm_rel}" \
+    "${after_norm_rel}" \
+    "${diff_rel}" \
+    "${stderr_rel}"
+}
+
+write_manifest() {
+  [[ -z "${ARTIFACT_TMP_ROOT}" ]] && return
+
+  jq -n \
+    --argjson formatVersion "${ARTIFACT_FORMAT_VERSION}" \
+    --arg createdAt "$(date -u +"%Y-%m-%dT%H:%M:%SZ")" \
+    --arg repoRoot "${REPO_ROOT}" \
+    --arg normalizedFilter "${NORMALIZE_FILTER}" \
+    --arg binPath "${PN_SOLVE_BIN}" \
+    --argjson singleMode "${SINGLE_MODE}" \
+    --argjson checked "${checked}" \
+    --argjson diff "${diff_count}" \
+    --argjson missingBefore "${missing_before}" \
+    --argjson runError "${run_error}" \
+    --argjson jdError "${jd_error}" \
+    '
+      {
+        formatVersion: $formatVersion,
+        createdAt: $createdAt,
+        repoRoot: $repoRoot,
+        normalizedFilter: $normalizedFilter,
+        executedLevels: $ARGS.positional,
+        singleMode: ($singleMode == 1),
+        binPath: $binPath,
+        summary: {
+          checked: $checked,
+          diff: $diff,
+          missingBefore: $missingBefore,
+          runError: $runError,
+          jdError: $jdError
+        }
+      }
+    ' \
+    --args "${LEVELS[@]}" > "${ARTIFACT_TMP_ROOT}/manifest.json"
+}
+
+publish_artifacts() {
+  [[ -z "${OUT_DIR_ABS}" ]] && return
+  rm -rf "${OUT_DIR_ABS}"
+  mkdir -p "${OUT_DIR_ABS:h}"
+  cp -R "${ARTIFACT_TMP_ROOT}" "${OUT_DIR_ABS}"
 }
 
 resolve_pnsolve_bin() {
@@ -71,106 +225,115 @@ run_one_case() {
   local level="$1"
   local param="$2"
 
+  local before="${SCRIPT_DIR}/${level}/results/${param}.json"
+  local after="${TMP_ROOT}/${level}/${param}.json"
+  local run_err_file="${TMP_ROOT}/errors/${level}/${param}.stderr"
+  local diff_file="${TMP_ROOT}/diffs/${level}/${param}.jd"
+  local diff_err_file="${TMP_ROOT}/diffs/${level}/${param}.jd.stderr"
+  local before_cmp="${TMP_ROOT}/compare/${level}/${param}.before.json"
+  local after_cmp="${TMP_ROOT}/compare/${level}/${param}.after.json"
+  local norm_err_file="${TMP_ROOT}/errors/${level}/${param}.normalize.stderr"
+  local case_status="-"
+  local case_diff="-"
+  local case_stderr="-"
+
   ((checked++))
-
-  before="${SCRIPT_DIR}/${level}/results/${param}.json"
-  after="${TMP_ROOT}/${level}/${param}.json"
-  run_err_file="${TMP_ROOT}/errors/${level}/${param}.stderr"
-  diff_file="${TMP_ROOT}/diffs/${level}/${param}.jd"
-  diff_err_file="${TMP_ROOT}/diffs/${level}/${param}.jd.stderr"
-  before_cmp="${TMP_ROOT}/compare/${level}/${param}.before.json"
-  after_cmp="${TMP_ROOT}/compare/${level}/${param}.after.json"
-  norm_err_file="${TMP_ROOT}/errors/${level}/${param}.normalize.stderr"
-
-  LAST_STATUS="-"
-  LAST_BEFORE="${before}"
-  LAST_AFTER="${after}"
-  LAST_DIFF="-"
-  LAST_STDERR="-"
 
   mkdir -p "${TMP_ROOT}/${level}" "${TMP_ROOT}/diffs/${level}" "${TMP_ROOT}/errors/${level}" "${TMP_ROOT}/compare/${level}"
 
   if [[ ! -f "${before}" ]]; then
     echo "BEFORE_MISSING ${level} ${param}"
     ((missing_before++))
-    LAST_STATUS="BEFORE_MISSING"
-    return
-  fi
-
-  if ! (
-    cd "${REPO_ROOT}" && \
-    "${PN_SOLVE_BIN}" -param "${param}" -pretty=false -expand-equivalent-hands >"${after}" 2>"${run_err_file}"
-  ); then
-    echo "RUN_ERROR ${level} ${param} (stderr: ${run_err_file})"
-    ((run_error++))
-    LAST_STATUS="RUN_ERROR"
-    LAST_STDERR="${run_err_file}"
-    return
-  fi
-
-  if [[ ! -s "${run_err_file}" ]]; then
-    rm -f "${run_err_file}"
-  fi
-
-  : > "${norm_err_file}"
-  if ! jq "${NORMALIZE_FILTER}" "${before}" > "${before_cmp}" 2>>"${norm_err_file}"; then
-    echo "JD_ERROR ${level} ${param} (stderr: ${norm_err_file})"
-    ((jd_error++))
-    LAST_STATUS="JD_ERROR"
-    LAST_STDERR="${norm_err_file}"
-    return
-  fi
-  if ! jq "${NORMALIZE_FILTER}" "${after}" > "${after_cmp}" 2>>"${norm_err_file}"; then
-    echo "JD_ERROR ${level} ${param} (stderr: ${norm_err_file})"
-    ((jd_error++))
-    LAST_STATUS="JD_ERROR"
-    LAST_STDERR="${norm_err_file}"
-    return
-  fi
-  if [[ ! -s "${norm_err_file}" ]]; then
-    rm -f "${norm_err_file}"
-  fi
-
-  jd -set "${before_cmp}" "${after_cmp}" >"${diff_file}" 2>"${diff_err_file}"
-  jd_status=$?
-
-  if [[ ${jd_status} -eq 0 ]]; then
-    rm -f "${diff_file}" "${diff_err_file}"
-    LAST_STATUS="MATCH"
-    return
-  fi
-
-  if [[ ${jd_status} -eq 1 ]]; then
-    echo "DIFF ${level} ${param}"
-    ((diff_count++))
-    append_diff_param "${level}" "${param}"
-
-    LAST_STATUS="DIFF"
-    LAST_DIFF="${diff_file}"
-    if [[ -s "${diff_err_file}" ]]; then
-      LAST_STDERR="${diff_err_file}"
+    case_status="BEFORE_MISSING"
+  else
+    if ! (
+      cd "${REPO_ROOT}" && \
+      "${PN_SOLVE_BIN}" -param "${param}" -pretty=false -expand-equivalent-hands >"${after}" 2>"${run_err_file}"
+    ); then
+      echo "RUN_ERROR ${level} ${param} (stderr: ${run_err_file})"
+      ((run_error++))
+      case_status="RUN_ERROR"
+      case_stderr="${run_err_file}"
     else
-      rm -f "${diff_err_file}"
-    fi
+      if [[ ! -s "${run_err_file}" ]]; then
+        rm -f "${run_err_file}"
+      fi
 
-    if [[ ${SHOW_DIFF} -eq 1 ]]; then
-      echo "--- DIFF BEGIN ${level} ${param} ---"
-      cat "${diff_file}"
-      echo "--- DIFF END ${level} ${param} ---"
+      : > "${norm_err_file}"
+      if ! jq "${NORMALIZE_FILTER}" "${before}" > "${before_cmp}" 2>>"${norm_err_file}"; then
+        echo "JD_ERROR ${level} ${param} (stderr: ${norm_err_file})"
+        ((jd_error++))
+        case_status="JD_ERROR"
+        case_stderr="${norm_err_file}"
+      elif ! jq "${NORMALIZE_FILTER}" "${after}" > "${after_cmp}" 2>>"${norm_err_file}"; then
+        echo "JD_ERROR ${level} ${param} (stderr: ${norm_err_file})"
+        ((jd_error++))
+        case_status="JD_ERROR"
+        case_stderr="${norm_err_file}"
+      else
+        if [[ ! -s "${norm_err_file}" ]]; then
+          rm -f "${norm_err_file}"
+        fi
+
+        jd -set "${before_cmp}" "${after_cmp}" >"${diff_file}" 2>"${diff_err_file}"
+        local jd_status=$?
+
+        if [[ ${jd_status} -eq 0 ]]; then
+          rm -f "${diff_file}" "${diff_err_file}"
+          case_status="MATCH"
+        elif [[ ${jd_status} -eq 1 ]]; then
+          echo "DIFF ${level} ${param}"
+          ((diff_count++))
+          append_diff_param "${level}" "${param}"
+
+          case_status="DIFF"
+          case_diff="${diff_file}"
+          if [[ -s "${diff_err_file}" ]]; then
+            case_stderr="${diff_err_file}"
+          else
+            rm -f "${diff_err_file}"
+          fi
+
+          if [[ ${SHOW_DIFF} -eq 1 ]]; then
+            echo "--- DIFF BEGIN ${level} ${param} ---"
+            cat "${diff_file}"
+            echo "--- DIFF END ${level} ${param} ---"
+          fi
+        else
+          echo "JD_ERROR ${level} ${param} (stderr: ${diff_err_file})"
+          ((jd_error++))
+          case_status="JD_ERROR"
+          case_stderr="${diff_err_file}"
+        fi
+      fi
     fi
-    return
   fi
 
-  echo "JD_ERROR ${level} ${param} (stderr: ${diff_err_file})"
-  ((jd_error++))
-  LAST_STATUS="JD_ERROR"
-  LAST_STDERR="${diff_err_file}"
+  LAST_STATUS="${case_status}"
+  LAST_BEFORE="${before}"
+  LAST_AFTER="${after}"
+  LAST_DIFF="${case_diff}"
+  LAST_STDERR="${case_stderr}"
+
+  persist_case_artifacts \
+    "${level}" \
+    "${param}" \
+    "${case_status}" \
+    "${before}" \
+    "${after}" \
+    "${before_cmp}" \
+    "${after_cmp}" \
+    "${case_diff}" \
+    "${case_stderr}"
 }
 
 typeset -a POSITIONAL=()
 SINGLE_LEVEL=""
 SINGLE_PARAM=""
 BIN_OVERRIDE=""
+OUT_DIR=""
+OUT_DIR_ABS=""
+ARTIFACT_TMP_ROOT=""
 typeset -i SHOW_DIFF=0
 
 while [[ $# -gt 0 ]]; do
@@ -210,6 +373,15 @@ while [[ $# -gt 0 ]]; do
       BIN_OVERRIDE="$2"
       shift 2
       ;;
+    -out-dir)
+      if [[ $# -lt 2 ]]; then
+        echo "error: -out-dir requires a value" >&2
+        usage >&2
+        exit 2
+      fi
+      OUT_DIR="$2"
+      shift 2
+      ;;
     -*)
       echo "error: unknown option: $1" >&2
       usage >&2
@@ -242,8 +414,6 @@ if [[ ! -f "${REPO_ROOT}/Cargo.toml" ]]; then
   echo "error: repository root not found from script path: ${REPO_ROOT}" >&2
   exit 2
 fi
-
-resolve_pnsolve_bin
 
 typeset -i SINGLE_MODE=0
 if [[ -n "${SINGLE_LEVEL}" || -n "${SINGLE_PARAM}" ]]; then
@@ -322,6 +492,12 @@ if [[ -z "${TMP_ROOT}" || ! -d "${TMP_ROOT}" ]]; then
   exit 2
 fi
 
+if [[ -n "${OUT_DIR}" ]]; then
+  OUT_DIR_ABS="${OUT_DIR:A}"
+  ARTIFACT_TMP_ROOT="${TMP_ROOT}/artifact"
+  mkdir -p "${ARTIFACT_TMP_ROOT}"
+fi
+
 typeset -i KEEP_TMP=0
 cleanup() {
   if [[ ${KEEP_TMP} -eq 0 ]]; then
@@ -329,6 +505,8 @@ cleanup() {
   fi
 }
 trap cleanup EXIT
+
+resolve_pnsolve_bin
 
 typeset -i checked=0
 typeset -i diff_count=0
@@ -362,6 +540,9 @@ else
     done < "${list_file}"
   done
 fi
+
+write_manifest
+publish_artifacts
 
 echo "checked=${checked} diff=${diff_count} missing_before=${missing_before} run_error=${run_error} jd_error=${jd_error}"
 
