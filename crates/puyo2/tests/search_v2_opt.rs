@@ -46,7 +46,7 @@ fn terminal_result_key(sr: &SearchResult) -> String {
     assert_callback_contract(sr);
     let result = sr.rensa_result.as_ref().unwrap();
     let bit_field = result.bit_field.as_ref().unwrap();
-    let m = bit_field.m;
+    let m = bit_field.matrix();
     format!(
         "{:x}:{:x}:{:x}:{:x}:{:x}:{:x}|c={}|s={}|e={}|q={}",
         m[0][0],

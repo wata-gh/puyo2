@@ -21,7 +21,7 @@ const SAME_COLOR_POSITIONS: [[usize; 2]; 11] = [
 
 impl SearchCondition {
     pub fn search_with_puyo_sets_v2(&mut self) {
-        let Some(bit_field) = self.bit_field.clone() else {
+        let Some(bit_field) = self.bit_field else {
             panic!("search_with_puyo_sets_v2 requires bit_field");
         };
         if self.puyo_sets.is_empty() {
@@ -117,7 +117,7 @@ fn search_position_v2(
             continue;
         }
 
-        let mut before_simulate = bit_field.clone();
+        let mut before_simulate = *bit_field;
         if !before_simulate.place_puyo_with_placement(&placement) {
             panic!("should be able to place. {placement:?}");
         }
@@ -136,7 +136,7 @@ fn search_position_v2(
 
         let mut rensa_result = simulate_for_node(
             runtime.simulate_policy,
-            &before_simulate,
+            before_simulate,
             is_terminal_depth,
             runtime.each_hand_callback.is_some(),
         );
@@ -242,21 +242,20 @@ fn search_position_v2(
 
 fn simulate_for_node(
     simulate_policy: SimulatePolicy,
-    bit_field: &BitField,
+    mut bit_field: BitField,
     terminal: bool,
     has_each_hand_callback: bool,
 ) -> RensaResult {
     let needs_detail = terminal || has_each_hand_callback;
-    let mut simulation_field = bit_field.clone_for_simulation();
     match simulate_policy {
         SimulatePolicy::FastAlways | SimulatePolicy::FastIntermediate => {
             if needs_detail {
-                simulation_field.simulate_detail()
+                bit_field.simulate_detail()
             } else {
-                simulation_field.simulate()
+                bit_field.simulate()
             }
         }
-        SimulatePolicy::DetailAlways => simulation_field.simulate_detail(),
+        SimulatePolicy::DetailAlways => bit_field.simulate_detail(),
     }
 }
 
@@ -287,7 +286,7 @@ fn mark_visited(
 }
 
 fn create_search_state_key(bit_field: &BitField, with_mirror: bool) -> SearchStateKey {
-    let mut matrix = bit_field.m;
+    let mut matrix = *bit_field.matrix();
     if with_mirror {
         let flip = mirror_bit_field_matrix(matrix);
         if less_bit_field_matrix(flip, matrix) {
@@ -337,7 +336,7 @@ fn color_table_signature(bit_field: &BitField) -> u32 {
     .into_iter()
     .enumerate()
     {
-        signature |= ((bit_field.table[color.idx()] as u32) & 0xf) << (index * 4);
+        signature |= ((bit_field.color_table()[color.idx()] as u32) & 0xf) << (index * 4);
     }
     signature
 }

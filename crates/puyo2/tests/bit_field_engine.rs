@@ -153,17 +153,27 @@ fn from_mattulwan_reads_purple() {
 }
 
 #[test]
-fn clone_does_not_share_table_and_colors() {
+fn register_color_keeps_original_copy_untouched() {
     let original = BitField::from_mattulwan("ba77");
-    let mut cloned = original.clone();
-    let old_table_color = original.table[Color::Red.idx()];
-    let old_color = original.colors[0];
+    let mut cloned = original;
 
-    cloned.table[Color::Red.idx()] = Color::Blue;
-    cloned.colors[0] = Color::Green;
+    cloned.register_color(Color::Blue);
 
-    assert_eq!(original.table[Color::Red.idx()], old_table_color);
-    assert_eq!(original.colors[0], old_color);
+    assert_eq!(original.color_table()[Color::Blue.idx()], Color::Empty);
+    assert!(!original.colors().contains(&Color::Blue));
+    assert_eq!(cloned.color_table()[Color::Blue.idx()], Color::Blue);
+    assert!(cloned.colors().contains(&Color::Blue));
+}
+
+#[test]
+fn colors_accessor_keeps_purple_mapping_order() {
+    let field = BitField::from_mattulwan(
+        "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaaaabfaaaadbdaabbffaa",
+    );
+    assert_eq!(
+        field.colors(),
+        &[Color::Red, Color::Blue, Color::Yellow, Color::Purple]
+    );
 }
 
 #[test]
@@ -278,4 +288,106 @@ fn place_puyo_drop_results_match_go() {
     field.drop_vanished(field.bits(Color::Empty).mask_field12());
     assert_bits_eq(field.bits(Color::Red), FieldBits::with_matrix([2 << 16, 0]));
     assert_bits_eq(field.bits(Color::Green), FieldBits::with_matrix([2, 0]));
+}
+
+#[test]
+fn drop_vanished_matches_reference_on_random_fields() {
+    let mut seed = 0x6c8e_9cf5_7093_2bd5u64;
+    for _ in 0..512 {
+        let field = random_field(&mut seed);
+        let vanished = field.find_vanishing_bits();
+
+        let mut actual = field;
+        actual.drop_vanished(vanished);
+
+        let expected = drop_vanished_reference(*field.matrix(), vanished);
+
+        assert_eq!(
+            actual.matrix(),
+            &expected,
+            "matrix mismatch: field={} vanished={:?}",
+            field.mattulwan_editor_param(),
+            vanished.to_int_array()
+        );
+        assert_eq!(actual.color_table(), field.color_table());
+        assert_eq!(actual.colors(), field.colors());
+    }
+}
+
+fn random_field(seed: &mut u64) -> BitField {
+    let palette = if next_u64(seed) & 1 == 0 {
+        [Color::Red, Color::Blue, Color::Yellow, Color::Green]
+    } else {
+        [Color::Red, Color::Blue, Color::Yellow, Color::Purple]
+    };
+    let mut field = BitField::from_mattulwan("a78");
+    for y in 1..=13 {
+        for x in 0..6 {
+            if next_u64(seed) % 10 >= 4 {
+                continue;
+            }
+            let color = if next_u64(seed) % 8 == 0 {
+                Color::Ojama
+            } else {
+                palette[(next_u64(seed) as usize) % palette.len()]
+            };
+            field.set_color(color, x, y);
+        }
+    }
+    field
+}
+
+fn next_u64(seed: &mut u64) -> u64 {
+    *seed = seed.wrapping_mul(6364136223846793005).wrapping_add(1);
+    *seed
+}
+
+fn drop_vanished_reference(mut matrix: [[u64; 2]; 3], vanished: FieldBits) -> [[u64; 2]; 3] {
+    let vanished_matrix = vanished.to_int_array();
+    let mut dropmask = [0u64; 2];
+    for x in 0..6 {
+        let idx = x >> 2;
+        let vc = vanished.col_bits(x).count_ones();
+        let rotated = (((1u64 << vc) - 1).rotate_left(14u32 - vc)) << ((x & 3) * 16);
+        dropmask[idx] |= rotated;
+    }
+    for plane in 0..matrix.len() {
+        let r0 = extract_reference(matrix[plane][0], !vanished_matrix[0]);
+        let r1 = extract_reference(matrix[plane][1], !vanished_matrix[1]);
+        matrix[plane][0] = deposit_reference(r0, !dropmask[0]);
+        matrix[plane][1] = deposit_reference(r1, !dropmask[1]);
+    }
+    matrix
+}
+
+fn extract_reference(x: u64, mut mask: u64) -> u64 {
+    let mut result = 0u64;
+    let mut next = 1u64;
+    loop {
+        let lsb = mask & mask.wrapping_neg();
+        if lsb == 0 {
+            return result;
+        }
+        mask ^= lsb;
+        if x & lsb != 0 {
+            result |= next;
+        }
+        next <<= 1;
+    }
+}
+
+fn deposit_reference(x: u64, mut mask: u64) -> u64 {
+    let mut result = 0u64;
+    let mut next = 1u64;
+    loop {
+        let lsb = mask & mask.wrapping_neg();
+        if lsb == 0 {
+            return result;
+        }
+        mask ^= lsb;
+        if x & next != 0 {
+            result |= lsb;
+        }
+        next <<= 1;
+    }
 }

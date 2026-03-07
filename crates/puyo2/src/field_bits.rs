@@ -40,6 +40,7 @@ impl FieldBits {
         self.m[idx] |= 1u64 << pos;
     }
 
+    #[inline]
     pub fn col_bits(&self, column: usize) -> u64 {
         match column {
             0 => self.m[0] & 0xffff,
@@ -52,6 +53,7 @@ impl FieldBits {
         }
     }
 
+    #[inline]
     pub fn shifted_col_bits(&self, column: usize) -> u64 {
         let mut col = self.col_bits(column);
         if column < 4 {
@@ -66,14 +68,17 @@ impl FieldBits {
         Self::with_matrix([self.m[0] & 0x3FFE3FFE3FFE3FFE, self.m[1] & 0x3FFE3FFE])
     }
 
+    #[inline]
     pub fn mask_field12(&self) -> Self {
         Self::with_matrix([self.m[0] & 0x1FFE1FFE1FFE1FFE, self.m[1] & 0x1FFE1FFE])
     }
 
+    #[inline]
     pub fn and(self, other: Self) -> Self {
         Self::with_matrix([self.m[0] & other.m[0], self.m[1] & other.m[1]])
     }
 
+    #[inline]
     pub fn or(self, other: Self) -> Self {
         Self::with_matrix([self.m[0] | other.m[0], self.m[1] | other.m[1]])
     }
@@ -87,6 +92,7 @@ impl FieldBits {
         self.m[1] &= !other.m[1];
     }
 
+    #[inline]
     pub fn popcount(&self) -> usize {
         self.m[0].count_ones() as usize + self.m[1].count_ones() as usize
     }

@@ -10,6 +10,7 @@ use crate::{
 };
 
 const BASIC_COLORS: [Color; 4] = [Color::Red, Color::Blue, Color::Yellow, Color::Green];
+const EMPTY_COLOR_SLOTS: [Color; 4] = [Color::Empty; 4];
 
 #[derive(Clone, Debug, Error, PartialEq, Eq)]
 pub enum BasicBitFieldError {
@@ -17,11 +18,12 @@ pub enum BasicBitFieldError {
     InvalidHaipuyo(#[from] HandParseError),
 }
 
-#[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub struct BitField {
-    pub m: [[u64; 2]; 3],
-    pub table: [Color; Color::COUNT],
-    pub colors: Vec<Color>,
+    m: [[u64; 2]; 3],
+    table: [Color; Color::COUNT],
+    colors: [Color; 4],
+    color_count: u8,
 }
 
 impl Default for BitField {
@@ -39,55 +41,43 @@ impl BitField {
         Self {
             m: [[0, 0], [0, 0], [0, 0]],
             table,
-            colors: BASIC_COLORS.to_vec(),
+            colors: BASIC_COLORS,
+            color_count: BASIC_COLORS.len() as u8,
         }
     }
 
     pub fn with_colors(colors: Vec<Color>) -> Self {
-        let has_purple = colors.contains(&Color::Purple);
-        let mut table = [Color::Empty; Color::COUNT];
-        if has_purple {
-            for color in BASIC_COLORS {
-                if colors.contains(&color) {
-                    table[color.idx()] = color;
-                }
-            }
-            for color in BASIC_COLORS {
-                if table[color.idx()] == Color::Empty {
-                    table[Color::Purple.idx()] = color;
-                    table[color.idx()] = Color::Purple;
-                    break;
-                }
-            }
-        } else {
-            for color in BASIC_COLORS {
-                table[color.idx()] = color;
-            }
+        if !colors.contains(&Color::Purple) {
+            return Self::new();
         }
+        let table = Self::build_table_from_registered(&colors);
         let mut field = Self {
             m: [[0, 0], [0, 0], [0, 0]],
             table,
-            colors: Vec::new(),
+            colors: EMPTY_COLOR_SLOTS,
+            color_count: 0,
         };
         field.reset_colors();
         field
     }
 
     pub fn with_table(table: [Color; Color::COUNT]) -> Self {
-        let mut field = Self {
-            m: [[0, 0], [0, 0], [0, 0]],
-            table,
-            colors: Vec::new(),
-        };
-        field.reset_colors();
-        field
-    }
-
-    pub fn with_table_and_colors(table: [Color; Color::COUNT], colors: Vec<Color>) -> Self {
+        let (colors, color_count) = Self::colors_from_table(table);
         Self {
             m: [[0, 0], [0, 0], [0, 0]],
             table,
             colors,
+            color_count,
+        }
+    }
+
+    pub fn with_table_and_colors(table: [Color; Color::COUNT], colors: Vec<Color>) -> Self {
+        let (colors, color_count) = Self::fill_color_slots(&colors);
+        Self {
+            m: [[0, 0], [0, 0], [0, 0]],
+            table,
+            colors,
+            color_count,
         }
     }
 
@@ -101,7 +91,8 @@ impl BitField {
         let mut bit_field = Self {
             m: [[0, 0], [0, 0], [0, 0]],
             table: [Color::Empty; Color::COUNT],
-            colors: Vec::new(),
+            colors: EMPTY_COLOR_SLOTS,
+            color_count: 0,
         };
         bit_field.build_colors_by_field_string(field);
         bit_field.set_mattulwan_param(field);
@@ -113,11 +104,30 @@ impl BitField {
         haipuyo: &str,
     ) -> Result<Self, BasicBitFieldError> {
         let mut bit_field = Self::from_mattulwan(field);
-        let table_colors = bit_field.table_colors(bit_field.table);
+        let table_colors = bit_field.colors;
+        let table_color_count = bit_field.color_count;
         let puyo_sets = haipuyo_to_puyo_sets(haipuyo)?;
-        let (_, colors) = bit_field.create_table_and_colors(&puyo_sets);
-        bit_field.merge_table_colors(table_colors, colors);
+        let (_, colors, color_count) = bit_field.create_table_and_colors(&puyo_sets);
+        bit_field.merge_table_colors(
+            &table_colors[..usize::from(table_color_count)],
+            &colors[..usize::from(color_count)],
+        );
         Ok(bit_field)
+    }
+
+    #[inline]
+    pub const fn matrix(&self) -> &[[u64; 2]; 3] {
+        &self.m
+    }
+
+    #[inline]
+    pub const fn color_table(&self) -> &[Color; Color::COUNT] {
+        &self.table
+    }
+
+    #[inline]
+    pub fn colors(&self) -> &[Color] {
+        &self.colors[..usize::from(self.color_count)]
     }
 
     fn color_bits(&self, color: Color) -> [u64; 3] {
@@ -152,18 +162,12 @@ impl BitField {
         if puyo.is_special() {
             return puyo;
         }
-        let has_table = BASIC_COLORS
-            .into_iter()
-            .chain(std::iter::once(Color::Purple))
-            .any(|color| self.table[color.idx()] != Color::Empty);
-        if !has_table {
-            return puyo;
-        }
         let converted = self.table[puyo.idx()];
         if converted == Color::Empty {
-            panic!("convert table can not convert color {puyo:?}");
+            puyo
+        } else {
+            converted
         }
-        converted
     }
 
     fn build_colors_by_field_string(&mut self, field: &str) {
@@ -224,77 +228,108 @@ impl BitField {
     fn create_table_and_colors(
         &self,
         puyo_sets: &[PuyoSet],
-    ) -> ([Color; Color::COUNT], Vec<Color>) {
-        let mut colors = Vec::new();
+    ) -> ([Color; Color::COUNT], [Color; 4], u8) {
         let mut table = [Color::Empty; Color::COUNT];
         for puyo_set in puyo_sets {
             table[puyo_set.axis.idx()] = puyo_set.axis;
             table[puyo_set.child.idx()] = puyo_set.child;
         }
         if table[Color::Purple.idx()] == Color::Purple {
-            let mut assigned = false;
             for color in BASIC_COLORS {
                 if table[color.idx()] == Color::Empty {
                     table[color.idx()] = Color::Purple;
                     table[Color::Purple.idx()] = color;
-                    assigned = true;
                     break;
-                }
-                colors.push(color);
-            }
-            if assigned {
-                colors.push(Color::Purple);
-            }
-        } else {
-            for color in BASIC_COLORS {
-                if table[color.idx()] != Color::Empty {
-                    colors.push(color);
                 }
             }
         }
-        (table, colors)
+        let (colors, color_count) = Self::colors_from_table(table);
+        (table, colors, color_count)
     }
 
-    fn merge_table_colors(&mut self, table_colors: Vec<Color>, mut colors: Vec<Color>) {
+    fn merge_table_colors(&mut self, table_colors: &[Color], colors: &[Color]) {
+        let mut combined = EMPTY_COLOR_SLOTS;
+        let mut color_count = 0u8;
+        for &color in colors {
+            Self::push_color_slot(&mut combined, &mut color_count, color);
+        }
         for color in table_colors {
-            if !colors.contains(&color) {
-                colors.push(color);
-            }
+            Self::push_color_slot(&mut combined, &mut color_count, *color);
         }
-        let mut new_table = [Color::Empty; Color::COUNT];
-        for color in &colors {
-            new_table[color.idx()] = *color;
-        }
-        if new_table[Color::Purple.idx()] == Color::Purple {
-            for color in BASIC_COLORS {
-                if new_table[color.idx()] == Color::Empty {
-                    new_table[color.idx()] = Color::Purple;
-                    new_table[Color::Purple.idx()] = color;
-                    break;
-                }
-            }
-        }
-        self.table = new_table;
-        self.reset_colors();
+        self.colors = combined;
+        self.color_count = color_count;
+        self.table = Self::build_table_from_registered(self.colors());
     }
 
     fn reset_colors(&mut self) {
-        self.colors = self.table_colors(self.table);
+        let (colors, color_count) = Self::colors_from_table(self.table);
+        self.colors = colors;
+        self.color_count = color_count;
     }
 
-    fn table_colors(&self, table: [Color; Color::COUNT]) -> Vec<Color> {
-        let mut colors = Vec::new();
+    fn colors_from_table(table: [Color; Color::COUNT]) -> ([Color; 4], u8) {
+        let mut colors = EMPTY_COLOR_SLOTS;
+        let mut color_count = 0u8;
         for color in BASIC_COLORS {
             let value = table[color.idx()];
             if value == Color::Purple {
-                colors.push(Color::Purple);
+                colors[usize::from(color_count)] = Color::Purple;
+                color_count += 1;
             } else if color == value {
-                colors.push(color);
+                colors[usize::from(color_count)] = color;
+                color_count += 1;
             }
         }
-        colors
+        (colors, color_count)
     }
 
+    fn fill_color_slots(colors: &[Color]) -> ([Color; 4], u8) {
+        let mut slots = EMPTY_COLOR_SLOTS;
+        let mut color_count = 0u8;
+        for &color in colors {
+            Self::push_color_slot(&mut slots, &mut color_count, color);
+        }
+        (slots, color_count)
+    }
+
+    fn push_color_slot(slots: &mut [Color; 4], color_count: &mut u8, color: Color) {
+        if color.is_special() || slots[..usize::from(*color_count)].contains(&color) {
+            return;
+        }
+        if usize::from(*color_count) >= slots.len() {
+            debug_assert!(false, "BitField can only register up to four colors");
+            return;
+        }
+        slots[usize::from(*color_count)] = color;
+        *color_count += 1;
+    }
+
+    fn build_table_from_registered(colors: &[Color]) -> [Color; Color::COUNT] {
+        let mut table = [Color::Empty; Color::COUNT];
+        for &color in colors {
+            if color.is_special() {
+                continue;
+            }
+            table[color.idx()] = color;
+        }
+        if table[Color::Purple.idx()] == Color::Purple {
+            for color in BASIC_COLORS {
+                if table[color.idx()] == Color::Empty {
+                    table[color.idx()] = Color::Purple;
+                    table[Color::Purple.idx()] = color;
+                    break;
+                }
+            }
+        }
+        table
+    }
+
+    pub fn register_color(&mut self, color: Color) {
+        Self::push_color_slot(&mut self.colors, &mut self.color_count, color);
+        self.table = Self::build_table_from_registered(self.colors());
+    }
+
+    #[inline]
     pub fn bits(&self, color: Color) -> FieldBits {
         match self.convert_color(color) {
             Color::Empty => FieldBits::with_matrix([
@@ -333,14 +368,12 @@ impl BitField {
         }
     }
 
+    #[inline]
     pub fn clone_for_simulation(&self) -> Self {
-        Self {
-            m: self.m,
-            table: self.table,
-            colors: self.colors.clone(),
-        }
+        *self
     }
 
+    #[inline]
     pub fn color(&self, x: usize, y: usize) -> Color {
         let idx = x >> 2;
         let pos = (x & 3) * 16 + y;
@@ -351,18 +384,19 @@ impl BitField {
     }
 
     pub fn drop_vanished(&mut self, vanished: FieldBits) {
-        let mut dropmask = [0u64; 2];
         for x in 0..6 {
             let idx = x >> 2;
-            let vc = vanished.col_bits(x).count_ones();
-            let rotated = (((1u64 << vc) - 1).rotate_left(14u32 - vc)) << ((x & 3) * 16);
-            dropmask[idx] |= rotated;
-        }
-        for plane in 0..self.m.len() {
-            let r0 = extract(self.m[plane][0], !vanished.m[0]);
-            let r1 = extract(self.m[plane][1], !vanished.m[1]);
-            self.m[plane][0] = deposit(r0, !dropmask[0]);
-            self.m[plane][1] = deposit(r1, !dropmask[1]);
+            let shift = ((x & 3) * 16) as u32;
+            let lane_mask = 0xffffu64 << shift;
+            let vanished_lane = ((vanished.m[idx] >> shift) & 0xffff) as u16;
+            if vanished_lane == 0 {
+                continue;
+            }
+            for plane in 0..self.m.len() {
+                let lane = ((self.m[plane][idx] >> shift) & 0xffff) as u16;
+                let compacted = compact_lane(lane, vanished_lane) as u64;
+                self.m[plane][idx] = (self.m[plane][idx] & !lane_mask) | (compacted << shift);
+            }
         }
     }
 
@@ -386,15 +420,15 @@ impl BitField {
 
     pub fn find_vanishing_bits(&self) -> FieldBits {
         let mut vanished = FieldBits::new();
-        for color in &self.colors {
-            vanished = vanished.or(self.bits(*color).mask_field12().find_vanishing_bits());
+        for &color in self.colors() {
+            vanished = vanished.or(self.bits(color).mask_field12().find_vanishing_bits());
         }
         let ojama = vanished.expand1(self.bits(Color::Ojama));
         vanished.or(ojama)
     }
 
     pub fn rensa_will_occur(&self) -> bool {
-        for &color in &self.colors {
+        for &color in self.colors() {
             if self.bits(color).mask_field12().has_vanishing_bits() {
                 return true;
             }
@@ -426,7 +460,7 @@ impl BitField {
     }
 
     pub fn mask_field(&self, mask: &FieldBits) -> Self {
-        let mut masked = self.clone();
+        let mut masked = *self;
         for plane in 0..3 {
             masked.m[plane][0] &= mask.m[0];
             masked.m[plane][1] &= mask.m[1];
@@ -481,8 +515,8 @@ impl BitField {
 
     pub fn overall_shape(&self) -> FieldBits {
         let mut shape = FieldBits::new();
-        for color in &self.colors {
-            shape = shape.or(self.bits(*color));
+        for &color in self.colors() {
+            shape = shape.or(self.bits(color));
         }
         shape.or(self.bits(Color::Ojama)).or(self.bits(Color::Iron))
     }
@@ -527,23 +561,7 @@ impl BitField {
     }
 
     pub fn set_color(&mut self, color: Color, x: usize, y: usize) {
-        if self.colors.len() < 4 && !color.is_special() {
-            let found = self.colors.contains(&color);
-            if !found {
-                self.colors.push(color);
-                if color == Color::Purple {
-                    for basic in BASIC_COLORS {
-                        if self.table[basic.idx()] == Color::Empty {
-                            self.table[basic.idx()] = Color::Purple;
-                            self.table[Color::Purple.idx()] = basic;
-                            break;
-                        }
-                    }
-                } else {
-                    self.table[color.idx()] = color;
-                }
-            }
-        }
+        self.register_color(color);
         let encoded = self.color_bits(self.convert_color(color));
         let pos = (x & 3) * 16 + y;
         let idx = x >> 2;
@@ -560,6 +578,7 @@ impl BitField {
     }
 
     pub fn set_color_with_field_bits(&mut self, color: Color, bits: FieldBits) {
+        self.register_color(color);
         let encoded = self.color_bits(self.convert_color(color));
         let mask = [!bits.m[0], !bits.m[1]];
         for (plane, bit) in encoded.iter().enumerate() {
@@ -613,7 +632,7 @@ impl BitField {
                 erased_puyos: Vec::new(),
             };
 
-            for &color in &self.colors {
+            for &color in self.colors() {
                 let vb = self.bits(color).mask_field12().find_vanishing_bits();
                 if !vb.is_empty() {
                     num_colors += 1;
@@ -686,7 +705,7 @@ impl BitField {
     }
 
     pub fn to_chain_shapes(&self) -> Vec<FieldBits> {
-        let mut cloned = self.clone();
+        let mut cloned = *self;
         let mut shapes = Vec::new();
         loop {
             let vanished = cloned.find_vanishing_bits();
@@ -960,34 +979,14 @@ impl fmt::Display for BitField {
     }
 }
 
-fn extract(x: u64, mut mask: u64) -> u64 {
-    let mut result = 0u64;
-    let mut next = 1u64;
-    loop {
-        let lsb = mask & mask.wrapping_neg();
-        if lsb == 0 {
-            return result;
-        }
-        mask ^= lsb;
-        if x & lsb != 0 {
-            result |= next;
-        }
-        next <<= 1;
+fn compact_lane(lane: u16, vanished: u16) -> u16 {
+    let mut compacted = 0u16;
+    let mut dst = 0u16;
+    for src in 0..16 {
+        let keep = (((vanished >> src) & 1) ^ 1) as u16;
+        let bit = ((lane >> src) & 1) & keep;
+        compacted |= bit << dst;
+        dst += keep;
     }
-}
-
-fn deposit(x: u64, mut mask: u64) -> u64 {
-    let mut result = 0u64;
-    let mut next = 1u64;
-    loop {
-        let lsb = mask & mask.wrapping_neg();
-        if lsb == 0 {
-            return result;
-        }
-        mask ^= lsb;
-        if x & next != 0 {
-            result |= lsb;
-        }
-        next <<= 1;
-    }
+    compacted
 }
