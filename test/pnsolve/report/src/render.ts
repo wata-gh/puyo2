@@ -17,6 +17,7 @@ function renderLayout(title: string, body: string): string {
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#16181d" />
     <title>${escapeHtml(title)}</title>
     <link rel="stylesheet" href="/static/styles.css" />
   </head>
