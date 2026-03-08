@@ -9,14 +9,15 @@
     "text": "4色同時に消す"
   },
   "status": "ok",
-  "searched": 2454665,
+  "searched": 2574657,
   "matched": 1,
+  "elapsedMs": 159,
   "solutions": [
     {
       "hands": "rg23gg50ry22gb42rb32",
       "chains": 6,
       "score": 25820,
-      "clear": true,
+      "clear": false,
       "initialField": "aaaaaaaaaaaaaaaaaaaaaaaeaeaaaeddbaabdbdaedbebbcbbcccbbeeceedecbcddbbcebbcceebc",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaeaaaaacaaaa"
     }

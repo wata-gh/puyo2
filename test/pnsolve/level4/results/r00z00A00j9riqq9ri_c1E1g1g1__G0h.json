@@ -9,14 +9,15 @@
     "text": "ぷよ17個同時に消す"
   },
   "status": "ok",
-  "searched": 234128,
+  "searched": 245282,
   "matched": 3,
+  "elapsedMs": 15,
   "solutions": [
     {
       "hands": "rg22by22bg40bg43",
       "chains": 2,
       "score": 3780,
-      "clear": true,
+      "clear": false,
       "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaaccdaaadcbaaaddeaaaecbeaaeecbaabbccca",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacbaaa"
     },
@@ -24,7 +25,7 @@
       "hands": "rg22by22bg43bg42",
       "chains": 3,
       "score": 5520,
-      "clear": true,
+      "clear": false,
       "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaaccdaaadcbaaaddeeaaecbbcaeeceeebbccee",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacbaaa"
     },
@@ -32,7 +33,7 @@
       "hands": "rg22by22bg53bg43",
       "chains": 2,
       "score": 3780,
-      "clear": true,
+      "clear": false,
       "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaaccdaaadcbaaaddeaaaecbeaaeecbaabbccca",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacbaaa"
     }

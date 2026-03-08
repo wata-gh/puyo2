@@ -9,14 +9,15 @@
     "text": "9連鎖する"
   },
   "status": "ok",
-  "searched": 2575052,
+  "searched": 2703334,
   "matched": 1,
+  "elapsedMs": 151,
   "solutions": [
     {
       "hands": "gb30gr22by00yy21gy10",
       "chains": 9,
       "score": 27880,
-      "clear": true,
+      "clear": false,
       "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaddaaaaecaaddbeaaceedeedeecccccbbdecddbdddbbeee",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbaaa"
     }

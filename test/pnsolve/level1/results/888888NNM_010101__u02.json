@@ -9,8 +9,9 @@
     "text": "2連鎖する"
   },
   "status": "ok",
-  "searched": 1331,
+  "searched": 1463,
   "matched": 4,
+  "elapsedMs": 0,
   "solutions": [
     {
       "hands": "rr20rr41rr11",
@@ -24,7 +25,7 @@
       "hands": "rr20rr41rr20",
       "chains": 2,
       "score": 360,
-      "clear": true,
+      "clear": false,
       "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaababaaababababagbbbgb",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaaaabaaaaa"
     },
@@ -40,7 +41,7 @@
       "hands": "rr41rr20rr20",
       "chains": 2,
       "score": 360,
-      "clear": true,
+      "clear": false,
       "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaababaaababababagbbbgb",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaaaabaaaaa"
     }

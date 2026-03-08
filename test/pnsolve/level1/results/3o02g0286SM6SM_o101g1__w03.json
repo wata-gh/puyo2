@@ -9,8 +9,9 @@
     "text": "3連鎖＆ぷよ全て消す"
   },
   "status": "ok",
-  "searched": 5324,
+  "searched": 5588,
   "matched": 1,
+  "elapsedMs": 2,
   "solutions": [
     {
       "hands": "rb10rr21bg22",

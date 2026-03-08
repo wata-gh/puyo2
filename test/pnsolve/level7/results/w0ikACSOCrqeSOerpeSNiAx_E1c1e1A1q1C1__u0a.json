@@ -9,14 +9,15 @@
     "text": "10連鎖する"
   },
   "status": "ok",
-  "searched": 50851037,
+  "searched": 53388523,
   "matched": 1,
+  "elapsedMs": 3142,
   "solutions": [
     {
       "hands": "by10rg12gg20ry50gb41gy00",
       "chains": 10,
       "score": 36840,
-      "clear": true,
+      "clear": false,
       "initialField": "aaaaaaaaaaaaabaaaaaeeaacddeaadecdaebeeeddddggggedgcccebggggebgcccbbggggbeedddb",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaeaaaa"
     }

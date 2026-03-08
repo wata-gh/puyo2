@@ -9,14 +9,15 @@
     "text": "12連鎖以上する"
   },
   "status": "ok",
-  "searched": 6660,
+  "searched": 7179,
   "matched": 3,
+  "elapsedMs": 2,
   "solutions": [
     {
       "hands": "bg21by32by10",
       "chains": 12,
       "score": 80150,
-      "clear": true,
+      "clear": false,
       "initialField": "aaacaaadadaabccecaccecddcedeccbbbecdcddbbdcdeeebcedbbedcebebddbceecccbbbbbbeee",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaadadaaac"
     },
@@ -24,7 +25,7 @@
       "hands": "bg21by32by11",
       "chains": 12,
       "score": 82810,
-      "clear": true,
+      "clear": false,
       "initialField": "aaacaaaaddaabccecaccecddcedeccbbbecdcddbbdcdeeebcedbbedcebebddbceecccbbbbbbeee",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaadaaaaac"
     },
@@ -32,7 +33,7 @@
       "hands": "bg21by32by13",
       "chains": 12,
       "score": 80150,
-      "clear": true,
+      "clear": false,
       "initialField": "aaacaadaadaabccecaccecddcedeccbbbecdcddbbdcdeeebcedbbedcebebddbceecccbbbbbbeee",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaddaaaac"
     }

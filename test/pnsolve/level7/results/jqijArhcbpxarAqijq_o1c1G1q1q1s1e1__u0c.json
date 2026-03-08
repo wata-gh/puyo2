@@ -9,14 +9,15 @@
     "text": "12連鎖する"
   },
   "status": "ok",
-  "searched": 299761338,
+  "searched": 330254993,
   "matched": 4,
+  "elapsedMs": 20548,
   "solutions": [
     {
       "hands": "rb32rg32yy21gb10gb20bb41gg01",
       "chains": 12,
       "score": 58660,
-      "clear": true,
+      "clear": false,
       "initialField": "aaaaaaaaaaaaaaadaaaaabaaaeceaaacebaaeedcccecceeeecddccebbdbccbdbbeccddceeeecce",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaca"
     },
@@ -32,7 +33,7 @@
       "hands": "rb32rg32yy21gb20gb10bb41gg01",
       "chains": 12,
       "score": 58660,
-      "clear": true,
+      "clear": false,
       "initialField": "aaaaaaaaaaaaaaadaaaaabaaaeceaaacebaaeedcccecceeeecddccebbdbccbdbbeccddceeeecce",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaca"
     },

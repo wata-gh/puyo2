@@ -37,6 +37,7 @@ async function createSampleArtifact(): Promise<string> {
     haipuyo: "rg",
     condition: { q0: 2, q1: 0, q2: 2, text: "2連鎖する" },
     status: "ok",
+    elapsedMs: 12,
     searched: 10,
     matched: 1,
     solutions: [
@@ -44,6 +45,7 @@ async function createSampleArtifact(): Promise<string> {
         hands: "rg12",
         chains: 2,
         score: 360,
+        clear: true,
         initialField: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
         finalField: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
       },
@@ -52,17 +54,17 @@ async function createSampleArtifact(): Promise<string> {
 
   const beforeNormalized = {
     ...beforeRaw,
-    searched: undefined,
     solutions: beforeRaw.solutions,
   };
-  delete (beforeNormalized as Record<string, unknown>).searched;
+  delete (beforeNormalized as Record<string, unknown>).elapsedMs;
 
-  const afterRawMatch = structuredClone(beforeRaw);
+  const afterRawMatch = { ...structuredClone(beforeRaw), elapsedMs: 24 };
   const afterNormalizedMatch = structuredClone(beforeNormalized);
 
   const afterRawDiff = {
     ...beforeRaw,
     input: diffParam,
+    elapsedMs: 36,
     matched: 2,
     solutions: [
       ...beforeRaw.solutions,
@@ -70,19 +72,20 @@ async function createSampleArtifact(): Promise<string> {
         hands: "by30",
         chains: 3,
         score: 720,
+        clear: false,
         initialField: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
         finalField: "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
       },
     ],
   };
   const afterNormalizedDiff = structuredClone(afterRawDiff);
-  delete (afterNormalizedDiff as Record<string, unknown>).searched;
+  delete (afterNormalizedDiff as Record<string, unknown>).elapsedMs;
 
   const manifest = {
     formatVersion: 1,
     createdAt: "2026-03-07T00:00:00Z",
     repoRoot,
-    normalizedFilter: 'del(.searched) | (if has("solutions") then .solutions |= map(del(.clear)) else . end)',
+    normalizedFilter: "del(.elapsedMs)",
     executedLevels: ["level1", "level2"],
     singleMode: false,
     binPath: path.join(repoRoot, "target/debug/pnsolve"),

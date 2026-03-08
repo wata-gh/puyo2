@@ -9,14 +9,15 @@
     "text": "5連鎖する"
   },
   "status": "ok",
-  "searched": 484,
+  "searched": 506,
   "matched": 2,
+  "elapsedMs": 0,
   "solutions": [
     {
       "hands": "gb00yb40",
       "chains": 5,
       "score": 4840,
-      "clear": true,
+      "clear": false,
       "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaeaaaaaeaaaaaeaaacadaaaeddaaacecdcaccecddgeccdd",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaeaaaaaeaaacaeaaa"
     },
@@ -24,7 +25,7 @@
       "hands": "gb01yb40",
       "chains": 5,
       "score": 4840,
-      "clear": true,
+      "clear": false,
       "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaeaaaaaeaaaaaeaaaacdaaaeddaaacecdcaccecddgeccdd",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaeaaaaaeaaaaceaaa"
     }

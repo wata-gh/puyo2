@@ -9,14 +9,15 @@
     "text": "10連鎖する"
   },
   "status": "ok",
-  "searched": 4747307,
+  "searched": 4981307,
   "matched": 7,
+  "elapsedMs": 320,
   "solutions": [
     {
       "hands": "yg42br30bg00yr43rg22",
       "chains": 10,
       "score": 36840,
-      "clear": true,
+      "clear": false,
       "initialField": "aaaaaaaaaaaaaaaaaaeabbaacbebdabbecdageedeagcddbgccebbegeedeeggddbggggbbcggggcc",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaggaaaaggaaaa"
     },
@@ -24,7 +25,7 @@
       "hands": "yg42br30bg01yr43rg22",
       "chains": 10,
       "score": 36840,
-      "clear": true,
+      "clear": false,
       "initialField": "aaaaaaaaaaaaaaaaaaaebbaacbebdabbecdageedeagcddbgccebbegeedeeggddbggggbbcggggcc",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaagaaaaaggaaaaggaaaa"
     },
@@ -32,7 +33,7 @@
       "hands": "yg42br30bg02yr43rg13",
       "chains": 10,
       "score": 36840,
-      "clear": true,
+      "clear": false,
       "initialField": "aaaaaaaaaaaaeaaaaacbabaaebabdabbecdageedeagcddbgccebbegeedeeggddbggggbbcggggcc",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaggaaaaggaaaa"
     },
@@ -40,7 +41,7 @@
       "hands": "yg42br30bg10yr43rg00",
       "chains": 10,
       "score": 36840,
-      "clear": true,
+      "clear": false,
       "initialField": "aaaaaaaaaaaaaeaaaaecabaabbabdabbecdageedeagcddbgccebbegeedeeggddbggggbbcggggcc",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaagaaaaaggaaaaggaaaa"
     },
@@ -48,7 +49,7 @@
       "hands": "yg42br30bg10yr43rg22",
       "chains": 10,
       "score": 36840,
-      "clear": true,
+      "clear": false,
       "initialField": "aaaaaaaaaaaaaeaaaaacbbaaabebdabbecdageedeagcddbgccebbegeedeeggddbggggbbcggggcc",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaagaaaaaggaaaaggaaaa"
     },
@@ -56,7 +57,7 @@
       "hands": "yg42br30bg12yr43rg01",
       "chains": 10,
       "score": 36840,
-      "clear": true,
+      "clear": false,
       "initialField": "aaaaaaaeaaaaacaaaaaeabaabbabdabbecdageedeagcddbgccebbegeedeeggddbggggbbcggggcc",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaagaaaaaggaaaaggaaaa"
     },
@@ -64,7 +65,7 @@
       "hands": "yg42br30bg13yr43rg22",
       "chains": 10,
       "score": 36840,
-      "clear": true,
+      "clear": false,
       "initialField": "aaaaaaaaaaaaaaaaaaacbbaaebebdabbecdageedeagcddbgccebbegeedeeggddbggggbbcggggcc",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaggaaaaggaaaa"
     }

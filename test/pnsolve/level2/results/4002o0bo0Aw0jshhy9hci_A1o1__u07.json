@@ -9,14 +9,15 @@
     "text": "7連鎖する"
   },
   "status": "ok",
-  "searched": 484,
+  "searched": 506,
   "matched": 2,
+  "elapsedMs": 0,
   "solutions": [
     {
       "hands": "ry30rb50",
       "chains": 7,
       "score": 14220,
-      "clear": true,
+      "clear": false,
       "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaadaaaaaecaaabccdacdddbabeccdebebdebbebbdee",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabac"
     },
@@ -24,7 +25,7 @@
       "hands": "ry30rb53",
       "chains": 7,
       "score": 14220,
-      "clear": true,
+      "clear": false,
       "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaadaaaaaecaaabccdaadddbcbeccdebebdebbebbdee",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabca"
     }

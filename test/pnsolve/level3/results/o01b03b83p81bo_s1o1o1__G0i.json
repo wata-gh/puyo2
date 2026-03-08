@@ -9,8 +9,9 @@
     "text": "ぷよ18個同時に消す"
   },
   "status": "ok",
-  "searched": 5324,
+  "searched": 5577,
   "matched": 1,
+  "elapsedMs": 2,
   "solutions": [
     {
       "hands": "bb41rb01rb01",

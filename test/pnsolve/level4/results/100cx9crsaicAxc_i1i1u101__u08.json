@@ -9,14 +9,15 @@
     "text": "8連鎖する"
   },
   "status": "ok",
-  "searched": 117128,
+  "searched": 128282,
   "matched": 4,
+  "elapsedMs": 10,
   "solutions": [
     {
       "hands": "yg00yg32yb50rr41",
       "chains": 8,
       "score": 20200,
-      "clear": true,
+      "clear": false,
       "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabeaadacdbaebdbddbbbbdcccdbeeebddddbbd",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaeaa"
     },
@@ -24,7 +25,7 @@
       "hands": "yg01yg32yb50rr41",
       "chains": 8,
       "score": 20200,
-      "clear": true,
+      "clear": false,
       "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaeadacdbaebdbddbbbbdcccdbeeebddddbbd",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaeaa"
     },
@@ -32,7 +33,7 @@
       "hands": "yg32yg00yb50rr41",
       "chains": 8,
       "score": 20200,
-      "clear": true,
+      "clear": false,
       "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabeaadacdbaebdbddbbbbdcccdbeeebddddbbd",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaeaa"
     },
@@ -40,7 +41,7 @@
       "hands": "yg32yg01yb50rr41",
       "chains": 8,
       "score": 20200,
-      "clear": true,
+      "clear": false,
       "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaeadacdbaebdbddbbbbdcccdbeeebddddbbd",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaeaa"
     }

@@ -3,7 +3,7 @@
 setopt pipefail
 setopt nounset
 
-readonly NORMALIZE_FILTER='del(.searched) | (if has("solutions") then .solutions |= map(del(.clear)) else . end)'
+readonly NORMALIZE_FILTER='del(.elapsedMs)'
 readonly ARTIFACT_FORMAT_VERSION=1
 
 usage() {

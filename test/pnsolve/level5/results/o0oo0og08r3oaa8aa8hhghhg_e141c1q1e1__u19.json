@@ -9,14 +9,15 @@
     "text": "9連鎖する"
   },
   "status": "ok",
-  "searched": 1241269,
+  "searched": 1361990,
   "matched": 9,
+  "elapsedMs": 85,
   "solutions": [
     {
       "hands": "gg11br01rg10gb11gg50",
       "chains": 9,
       "score": 28620,
-      "clear": true,
+      "clear": false,
       "initialField": "aaaaaaaaaaaaaaaaaaaeaaaaceaaaacbaacacbaacaeecabacceccabebebabebebaebebeeebebee",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaaaacaaaaaba"
     },
@@ -24,7 +25,7 @@
       "hands": "gg11br01rg10gb22gg50",
       "chains": 9,
       "score": 28620,
-      "clear": true,
+      "clear": false,
       "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaceaaaacbaacacbeacaeecabacceccabebebabebebaebebeeebebee",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaaaacaaaaaba"
     },
@@ -32,7 +33,7 @@
       "hands": "gg11br23rg10gb10gg50",
       "chains": 9,
       "score": 28620,
-      "clear": true,
+      "clear": false,
       "initialField": "aaaaaaaaaaaaacaaaaaeaaaaaeaaaacbaacacbaacaeecabacceccabebebabebebaebebeeebebee",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaaaacaaaaaba"
     },
@@ -40,7 +41,7 @@
       "hands": "gg11br23rg10gb13gg50",
       "chains": 9,
       "score": 28620,
-      "clear": true,
+      "clear": false,
       "initialField": "aaaaaaaaaaaaaaaaaaaeaaaaceaaaacbaacacbaacaeecabacceccabebebabebebaebebeeebebee",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaaaacaaaaaba"
     },
@@ -48,7 +49,7 @@
       "hands": "gg11br23rg10gb23gg50",
       "chains": 9,
       "score": 28620,
-      "clear": true,
+      "clear": false,
       "initialField": "aaaaaaaaaaaaaaaaaaacaaaaaeaaaacbaacacbeacaeecabacceccabebebabebebaebebeeebebee",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaaaacaaaaaba"
     },
@@ -56,7 +57,7 @@
       "hands": "gg11br23rg11gb10gg50",
       "chains": 9,
       "score": 28620,
-      "clear": true,
+      "clear": false,
       "initialField": "aaaaaaaaaaaaaaaaaaacaaaaaeaaaacbaacacbeacaeecabacceccabebebabebebaebebeeebebee",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaaaacaaaaaba"
     },
@@ -64,7 +65,7 @@
       "hands": "gg11br23rg11gb13gg50",
       "chains": 9,
       "score": 28620,
-      "clear": true,
+      "clear": false,
       "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaceaaaacbaacacbeacaeecabacceccabebebabebebaebebeeebebee",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaaaacaaaaaba"
     },
@@ -72,7 +73,7 @@
       "hands": "gg11br23rg22gb10gg50",
       "chains": 9,
       "score": 28620,
-      "clear": true,
+      "clear": false,
       "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaacaaaacebacacbeacaeecabacceccabebebabebebaebebeeebebee",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaaaacaaaaaba"
     },
@@ -80,7 +81,7 @@
       "hands": "gg11br23rg22gb13gg50",
       "chains": 9,
       "score": 28620,
-      "clear": true,
+      "clear": false,
       "initialField": "aaaaaaaaaaaaaaaaaaaaaaaacaaaaacebacacbeacaeecabacceccabebebabebebaebebeeebebee",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaaaacaaaaaba"
     }

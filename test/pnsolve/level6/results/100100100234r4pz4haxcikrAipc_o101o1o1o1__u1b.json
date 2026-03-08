@@ -9,14 +9,15 @@
     "text": "11連鎖する"
   },
   "status": "ok",
-  "searched": 2535997,
+  "searched": 2657772,
   "matched": 1,
+  "elapsedMs": 148,
   "solutions": [
     {
       "hands": "rb10rr10rb22rb22rb31",
       "chains": 11,
       "score": 47500,
-      "clear": true,
+      "clear": false,
       "initialField": "aaaaaaaaaaaaaaaaaaabaaababbaabaccaababbbceaccdccadcbdcadebbedbbdeeedccddeecbbd",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaadaa"
     }
