@@ -1,0 +1,259 @@
+#!/bin/zsh
+
+setopt pipefail
+setopt nounset
+
+usage() {
+  cat <<'USAGE'
+Usage:
+  test/pnsolve/elapsed
+  test/pnsolve/elapsed level1 [level2 ...]
+  test/pnsolve/elapsed -artifacts DIR [level1 ...]
+
+Options:
+  -artifacts <DIR>  Use an artifact root other than test/pnsolve/artifacts/latest.
+  -h, --help        Show this help.
+
+Description:
+  Print matched baseline/artifact elapsedMs pairs for the same level and param.
+  Output format:
+    level  param  baselineMs  artifactMs
+USAGE
+}
+
+validate_level_name() {
+  local level="$1"
+  [[ "${level}" =~ '^level[0-9]+$' ]]
+}
+
+require_command() {
+  local cmd="$1"
+  if ! command -v "${cmd}" >/dev/null 2>&1; then
+    echo "error: required command not found: ${cmd}" >&2
+    exit 2
+  fi
+}
+
+resolve_level_dir() {
+  local level="$1"
+  local candidate="${SCRIPT_DIR}/${level}"
+
+  if ! validate_level_name "${level}"; then
+    echo "error: invalid level name: ${level}" >&2
+    exit 2
+  fi
+
+  if [[ ! -d "${candidate}" || ! -d "${candidate}/results" ]]; then
+    echo "error: baseline level directory not found: ${candidate}" >&2
+    exit 2
+  fi
+
+  print -r -- "${candidate:A}"
+}
+
+resolve_default_levels() {
+  local -a level_dirs
+  level_dirs=("${SCRIPT_DIR}"/level<->(/N))
+
+  if [[ ${#level_dirs[@]} -eq 0 ]]; then
+    echo "error: no baseline levels found under ${SCRIPT_DIR}" >&2
+    exit 2
+  fi
+
+  local level_dir=""
+  for level_dir in "${level_dirs[@]}"; do
+    LEVELS+=("${level_dir:t}")
+  done
+}
+
+extract_result_row() {
+  local level="$1"
+  local file="$2"
+  local source_name="$3"
+  local parsed
+
+  if ! parsed=$(jq -r '
+    if (.input? != null and .elapsedMs? != null) then
+      [.input, (.elapsedMs | tostring)] | @tsv
+    else
+      ""
+    end
+  ' "${file}"); then
+    echo "error: failed to parse ${source_name}: ${file}" >&2
+    exit 2
+  fi
+
+  if [[ -z "${parsed}" ]]; then
+    return 1
+  fi
+
+  local param="${parsed%%$'\t'*}"
+  local elapsed="${parsed#*$'\t'}"
+  print -r -- "${level}"$'\t'"${param}"$'\t'"${elapsed}"
+}
+
+collect_baseline_rows() {
+  local output_file="$1"
+  : > "${output_file}"
+
+  local level=""
+  for level in "${LEVELS[@]}"; do
+    local level_dir=""
+    level_dir=$(resolve_level_dir "${level}")
+    local -a files
+    files=("${level_dir}/results"/*.json(N))
+
+    local file=""
+    for file in "${files[@]}"; do
+      if extract_result_row "${level}" "${file}" "baseline" >> "${output_file}"; then
+        :
+      fi
+    done
+  done
+}
+
+collect_artifact_rows() {
+  local output_file="$1"
+  : > "${output_file}"
+
+  if [[ ! -d "${ARTIFACT_ROOT}" ]]; then
+    echo "error: artifact root not found: ${ARTIFACT_ROOT}" >&2
+    exit 2
+  fi
+
+  local level=""
+  for level in "${LEVELS[@]}"; do
+    local case_root="${ARTIFACT_ROOT}/levels/${level}/cases"
+    local -a files
+    files=("${case_root}"/*/after.raw.json(N))
+
+    local file=""
+    for file in "${files[@]}"; do
+      if extract_result_row "${level}" "${file}" "artifact" >> "${output_file}"; then
+        :
+      fi
+    done
+  done
+}
+
+SCRIPT_DIR=${0:A:h}
+REPO_ROOT=${SCRIPT_DIR:h:h}
+
+if [[ ! -f "${REPO_ROOT}/Cargo.toml" ]]; then
+  echo "error: repository root not found from script path: ${REPO_ROOT}" >&2
+  exit 2
+fi
+
+require_command jq
+require_command awk
+require_command sort
+
+ARTIFACT_ROOT="${SCRIPT_DIR}/artifacts/latest"
+typeset -a LEVELS=()
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    -h|--help)
+      usage
+      exit 0
+      ;;
+    -artifacts)
+      if [[ $# -lt 2 ]]; then
+        echo "error: -artifacts requires a value" >&2
+        usage >&2
+        exit 2
+      fi
+      ARTIFACT_ROOT="${2:A}"
+      shift 2
+      ;;
+    -*)
+      echo "error: unknown option: $1" >&2
+      usage >&2
+      exit 2
+      ;;
+    *)
+      if ! validate_level_name "$1"; then
+        echo "error: invalid level name: $1" >&2
+        usage >&2
+        exit 2
+      fi
+      LEVELS+=("$1")
+      shift
+      ;;
+  esac
+done
+
+if [[ ${#LEVELS[@]} -eq 0 ]]; then
+  resolve_default_levels
+fi
+
+baseline_rows=$(mktemp "${TMPDIR:-/tmp}/pnsolve-elapsed-baseline.XXXXXX")
+artifact_rows=$(mktemp "${TMPDIR:-/tmp}/pnsolve-elapsed-artifact.XXXXXX")
+output_rows=$(mktemp "${TMPDIR:-/tmp}/pnsolve-elapsed-output.XXXXXX")
+
+cleanup() {
+  rm -f "${baseline_rows}" "${artifact_rows}" "${output_rows}"
+}
+trap cleanup EXIT
+
+collect_baseline_rows "${baseline_rows}"
+collect_artifact_rows "${artifact_rows}"
+
+awk -F '\t' '
+  NR == FNR {
+    artifact[$1 SUBSEP $2] = $3
+    next
+  }
+  (($1 SUBSEP $2) in artifact) {
+    print $1 "\t" $2 "\t" $3 "\t" artifact[$1 SUBSEP $2]
+  }
+' "${artifact_rows}" "${baseline_rows}" \
+  | sort -t $'\t' -k1,1 -k2,2 > "${output_rows}"
+
+awk -F '\t' '
+  BEGIN {
+    header_level = "level"
+    header_param = "param"
+    header_base = "baselineMs"
+    header_artifact = "artifactMs"
+
+    level_width = length(header_level)
+    param_width = length(header_param)
+    base_width = length(header_base)
+    artifact_width = length(header_artifact)
+  }
+  {
+    levels[NR] = $1
+    params[NR] = $2
+    bases[NR] = $3
+    artifacts[NR] = $4
+
+    if (length($1) > level_width) {
+      level_width = length($1)
+    }
+    if (length($2) > param_width) {
+      param_width = length($2)
+    }
+    if (length($3) > base_width) {
+      base_width = length($3)
+    }
+    if (length($4) > artifact_width) {
+      artifact_width = length($4)
+    }
+  }
+  END {
+    printf "%-*s  %-*s  %*s  %*s\n",
+      level_width, header_level,
+      param_width, header_param,
+      base_width, header_base,
+      artifact_width, header_artifact
+
+    for (i = 1; i <= NR; i++) {
+      printf "%-*s  %-*s  %*s  %*s\n",
+        level_width, levels[i],
+        param_width, params[i],
+        base_width, bases[i],
+        artifact_width, artifacts[i]
+    }
+  }
+' "${output_rows}"

@@ -1,6 +1,7 @@
 mod bit_field;
 mod bit_field_render;
 mod color;
+mod drop_compact;
 mod field_bits;
 mod ips_nazo;
 mod render;

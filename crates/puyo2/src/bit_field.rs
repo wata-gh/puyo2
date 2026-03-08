@@ -6,7 +6,8 @@ use thiserror::Error;
 use crate::{
     CHIGIRI_FRAMES_TABLE, Color, FieldBits, HandParseError, NthResult, PuyoSet, PuyoSetPlacement,
     RensaResult, SET_FRAMES_TABLE, ShapeBitField, SingleResult, calc_rensa_bonus_coef, color_bonus,
-    expand_mattulwan_param, haipuyo_to_puyo_sets, long_bonus, rensa_bonus,
+    drop_compact::compact_lane_u16, expand_mattulwan_param, haipuyo_to_puyo_sets, long_bonus,
+    rensa_bonus,
 };
 
 const BASIC_COLORS: [Color; 4] = [Color::Red, Color::Blue, Color::Yellow, Color::Green];
@@ -394,7 +395,7 @@ impl BitField {
             }
             for plane in 0..self.m.len() {
                 let lane = ((self.m[plane][idx] >> shift) & 0xffff) as u16;
-                let compacted = compact_lane(lane, vanished_lane) as u64;
+                let compacted = compact_lane_u16(lane, vanished_lane) as u64;
                 self.m[plane][idx] = (self.m[plane][idx] & !lane_mask) | (compacted << shift);
             }
         }
@@ -977,16 +978,4 @@ impl fmt::Display for BitField {
         }
         Ok(())
     }
-}
-
-fn compact_lane(lane: u16, vanished: u16) -> u16 {
-    let mut compacted = 0u16;
-    let mut dst = 0u16;
-    for src in 0..16 {
-        let keep = (((vanished >> src) & 1) ^ 1) as u16;
-        let bit = ((lane >> src) & 1) & keep;
-        compacted |= bit << dst;
-        dst += keep;
-    }
-    compacted
 }
