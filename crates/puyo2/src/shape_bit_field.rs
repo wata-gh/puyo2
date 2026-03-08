@@ -4,6 +4,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::{
     BitField, Color, FieldBits, ShapeRensaResult,
+    drop_compact::compact_lane_u16,
     render::{TILE_SIZE, copy_tile, load_sprite, new_canvas, overlay_tile, write_png},
 };
 
@@ -58,17 +59,24 @@ impl ShapeBitField {
     }
 
     pub fn drop(&mut self, field_bits: FieldBits) {
-        for shape in &mut self.shapes {
-            let r0 = extract(shape.m[0], !field_bits.m[0]);
-            let r1 = extract(shape.m[1], !field_bits.m[1]);
-            let mut dropmask = [0u64; 2];
-            for x in 0..6 {
-                let idx = x >> 2;
-                let vc = field_bits.col_bits(x).count_ones();
-                dropmask[idx] |= (((1u64 << vc) - 1).rotate_left(14u32 - vc)) << ((x & 3) * 16);
+        let mut active = [(0usize, 0u32, 0u64, 0u16); 6];
+        let mut active_len = 0usize;
+        for x in 0..6 {
+            let idx = x >> 2;
+            let shift = ((x & 3) * 16) as u32;
+            let vanished_lane = ((field_bits.m[idx] >> shift) & 0xffff) as u16;
+            if vanished_lane == 0 {
+                continue;
             }
-            shape.m[0] = deposit(r0, !dropmask[0]);
-            shape.m[1] = deposit(r1, !dropmask[1]);
+            active[active_len] = (idx, shift, 0xffffu64 << shift, vanished_lane);
+            active_len += 1;
+        }
+        for shape in &mut self.shapes {
+            for &(idx, shift, lane_mask, vanished_lane) in &active[..active_len] {
+                let lane = ((shape.m[idx] >> shift) & 0xffff) as u16;
+                let compacted = compact_lane_u16(lane, vanished_lane) as u64;
+                shape.m[idx] = (shape.m[idx] & !lane_mask) | (compacted << shift);
+            }
         }
         self.key_string = None;
     }
@@ -558,32 +566,4 @@ fn num_to_letter(num: usize) -> char {
         .get(num - 1)
         .copied()
         .unwrap_or_else(|| panic!("shape label index out of range: {num}"))
-}
-
-fn extract(x: u64, mut mask: u64) -> u64 {
-    let mut result = 0u64;
-    let mut bit = 1u64;
-    while mask != 0 {
-        let lowest = mask & mask.wrapping_neg();
-        if x & lowest != 0 {
-            result |= bit;
-        }
-        mask &= mask - 1;
-        bit <<= 1;
-    }
-    result
-}
-
-fn deposit(x: u64, mut mask: u64) -> u64 {
-    let mut result = 0u64;
-    let mut bit = 1u64;
-    while mask != 0 {
-        let lowest = mask & mask.wrapping_neg();
-        if x & bit != 0 {
-            result |= lowest;
-        }
-        mask &= mask - 1;
-        bit <<= 1;
-    }
-    result
 }

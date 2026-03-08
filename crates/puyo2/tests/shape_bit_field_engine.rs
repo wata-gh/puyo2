@@ -196,3 +196,103 @@ fn original_overall_shape_stays_stable_after_simulation() {
         shape(&[(0, 1), (0, 2), (1, 1), (1, 2)])
     );
 }
+
+#[test]
+fn drop_matches_reference_on_random_shapes() {
+    let mut seed = 0x7f4a_7c15_d2b8_9e31u64;
+    for _ in 0..128 {
+        let mut actual = ShapeBitField::new();
+        let shape_count = (next_u64(&mut seed) % 8 + 1) as usize;
+        for _ in 0..shape_count {
+            actual.add_shape(random_bits(&mut seed));
+        }
+        actual.key_string = Some("cached".to_string());
+        let vanished = random_bits(&mut seed);
+        let expected = drop_shapes_reference(&actual.shapes, vanished);
+
+        actual.drop(vanished);
+
+        assert_eq!(
+            actual
+                .shapes
+                .iter()
+                .map(FieldBits::to_int_array)
+                .collect::<Vec<_>>(),
+            expected
+        );
+        assert_eq!(actual.key_string, None);
+    }
+}
+
+fn random_bits(seed: &mut u64) -> FieldBits {
+    let mut bits = FieldBits::new();
+    for y in 1..=13 {
+        for x in 0..6 {
+            if next_u64(seed) & 3 == 0 {
+                bits.set_onebit(x, y);
+            }
+        }
+    }
+    bits
+}
+
+fn drop_shapes_reference(shapes: &[FieldBits], vanished: FieldBits) -> Vec<[u64; 2]> {
+    shapes
+        .iter()
+        .map(|shape| drop_shape_reference(shape.to_int_array(), vanished))
+        .collect()
+}
+
+fn drop_shape_reference(mut matrix: [u64; 2], vanished: FieldBits) -> [u64; 2] {
+    let vanished_matrix = vanished.to_int_array();
+    let mut dropmask = [0u64; 2];
+    for x in 0..6 {
+        let idx = x >> 2;
+        let vc = vanished.col_bits(x).count_ones();
+        let rotated = (((1u64 << vc) - 1).rotate_left(14u32 - vc)) << ((x & 3) * 16);
+        dropmask[idx] |= rotated;
+    }
+
+    let r0 = extract_reference(matrix[0], !vanished_matrix[0]);
+    let r1 = extract_reference(matrix[1], !vanished_matrix[1]);
+    matrix[0] = deposit_reference(r0, !dropmask[0]);
+    matrix[1] = deposit_reference(r1, !dropmask[1]);
+    matrix
+}
+
+fn extract_reference(x: u64, mut mask: u64) -> u64 {
+    let mut result = 0u64;
+    let mut next = 1u64;
+    loop {
+        let lsb = mask & mask.wrapping_neg();
+        if lsb == 0 {
+            return result;
+        }
+        mask ^= lsb;
+        if x & lsb != 0 {
+            result |= next;
+        }
+        next <<= 1;
+    }
+}
+
+fn deposit_reference(x: u64, mut mask: u64) -> u64 {
+    let mut result = 0u64;
+    let mut next = 1u64;
+    loop {
+        let lsb = mask & mask.wrapping_neg();
+        if lsb == 0 {
+            return result;
+        }
+        mask ^= lsb;
+        if x & next != 0 {
+            result |= lsb;
+        }
+        next <<= 1;
+    }
+}
+
+fn next_u64(seed: &mut u64) -> u64 {
+    *seed = seed.wrapping_mul(6364136223846793005).wrapping_add(1);
+    *seed
+}
