@@ -9,14 +9,15 @@
     "text": "赤ぷよ全て消す"
   },
   "status": "ok",
-  "searched": 1331,
+  "searched": 1463,
   "matched": 6,
+  "elapsedMs": 0,
   "solutions": [
     {
       "hands": "rr00rr00rr41",
       "chains": 2,
       "score": 700,
-      "clear": true,
+      "clear": false,
       "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaaaabaaaaabaaaaagbgggbgbgggbgbgggggbggggbg",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaggaaaaggaaaagggaaagggaaa"
     },
@@ -24,7 +25,7 @@
       "hands": "rr00rr01rr41",
       "chains": 2,
       "score": 700,
-      "clear": true,
+      "clear": false,
       "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaaaabaaaaabaaaaagbgggbgbgggbgbgggggbggggbg",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaggaaaaggaaaagggaaagggaaa"
     },
@@ -32,7 +33,7 @@
       "hands": "rr00rr10rr41",
       "chains": 2,
       "score": 700,
-      "clear": true,
+      "clear": false,
       "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaaaabaaaaabagaaagbgggbgbgggbgbgggggbggggbg",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaagaaaaaggaaaaggaaaagggaaagggaaa"
     },
@@ -40,7 +41,7 @@
       "hands": "rr01rr00rr41",
       "chains": 2,
       "score": 700,
-      "clear": true,
+      "clear": false,
       "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaaaabaaaaabaaaaagbgggbgbgggbgbgggggbggggbg",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaggaaaaggaaaagggaaagggaaa"
     },
@@ -48,7 +49,7 @@
       "hands": "rr01rr01rr41",
       "chains": 2,
       "score": 700,
-      "clear": true,
+      "clear": false,
       "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaaaabaaaaabaaaaagbgggbgbgggbgbgggggbggggbg",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaggaaaaggaaaagggaaagggaaa"
     },
@@ -56,7 +57,7 @@
       "hands": "rr01rr10rr41",
       "chains": 2,
       "score": 700,
-      "clear": true,
+      "clear": false,
       "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaaaabaaaaabagaaagbgggbgbgggbgbgggggbggggbg",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaagaaaaaggaaaaggaaaagggaaagggaaa"
     }

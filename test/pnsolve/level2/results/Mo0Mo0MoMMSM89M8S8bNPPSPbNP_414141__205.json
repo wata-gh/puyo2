@@ -9,8 +9,9 @@
     "text": "ぷよ全て消す"
   },
   "status": "ok",
-  "searched": 10558,
+  "searched": 11064,
   "matched": 3,
+  "elapsedMs": 3,
   "solutions": [
     {
       "hands": "br12br23br43",

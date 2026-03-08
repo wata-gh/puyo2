@@ -9,14 +9,15 @@
     "text": "5連鎖する"
   },
   "status": "ok",
-  "searched": 242,
+  "searched": 264,
   "matched": 3,
+  "elapsedMs": 0,
   "solutions": [
     {
       "hands": "yb21bb10",
       "chains": 5,
       "score": 4840,
-      "clear": true,
+      "clear": false,
       "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaaaecaaaaccdcaaebedcaeebddabbdcca",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaeaaaaadaaa"
     },
@@ -24,7 +25,7 @@
       "hands": "yb21bb11",
       "chains": 5,
       "score": 4840,
-      "clear": true,
+      "clear": false,
       "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaeccaaaccdcaaebedcaeebddabbdcca",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaeaaaaadaaa"
     },
@@ -32,7 +33,7 @@
       "hands": "yb23bb21",
       "chains": 5,
       "score": 4840,
-      "clear": true,
+      "clear": false,
       "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaeccaaaccdcaaebedcaeebddabbdcca",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaeaaaaadaaa"
     }

@@ -9,14 +9,15 @@
     "text": "5連鎖する"
   },
   "status": "ok",
-  "searched": 180115,
+  "searched": 191665,
   "matched": 1,
+  "elapsedMs": 13,
   "solutions": [
     {
       "hands": "yr10yg22yg23yb33",
       "chains": 5,
       "score": 4840,
-      "clear": true,
+      "clear": false,
       "initialField": "aaaaaaaaaaagaaaaagaaaaagaaaaagaacaagaadaagaadaagaeeaagabdaagadddagbbeccgbdedcg",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaagaaaaagaaaaagaaaaagaaaaagaaaaagaaaaagaaaaagaaaaagaaaaag"
     }

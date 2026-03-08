@@ -9,14 +9,15 @@
     "text": "赤ぷよ全て消す"
   },
   "status": "ok",
-  "searched": 118,
+  "searched": 129,
   "matched": 1,
+  "elapsedMs": 0,
   "solutions": [
     {
       "hands": "rr20rr21",
       "chains": 3,
       "score": 2260,
-      "clear": true,
+      "clear": false,
       "initialField": "aaaaaadaaaaabbbababgbabadebbbaddgbdagebbdageeggggggggggggggggggggggggggggggggg",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaadaaaaadaaaaagggaaggggggggggggggggggggggggggg"
     }

@@ -9,14 +9,15 @@
     "text": "12連鎖する"
   },
   "status": "ok",
-  "searched": 107052,
+  "searched": 112666,
   "matched": 9,
+  "elapsedMs": 10,
   "solutions": [
     {
       "hands": "gy42gy50yy31gy21",
       "chains": 12,
       "score": 59000,
-      "clear": true,
+      "clear": false,
       "initialField": "aaaaaaaaaaaaaaadaaadadaaadeeaabdecdaceeceaddceddcdeceecebdbdcbebdbbebdbdbebdbd",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaeaaa"
     },
@@ -24,7 +25,7 @@
       "hands": "gy42gy50yy41gy21",
       "chains": 12,
       "score": 59000,
-      "clear": true,
+      "clear": false,
       "initialField": "aaaaaaaaaaaaaaaaaaadadaaadeeaabdecdaceecedddceddcdeceecebdbdcbebdbbebdbdbebdbd",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaeaaa"
     },
@@ -32,7 +33,7 @@
       "hands": "gy42gy53yy50gy21",
       "chains": 12,
       "score": 59000,
-      "clear": true,
+      "clear": false,
       "initialField": "aaaaaaaaaaaaaaaaaaadadaaadeeaabdecdaceecedddceddcdeceecebdbdcbebdbbebdbdbebdbd",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaeaaa"
     },
@@ -40,7 +41,7 @@
       "hands": "gy50gy42yy31gy21",
       "chains": 12,
       "score": 59000,
-      "clear": true,
+      "clear": false,
       "initialField": "aaaaaaaaaaaaaaadaaadadaaadeeaabdecdaceeceaddceddcdeceecebdbdcbebdbbebdbdbebdbd",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaeaaa"
     },
@@ -48,7 +49,7 @@
       "hands": "gy50gy42yy41gy21",
       "chains": 12,
       "score": 59000,
-      "clear": true,
+      "clear": false,
       "initialField": "aaaaaaaaaaaaaaaaaaadadaaadeeaabdecdaceecedddceddcdeceecebdbdcbebdbbebdbdbebdbd",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaeaaa"
     },
@@ -56,7 +57,7 @@
       "hands": "gy53gy40yy50gy21",
       "chains": 12,
       "score": 59000,
-      "clear": true,
+      "clear": false,
       "initialField": "aaaaaaaaaaaaaaaaaaadadaaadeeaabdecdaceecedddceddcdeceecebdbdcbebdbbebdbdbebdbd",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaeaaa"
     },
@@ -64,7 +65,7 @@
       "hands": "gy53gy41yy31gy21",
       "chains": 12,
       "score": 59000,
-      "clear": true,
+      "clear": false,
       "initialField": "aaaaaaaaaaaaaaadaaadadaaadeeaabdecdaceeceaddceddcdeceecebdbdcbebdbbebdbdbebdbd",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaeaaa"
     },
@@ -72,7 +73,7 @@
       "hands": "gy53gy41yy41gy21",
       "chains": 12,
       "score": 59000,
-      "clear": true,
+      "clear": false,
       "initialField": "aaaaaaaaaaaaaaaaaaadadaaadeeaabdecdaceecedddceddcdeceecebdbdcbebdbbebdbdbebdbd",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaeaaa"
     },
@@ -80,7 +81,7 @@
       "hands": "gy53gy43yy41gy21",
       "chains": 12,
       "score": 59000,
-      "clear": true,
+      "clear": false,
       "initialField": "aaaaaaaaaaaaaaadaaadadaaadeeaabdecdaceeceaddceddcdeceecebdbdcbebdbbebdbdbebdbd",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaeaaa"
     }

@@ -9,8 +9,9 @@
     "text": "5連鎖する"
   },
   "status": "ok",
-  "searched": 484,
+  "searched": 506,
   "matched": 1,
+  "elapsedMs": 0,
   "solutions": [
     {
       "hands": "bg11br10",

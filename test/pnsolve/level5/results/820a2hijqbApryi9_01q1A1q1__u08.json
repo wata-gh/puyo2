@@ -9,14 +9,15 @@
     "text": "8連鎖する"
   },
   "status": "ok",
-  "searched": 117128,
+  "searched": 122705,
   "matched": 1,
+  "elapsedMs": 12,
   "solutions": [
     {
       "hands": "rr10gb32ry22gb00",
       "chains": 8,
       "score": 20260,
-      "clear": true,
+      "clear": false,
       "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaaaabbebacedcbeeeebeeeccebcddcbccdeeebb",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaaaaba"
     }

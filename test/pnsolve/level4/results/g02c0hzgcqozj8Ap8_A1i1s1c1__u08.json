@@ -9,8 +9,9 @@
     "text": "8連鎖する"
   },
   "status": "ok",
-  "searched": 117040,
+  "searched": 122870,
   "matched": 6,
+  "elapsedMs": 9,
   "solutions": [
     {
       "hands": "ry00yg33bb40rg50",

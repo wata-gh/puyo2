@@ -9,8 +9,9 @@
     "text": "5連鎖＆ぷよ全て消す"
   },
   "status": "ok",
-  "searched": 5324,
+  "searched": 5830,
   "matched": 1,
+  "elapsedMs": 2,
   "solutions": [
     {
       "hands": "rg31rg42rr41",

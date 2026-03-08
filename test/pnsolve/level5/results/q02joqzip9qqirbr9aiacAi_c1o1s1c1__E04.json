@@ -9,8 +9,9 @@
     "text": "4色同時に消す"
   },
   "status": "ok",
-  "searched": 112084,
+  "searched": 117854,
   "matched": 1,
+  "elapsedMs": 12,
   "solutions": [
     {
       "hands": "rg50rb13bb30rg02",
