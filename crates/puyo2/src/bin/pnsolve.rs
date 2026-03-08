@@ -3,6 +3,7 @@ mod cli_common;
 
 use std::{
     cell::RefCell,
+    collections::HashMap,
     process,
     rc::Rc,
     str::FromStr,
@@ -12,6 +13,7 @@ use std::{
         mpsc,
     },
     thread,
+    time::Instant,
 };
 
 use serde::Serialize;
@@ -59,6 +61,8 @@ struct SolveOutputJson {
     error: String,
     searched: usize,
     matched: usize,
+    #[serde(rename = "elapsedMs")]
+    elapsed_ms: u64,
     solutions: Vec<SolveSolutionJson>,
 }
 
@@ -150,14 +154,14 @@ fn record_solution(
     prefix: &str,
     sr: &SearchResult,
     condition: &IPSNazoCondition,
-) {
+) -> bool {
     let before_simulate = sr
         .before_simulate
         .as_ref()
         .expect("search result must have before_simulate");
     let (matched, _) = evaluate_ips_nazo_condition(before_simulate, condition);
     if !matched {
-        return;
+        return false;
     }
 
     let result = sr
@@ -180,6 +184,7 @@ fn record_solution(
             final_field.is_empty(),
         ),
     });
+    true
 }
 
 fn search_job_terminal(
@@ -223,53 +228,31 @@ fn search_job_expansion(
 ) -> Result<WorkerOutput, String> {
     let prefix = to_simple_hands(&job.hands_prefix).expect("hands must be serializable");
     let output = Rc::new(RefCell::new(WorkerOutput::default()));
-    let mut local_order = 0usize;
+    let mut local_order = usize::from(!job.hands_prefix.is_empty());
     let mut condition_search =
         SearchCondition::with_bit_field_and_puyo_sets(job.bit_field, puyo_sets);
     condition_search.disable_chigiri = options.disable_chigiri;
     condition_search.dedup_mode = DedupMode::Off;
     condition_search.simulate_policy = options.simulate_policy;
-    condition_search.stop_on_chain = true;
+    condition_search.stop_on_chain = false;
 
     let output_each = Rc::clone(&output);
     let condition_each = condition.clone();
     let prefix_each = prefix.clone();
     condition_search.each_hand_callback = Some(Box::new(move |sr: &SearchResult| {
-        if sr
-            .rensa_result
-            .as_ref()
-            .expect("search result must have rensa_result")
-            .chains
-            > 0
-        {
-            let mut output = output_each.borrow_mut();
-            output.searched += 1;
-            record_solution(
-                &mut output.solutions,
-                job.root_order,
-                local_order,
-                &prefix_each,
-                sr,
-                &condition_each,
-            );
-            local_order += 1;
-        }
-        true
-    }));
-
-    let output_last = Rc::clone(&output);
-    condition_search.last_callback = Some(Box::new(move |sr: &SearchResult| {
-        let mut output = output_last.borrow_mut();
+        let mut output = output_each.borrow_mut();
         output.searched += 1;
-        record_solution(
+        if record_solution(
             &mut output.solutions,
             job.root_order,
             local_order,
-            &prefix,
+            &prefix_each,
             sr,
-            &condition,
-        );
-        local_order += 1;
+            &condition_each,
+        ) {
+            local_order += 1;
+        }
+        true
     }));
     catch_unwind_silent(move || condition_search.search_with_puyo_sets_v2())?;
     Ok(output.borrow().clone())
@@ -365,8 +348,9 @@ fn run_search(
 
         let first = vec![puyo_sets[0]];
         let root_records = Rc::new(RefCell::new(Vec::<SolutionRecord>::new()));
-        let root_terminal_count = Rc::new(RefCell::new(0usize));
+        let root_search_count = Rc::new(RefCell::new(0usize));
         let root_order = Rc::new(RefCell::new(0usize));
+        let root_order_map = Rc::new(RefCell::new(HashMap::<String, usize>::new()));
         let sender_for_root = sender.clone();
         let mut root_condition = SearchCondition::with_bit_field_and_puyo_sets(initial, first);
         root_condition.disable_chigiri = options.disable_chigiri;
@@ -375,48 +359,55 @@ fn run_search(
             SearchMode::Expansion => DedupMode::Off,
         };
         root_condition.simulate_policy = options.simulate_policy;
-        root_condition.stop_on_chain = mode == SearchMode::Expansion;
+        root_condition.stop_on_chain = false;
 
         if mode == SearchMode::Expansion {
             let root_records = Rc::clone(&root_records);
-            let root_terminal_count = Rc::clone(&root_terminal_count);
+            let root_search_count = Rc::clone(&root_search_count);
             let root_order_each = Rc::clone(&root_order);
+            let root_order_map = Rc::clone(&root_order_map);
             let condition_each = condition.clone();
             root_condition.each_hand_callback = Some(Box::new(move |sr: &SearchResult| {
-                if sr
-                    .rensa_result
-                    .as_ref()
-                    .expect("search result must have rensa_result")
-                    .chains
-                    > 0
-                {
-                    *root_terminal_count.borrow_mut() += 1;
-                    let current_root_order = {
+                *root_search_count.borrow_mut() += 1;
+                let hands_key = to_simple_hands(&sr.hands).expect("hands must be serializable");
+                let current_root_order = {
+                    let mut root_order_map = root_order_map.borrow_mut();
+                    if let Some(&current_root_order) = root_order_map.get(&hands_key) {
+                        current_root_order
+                    } else {
                         let mut order = root_order_each.borrow_mut();
-                        let current = *order;
+                        let current_root_order = *order;
                         *order += 1;
-                        current
-                    };
-                    record_solution(
-                        &mut root_records.borrow_mut(),
-                        current_root_order,
-                        0,
-                        "",
-                        sr,
-                        &condition_each,
-                    );
-                }
+                        root_order_map.insert(hands_key, current_root_order);
+                        current_root_order
+                    }
+                };
+                let _ = record_solution(
+                    &mut root_records.borrow_mut(),
+                    current_root_order,
+                    0,
+                    "",
+                    sr,
+                    &condition_each,
+                );
                 true
             }));
         }
 
         let root_order_last = Rc::clone(&root_order);
+        let root_order_map_last = Rc::clone(&root_order_map);
         root_condition.last_callback = Some(Box::new(move |sr: &SearchResult| {
-            let current_root_order = {
+            let current_root_order = if mode == SearchMode::Expansion {
+                let hands_key = to_simple_hands(&sr.hands).expect("hands must be serializable");
+                *root_order_map_last
+                    .borrow()
+                    .get(&hands_key)
+                    .expect("root order must be registered before queueing")
+            } else {
                 let mut order = root_order_last.borrow_mut();
-                let current = *order;
+                let current_root_order = *order;
                 *order += 1;
-                current
+                current_root_order
             };
             let final_field = sr
                 .rensa_result
@@ -464,7 +455,11 @@ fn run_search(
             return Err(err);
         }
 
-        let root_searched = *root_terminal_count.borrow();
+        let root_searched = if mode == SearchMode::Expansion {
+            *root_search_count.borrow()
+        } else {
+            0
+        };
         let mut records = root_records.take();
         records.extend(
             worker_outputs
@@ -590,6 +585,7 @@ fn main() {
         error: String::new(),
         searched: 0,
         matched: 0,
+        elapsed_ms: 0,
         solutions: Vec::new(),
     };
 
@@ -623,6 +619,8 @@ fn main() {
             return;
         }
     };
+
+    let search_started_at = Instant::now();
 
     if puyo_sets.is_empty() {
         out.searched = 1;
@@ -670,6 +668,9 @@ fn main() {
             }
         }
     }
+
+    let elapsed_ms = search_started_at.elapsed().as_millis();
+    out.elapsed_ms = elapsed_ms.min(u128::from(u64::MAX)) as u64;
 
     if out.status == "ok" && out.matched == 0 {
         out.status = "no_solution".to_string();

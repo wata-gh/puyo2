@@ -9,14 +9,15 @@
     "text": "6連鎖する"
   },
   "status": "ok",
-  "searched": 1288324,
+  "searched": 1349803,
   "matched": 1,
+  "elapsedMs": 88,
   "solutions": [
     {
       "hands": "rr41bg50bb31ry31rb33",
       "chains": 6,
       "score": 8680,
-      "clear": true,
+      "clear": false,
       "initialField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaeaaabdcaaabcbaaacbeaacbcbacccbbadddeeagggbg",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaba"
     }

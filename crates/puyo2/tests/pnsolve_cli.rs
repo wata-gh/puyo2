@@ -6,7 +6,7 @@ use puyo2::{BitField, parse_ips_nazo_url, parse_simple_hands};
 
 use crate::common::{output_strings, run_bin, run_bin_with_env};
 
-#[derive(Clone, Debug, Deserialize)]
+#[derive(Clone, Debug, Deserialize, PartialEq, Eq)]
 struct SolveConditionJson {
     q0: usize,
     q1: usize,
@@ -14,7 +14,7 @@ struct SolveConditionJson {
     text: String,
 }
 
-#[derive(Clone, Debug, Deserialize)]
+#[derive(Clone, Debug, Deserialize, PartialEq, Eq)]
 struct SolveSolutionJson {
     hands: String,
     chains: usize,
@@ -26,7 +26,7 @@ struct SolveSolutionJson {
     final_field: String,
 }
 
-#[derive(Clone, Debug, Deserialize)]
+#[derive(Clone, Debug, Deserialize, PartialEq, Eq)]
 struct SolveOutputJson {
     input: String,
     #[serde(rename = "initialField")]
@@ -38,6 +38,8 @@ struct SolveOutputJson {
     condition: SolveConditionJson,
     searched: usize,
     matched: usize,
+    #[serde(rename = "elapsedMs")]
+    elapsed_ms: u64,
     solutions: Vec<SolveSolutionJson>,
 }
 
@@ -47,6 +49,25 @@ fn decode_output(stdout: &str) -> SolveOutputJson {
 
 fn is_all_clear_field(field: &str) -> bool {
     field.chars().all(|ch| ch == 'a')
+}
+
+fn normalized_output(mut out: SolveOutputJson) -> SolveOutputJson {
+    out.elapsed_ms = 0;
+    out
+}
+
+fn assert_outputs_equal_ignoring_elapsed(left: &str, right: &str) {
+    let left = normalized_output(decode_output(left));
+    let right = normalized_output(decode_output(right));
+    assert_eq!(left, right);
+}
+
+fn assert_elapsed_ms_present(out: &SolveOutputJson) {
+    assert!(
+        out.elapsed_ms < 60_000,
+        "elapsedMs looks unreasonable: {}",
+        out.elapsed_ms
+    );
 }
 
 fn assert_solution_replays_with_last_hand_chain(param: &str, solution: &SolveSolutionJson) {
@@ -77,6 +98,32 @@ fn assert_solution_replays_with_last_hand_chain(param: &str, solution: &SolveSol
     }
 }
 
+fn assert_solution_replays_allowing_intermediate_chains(param: &str, solution: &SolveSolutionJson) {
+    let decoded = parse_ips_nazo_url(param).unwrap();
+    let hands = parse_simple_hands(&solution.hands).unwrap();
+    let mut field =
+        BitField::from_mattulwan_and_haipuyo(&decoded.initial_field, &decoded.haipuyo).unwrap();
+
+    for (index, hand) in hands.iter().enumerate() {
+        let (placed, _) = field.place_puyo(hand.puyo_set, hand.position);
+        assert!(placed, "hand must be placeable: {}", solution.hands);
+
+        let before_simulate = field.mattulwan_editor_param();
+        let mut simulation = field.clone_for_simulation();
+        let result = simulation.simulate_detail();
+        let after_simulate = result.bit_field.as_ref().unwrap().mattulwan_editor_param();
+
+        if index + 1 == hands.len() {
+            assert_eq!(before_simulate, solution.initial_field);
+            assert_eq!(after_simulate, solution.final_field);
+            assert_eq!(result.chains, solution.chains);
+            assert_eq!(result.score, solution.score);
+        }
+
+        field = result.bit_field.unwrap();
+    }
+}
+
 #[test]
 fn pnsolve_pretty_json_matches_go_contract() {
     let param = "800F08J08A0EB_8161__270";
@@ -97,6 +144,7 @@ fn pnsolve_pretty_json_matches_go_contract() {
     assert_eq!(out.matched, out.solutions.len());
     assert_eq!(out.status, "ok");
     assert!(out.searched >= out.matched);
+    assert_elapsed_ms_present(&out);
     assert!(stdout.contains("\n  \"status\": \"ok\""));
 
     for solution in out.solutions {
@@ -118,6 +166,7 @@ fn pnsolve_compact_json_matches_go_contract() {
 
     let out = decode_output(&stdout);
     assert_eq!(out.input, param);
+    assert_elapsed_ms_present(&out);
     assert!(matches!(out.status.as_str(), "ok" | "no_solution"));
 }
 
@@ -141,9 +190,9 @@ fn pnsolve_default_matches_explicit_optimization_flags() {
 
     assert_eq!(output_strings(&default_output).1, "");
     assert_eq!(output_strings(&explicit_output).1, "");
-    assert_eq!(
-        output_strings(&default_output).0,
-        output_strings(&explicit_output).0
+    assert_outputs_equal_ignoring_elapsed(
+        &output_strings(&default_output).0,
+        &output_strings(&explicit_output).0,
     );
 }
 
@@ -179,14 +228,15 @@ fn pnsolve_same_pair_order_is_noop_without_stop_on_chain() {
 
     assert_eq!(output_strings(&same_pair_output).1, "");
     assert_eq!(output_strings(&off_output).1, "");
-    assert_eq!(
-        output_strings(&same_pair_output).0,
-        output_strings(&off_output).0
+    assert_outputs_equal_ignoring_elapsed(
+        &output_strings(&same_pair_output).0,
+        &output_strings(&off_output).0,
     );
 
     let out = decode_output(&output_strings(&same_pair_output).0);
     assert_eq!(out.matched, out.solutions.len());
     assert_eq!(out.matched, 4);
+    assert_elapsed_ms_present(&out);
 }
 
 #[test]
@@ -234,6 +284,7 @@ fn pnsolve_search_failed_json_matches_go_contract() {
     assert_eq!(out.status, "search_failed");
     assert!(!out.error.is_empty());
     assert_eq!(out.matched, 0);
+    assert_elapsed_ms_present(&out);
     assert!(out.solutions.is_empty());
 }
 
@@ -248,6 +299,7 @@ fn pnsolve_no_index_13_panic_regression() {
 
     let out = decode_output(&stdout);
     assert_ne!(out.status, "search_failed");
+    assert_elapsed_ms_present(&out);
     assert!(!out.error.contains("index out of range [13]"));
 }
 
@@ -272,6 +324,7 @@ fn pnsolve_non_all_clear_no_hands_regression_matches_go() {
     assert_eq!(out.solutions[0].hands, "");
     assert!(out.solutions[0].chains > 0);
     assert!(out.solutions[0].score > 0);
+    assert_elapsed_ms_present(&out);
 }
 
 #[test]
@@ -292,7 +345,7 @@ fn pnsolve_parallel_matches_single_worker_output() {
 
     assert_eq!(output_strings(&single).1, "");
     assert_eq!(output_strings(&parallel).1, "");
-    assert_eq!(output_strings(&single).0, output_strings(&parallel).0);
+    assert_outputs_equal_ignoring_elapsed(&output_strings(&single).0, &output_strings(&parallel).0);
 }
 
 #[test]
@@ -341,6 +394,9 @@ fn pnsolve_parallel_solution_order_is_stable() {
     assert_eq!(hands_2, hands_8);
     assert_eq!(out_2.searched, out_4.searched);
     assert_eq!(out_2.searched, out_8.searched);
+    assert_elapsed_ms_present(&out_2);
+    assert_elapsed_ms_present(&out_4);
+    assert_elapsed_ms_present(&out_8);
 }
 
 #[test]
@@ -361,6 +417,7 @@ fn pnsolve_parallel_search_failed_json_matches_go_contract() {
     assert_eq!(out.status, "search_failed");
     assert!(!out.error.is_empty());
     assert_eq!(out.matched, 0);
+    assert_elapsed_ms_present(&out);
     assert!(out.solutions.is_empty());
 }
 
@@ -379,13 +436,26 @@ fn pnsolve_expand_equivalent_hands_is_not_noop() {
 
     assert_eq!(normal_out.status, "ok");
     assert_eq!(normal_out.matched, 2);
-    assert_eq!(expanded_out.status, "no_solution");
-    assert_eq!(expanded_out.matched, 0);
-    assert_ne!(normal_out.searched, expanded_out.searched);
+    assert_elapsed_ms_present(&normal_out);
+    assert_eq!(expanded_out.status, "ok");
+    assert_eq!(expanded_out.matched, 2);
+    assert_elapsed_ms_present(&expanded_out);
+    assert_eq!(
+        expanded_out
+            .solutions
+            .iter()
+            .map(|solution| solution.hands.clone())
+            .collect::<Vec<_>>(),
+        vec!["yy31bb01rr11".to_string(), "yy31bb01rr21".to_string()]
+    );
+
+    for solution in &expanded_out.solutions {
+        assert_solution_replays_allowing_intermediate_chains(param, solution);
+    }
 }
 
 #[test]
-fn pnsolve_expand_equivalent_hands_returns_stop_on_chain_solutions() {
+fn pnsolve_expand_equivalent_hands_returns_expected_solutions() {
     let param = "1hgaaaaaaaaa_c1c1c1__u06";
     let output = run_bin(
         "pnsolve",
@@ -400,6 +470,7 @@ fn pnsolve_expand_equivalent_hands_returns_stop_on_chain_solutions() {
     let out = decode_output(&stdout);
     assert_eq!(out.status, "ok");
     assert_eq!(out.matched, 4);
+    assert_elapsed_ms_present(&out);
     assert_eq!(
         out.solutions
             .iter()
@@ -436,7 +507,33 @@ fn pnsolve_expand_equivalent_hands_parallel_matches_single_worker() {
 
     assert_eq!(output_strings(&single).1, "");
     assert_eq!(output_strings(&parallel).1, "");
-    assert_eq!(output_strings(&single).0, output_strings(&parallel).0);
+    assert_outputs_equal_ignoring_elapsed(&output_strings(&single).0, &output_strings(&parallel).0);
+}
+
+#[test]
+fn pnsolve_expand_equivalent_hands_parallel_matches_single_worker_with_intermediate_chains() {
+    let param = "3k03k03k01903k03k03k0190_G1s101__278";
+    let single = run_bin_with_env(
+        "pnsolve",
+        &["-param", param, "-pretty=false", "-expand-equivalent-hands"],
+        None,
+        &[("PUYO2_PNSOLVE_JOBS", "1")],
+    );
+    let parallel = run_bin_with_env(
+        "pnsolve",
+        &["-param", param, "-pretty=false", "-expand-equivalent-hands"],
+        None,
+        &[("PUYO2_PNSOLVE_JOBS", "4")],
+    );
+
+    assert_eq!(output_strings(&single).1, "");
+    assert_eq!(output_strings(&parallel).1, "");
+    assert_outputs_equal_ignoring_elapsed(&output_strings(&single).0, &output_strings(&parallel).0);
+
+    let out = decode_output(&output_strings(&single).0);
+    assert_eq!(out.status, "ok");
+    assert_eq!(out.matched, 2);
+    assert_elapsed_ms_present(&out);
 }
 
 #[test]
@@ -457,5 +554,6 @@ fn pnsolve_expand_equivalent_hands_search_failed_stays_json() {
     assert_eq!(out.status, "search_failed");
     assert!(!out.error.is_empty());
     assert_eq!(out.matched, 0);
+    assert_elapsed_ms_present(&out);
     assert!(out.solutions.is_empty());
 }

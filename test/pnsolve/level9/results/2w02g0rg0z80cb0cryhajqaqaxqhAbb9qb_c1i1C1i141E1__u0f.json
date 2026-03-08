@@ -9,8 +9,9 @@
     "text": "15連鎖する"
   },
   "status": "ok",
-  "searched": 37112693,
+  "searched": 39472956,
   "matched": 6,
+  "elapsedMs": 2490,
   "solutions": [
     {
       "hands": "rg30yg30gy31yg42br30by11",

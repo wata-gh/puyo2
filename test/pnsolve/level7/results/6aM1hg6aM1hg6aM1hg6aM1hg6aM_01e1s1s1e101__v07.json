@@ -9,14 +9,15 @@
     "text": "7連鎖以上する"
   },
   "status": "ok",
-  "searched": 904799,
+  "searched": 1021259,
   "matched": 1,
+  "elapsedMs": 59,
   "solutions": [
     {
       "hands": "rr31gg00bb50bb50gg00rr01",
       "chains": 7,
       "score": 14540,
-      "clear": true,
+      "clear": false,
       "initialField": "aaaaaaaaaaaaaaaaaaaaabaaaabeaaabebbaagbegaabebeaagbegaabebeaagbegaabebeabbbeea",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaea"
     }

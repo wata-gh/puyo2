@@ -9,14 +9,15 @@
     "text": "9連鎖する"
   },
   "status": "ok",
-  "searched": 55660400,
+  "searched": 58333230,
   "matched": 2,
+  "elapsedMs": 3246,
   "solutions": [
     {
       "hands": "br50bb41gr40gb41yr53yb21",
       "chains": 9,
       "score": 27880,
-      "clear": true,
+      "clear": false,
       "initialField": "aaaaaaaaaaaaaaaabaaaaaeaaaaabaaadceaaacccaaabbgdaabeecaaccecaecbbbddeedcdceddc",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaeaaaa"
     },
@@ -24,7 +25,7 @@
       "hands": "br50bb41gr40gb41yr53yb22",
       "chains": 9,
       "score": 27880,
-      "clear": true,
+      "clear": false,
       "initialField": "aaaaaaaaaaaaaaaabaaaaaeaaadabaaacaeaaacccaaabbgdaabeecaaccecaecbbbddeedcdceddc",
       "finalField": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaeaaaa"
     }
