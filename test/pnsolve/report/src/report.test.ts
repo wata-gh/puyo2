@@ -292,6 +292,29 @@ test("http routes return dashboard and level detail", async () => {
   }
 });
 
+test("static styles expose dark theme tokens", async () => {
+  const artifactRoot = await createSampleArtifact();
+  const server = Bun.serve({
+    port: 0,
+    hostname: "127.0.0.1",
+    fetch: createFetchHandler({ artifactRoot, port: 0 }),
+  });
+
+  try {
+    const response = await fetch(`${server.url}static/styles.css`);
+
+    expect(response.status).toBe(200);
+    expect(response.headers.get("content-type")).toContain("text/css");
+
+    const css = await response.text();
+    expect(css).toContain("color-scheme: dark");
+    expect(css).toContain("--bg: #16181d");
+    expect(css).toContain("--accent-error: #f07d7d");
+  } finally {
+    server.stop(true);
+  }
+});
+
 test("artifact report loads even when manifest repoRoot is unavailable", async () => {
   const artifactRoot = await createSampleArtifact();
   const manifestPath = path.join(artifactRoot, "manifest.json");

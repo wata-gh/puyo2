@@ -1,20 +1,24 @@
 :root {
-  color-scheme: light;
-  --bg: #f5f5f2;
-  --panel: #ffffff;
-  --panel-muted: #fafaf8;
-  --border: #d6d5cf;
-  --border-strong: #b9b7b0;
-  --text: #1c1b18;
-  --text-muted: #666258;
-  --accent-clean: #2f6b46;
-  --accent-diff: #a06a00;
-  --accent-error: #a33333;
-  --accent-idle: #62727b;
-  --added-bg: #edf7ef;
-  --removed-bg: #fbefef;
-  --changed-bg: #fff8e5;
-  --shadow: 0 1px 2px rgba(18, 18, 18, 0.04);
+  color-scheme: dark;
+  --bg: #16181d;
+  --bg-accent: rgba(123, 162, 255, 0.1);
+  --panel: #1d2128;
+  --panel-muted: #252a33;
+  --panel-strong: #2c323d;
+  --border: #343b47;
+  --border-strong: #566071;
+  --text: #eef2f7;
+  --text-muted: #a2adbc;
+  --text-link: #9fc0ff;
+  --accent-clean: #57c08a;
+  --accent-diff: #f0be63;
+  --accent-error: #f07d7d;
+  --accent-idle: #92a0b4;
+  --added-bg: rgba(87, 192, 138, 0.12);
+  --removed-bg: rgba(240, 125, 125, 0.12);
+  --changed-bg: rgba(240, 190, 99, 0.12);
+  --focus-ring: 0 0 0 3px rgba(159, 192, 255, 0.24);
+  --shadow: 0 18px 42px rgba(0, 0, 0, 0.28);
 }
 
 * {
@@ -23,14 +27,30 @@
 
 body {
   margin: 0;
+  min-height: 100vh;
   background: var(--bg);
+  background-image:
+    radial-gradient(circle at top, var(--bg-accent), transparent 40%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.015), rgba(255, 255, 255, 0));
   color: var(--text);
   font-family: "Avenir Next", "Hiragino Sans", "Yu Gothic", sans-serif;
   line-height: 1.5;
 }
 
 a {
-  color: inherit;
+  color: var(--text-link);
+  transition: color 140ms ease, border-color 140ms ease, background-color 140ms ease, transform 140ms ease;
+}
+
+a:hover {
+  color: var(--text);
+}
+
+a:focus-visible,
+summary:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+  border-radius: 10px;
 }
 
 pre,
@@ -43,7 +63,9 @@ pre,
 
 .page-header {
   border-bottom: 1px solid var(--border);
-  background: var(--panel);
+  background: rgba(29, 33, 40, 0.92);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(12px);
 }
 
 .page-header-inner,
@@ -135,6 +157,14 @@ h3 {
   padding: 20px;
 }
 
+.panel pre,
+.solution-card pre {
+  padding: 14px 15px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: rgba(8, 10, 14, 0.34);
+}
+
 .intro-panel,
 .level-summary-top {
   margin-bottom: 20px;
@@ -158,6 +188,7 @@ h3 {
 
 .metric-emphasis {
   border-color: var(--border-strong);
+  background: var(--panel-strong);
 }
 
 .metric-label {
@@ -181,6 +212,17 @@ h3 {
   display: block;
   text-decoration: none;
   overflow: hidden;
+  transform: translateY(0);
+}
+
+.level-card:hover {
+  border-color: var(--border-strong);
+  transform: translateY(-2px);
+}
+
+.level-card:focus-visible {
+  outline: none;
+  box-shadow: var(--shadow), var(--focus-ring);
 }
 
 .level-band {
@@ -236,7 +278,7 @@ h3 {
   min-width: 88px;
   padding: 10px 12px;
   border: 1px solid var(--border);
-  background: var(--panel-muted);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0));
   text-align: right;
 }
 
@@ -257,11 +299,18 @@ h3 {
   padding: 8px 12px;
   background: var(--panel-muted);
   font-size: 13px;
+  border-radius: 999px;
+}
+
+.filter-pill:hover {
+  border-color: var(--border-strong);
+  background: var(--panel-strong);
 }
 
 .filter-pill.current {
   border-color: var(--border-strong);
-  background: var(--panel);
+  background: var(--panel-strong);
+  color: var(--text);
 }
 
 .case-list {
@@ -275,8 +324,16 @@ h3 {
   padding: 18px 20px;
 }
 
+.case-card[open] {
+  border-color: var(--border-strong);
+}
+
 .case-card summary::-webkit-details-marker {
   display: none;
+}
+
+.case-card summary:hover {
+  background: rgba(255, 255, 255, 0.02);
 }
 
 .case-summary {
@@ -358,6 +415,7 @@ h3 {
   width: 100%;
   border-collapse: collapse;
   margin-top: 12px;
+  background: rgba(8, 10, 14, 0.18);
 }
 
 .diff-table th,
@@ -370,6 +428,14 @@ h3 {
   word-break: break-all;
 }
 
+.diff-table th {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.diff-table td {
+  color: var(--text);
+}
+
 .row-changed {
   background: var(--changed-bg);
 }
@@ -378,6 +444,8 @@ h3 {
   border: 1px solid var(--border);
   padding: 12px;
   margin-bottom: 12px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.015);
 }
 
 .solution-card pre,
@@ -402,7 +470,12 @@ h3 {
 
 .link-list a {
   text-decoration: none;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid rgba(159, 192, 255, 0.34);
+}
+
+.link-list a:hover,
+.back-link:hover {
+  border-color: currentColor;
 }
 
 .standalone {
