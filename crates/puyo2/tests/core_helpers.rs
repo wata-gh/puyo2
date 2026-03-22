@@ -1,8 +1,9 @@
 use std::str::FromStr;
 
 use puyo2::{
-    Color, DedupMode, Hand, SearchCondition, SimulatePolicy, expand_mattulwan_param,
-    haipuyo_to_puyo_sets, parse_simple_hands, to_simple_hands,
+    Color, ColorParseError, DedupMode, Hand, HandParseError, SearchCondition, SimulatePolicy,
+    expand_mattulwan_param, haipuyo_to_puyo_sets, normalize_haipuyo, parse_simple_hands,
+    to_simple_hands,
 };
 
 #[test]
@@ -28,6 +29,68 @@ fn haipuyo_to_puyo_sets_matches_go() {
     assert_eq!(puyo_sets[0].child, Color::Red);
     assert_eq!(puyo_sets[1].axis, Color::Yellow);
     assert_eq!(puyo_sets[1].child, Color::Red);
+}
+
+#[test]
+fn normalize_haipuyo_empty_string_is_empty() {
+    assert_eq!(normalize_haipuyo("").unwrap(), "");
+}
+
+#[test]
+fn normalize_haipuyo_collapses_same_pair_order() {
+    assert_eq!(normalize_haipuyo("rrrb").unwrap(), "1112");
+    assert_eq!(
+        normalize_haipuyo("rrrb").unwrap(),
+        normalize_haipuyo("rrbr").unwrap()
+    );
+}
+
+#[test]
+fn normalize_haipuyo_collapses_cross_pair_color_symmetry() {
+    assert_eq!(normalize_haipuyo("rbrg").unwrap(), "1213");
+    assert_eq!(
+        normalize_haipuyo("rbrg").unwrap(),
+        normalize_haipuyo("rbbg").unwrap()
+    );
+}
+
+#[test]
+fn normalize_haipuyo_collapses_global_color_renaming() {
+    assert_eq!(normalize_haipuyo("rbgy").unwrap(), "1234");
+    assert_eq!(
+        normalize_haipuyo("rbgy").unwrap(),
+        normalize_haipuyo("bgyr").unwrap()
+    );
+}
+
+#[test]
+fn normalize_haipuyo_resolves_purple_placeholder() {
+    assert_eq!(normalize_haipuyo("pprr").unwrap(), "1122");
+    assert_eq!(
+        normalize_haipuyo("pprr").unwrap(),
+        normalize_haipuyo("bbrr").unwrap()
+    );
+}
+
+#[test]
+fn normalize_haipuyo_rejects_five_color_inputs() {
+    assert!(matches!(
+        normalize_haipuyo("prbgyrby"),
+        Err(HandParseError::TooManyColorsToNormalize(5))
+    ));
+}
+
+#[test]
+fn normalize_haipuyo_preserves_existing_parse_failures() {
+    assert!(matches!(
+        normalize_haipuyo("rgb"),
+        Err(HandParseError::OddHaipuyoLength(3))
+    ));
+    assert!(matches!(
+        normalize_haipuyo("rx"),
+        Err(HandParseError::InvalidColor(ColorParseError::InvalidLetter(letter)))
+            if letter == "x"
+    ));
 }
 
 #[test]

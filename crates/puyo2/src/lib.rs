@@ -25,8 +25,8 @@ pub use search_mode::{DedupMode, ParseDedupModeError, ParseSimulatePolicyError, 
 pub use search_types::{EachHandCallback, LastCallback, SearchCondition, SearchResult};
 pub use shape_bit_field::ShapeBitField;
 pub use simple::{
-    HandParseError, expand_mattulwan_param, haipuyo_to_puyo_sets, parse_simple_hands,
-    to_simple_hands,
+    HandParseError, expand_mattulwan_param, haipuyo_to_puyo_sets, normalize_haipuyo,
+    parse_simple_hands, to_simple_hands,
 };
 pub use types::{
     ALL_PUYO_SETS, CHIGIRI_FRAMES_TABLE, Hand, NthResult, PuyoSet, PuyoSetPlacement, RensaResult,
