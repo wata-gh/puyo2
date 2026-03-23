@@ -8,6 +8,8 @@ pub enum HandParseError {
     OddHaipuyoLength(usize),
     #[error("hand string length must be a multiple of 4, got {0}")]
     InvalidHandStringLength(usize),
+    #[error("haipuyo normalization only supports up to four colors, got {0}")]
+    TooManyColorsToNormalize(usize),
     #[error("invalid digit {value:?} at index {index}")]
     InvalidDigit { value: char, index: usize },
     #[error(transparent)]
@@ -62,6 +64,145 @@ pub fn haipuyo_to_puyo_sets(haipuyo: &str) -> Result<Vec<PuyoSet>, HandParseErro
         });
     }
     Ok(puyo_sets)
+}
+
+/// Normalizes a haipuyo string into a canonical digit string.
+///
+/// Colors are canonicalized up to global renaming, and each pair is treated as
+/// unordered so that `12` and `21` normalize identically. `p` is treated as a
+/// placeholder for the first unused basic color in `[r, b, y, g]`. The return
+/// value is a two-digits-per-pair string and is not accepted by
+/// [`haipuyo_to_puyo_sets`].
+pub fn normalize_haipuyo(haipuyo: &str) -> Result<String, HandParseError> {
+    let mut puyo_sets = haipuyo_to_puyo_sets(haipuyo)?;
+    resolve_purple_placeholder(&mut puyo_sets)?;
+
+    let used_colors = collect_used_colors(&puyo_sets);
+    if used_colors.len() > 4 {
+        return Err(HandParseError::TooManyColorsToNormalize(used_colors.len()));
+    }
+    if used_colors.is_empty() {
+        return Ok(String::new());
+    }
+
+    let mut best: Option<String> = None;
+    for_each_color_permutation(&used_colors, &mut |permutation| {
+        let candidate = normalize_for_permutation(&puyo_sets, permutation);
+        if best.as_ref().is_none_or(|current| candidate < *current) {
+            best = Some(candidate);
+        }
+    });
+
+    Ok(best.unwrap_or_default())
+}
+
+fn resolve_purple_placeholder(puyo_sets: &mut [PuyoSet]) -> Result<(), HandParseError> {
+    if !puyo_sets
+        .iter()
+        .any(|puyo_set| puyo_set.axis == Color::Purple || puyo_set.child == Color::Purple)
+    {
+        return Ok(());
+    }
+
+    let mut used_without_purple = Vec::with_capacity(4);
+    for puyo_set in puyo_sets.iter() {
+        for color in [puyo_set.axis, puyo_set.child] {
+            if color == Color::Purple || used_without_purple.contains(&color) {
+                continue;
+            }
+            used_without_purple.push(color);
+        }
+    }
+
+    let replacement = [Color::Red, Color::Blue, Color::Yellow, Color::Green]
+        .into_iter()
+        .find(|color| !used_without_purple.contains(color))
+        .ok_or_else(|| {
+            HandParseError::TooManyColorsToNormalize(count_distinct_colors(puyo_sets))
+        })?;
+
+    for puyo_set in puyo_sets {
+        if puyo_set.axis == Color::Purple {
+            puyo_set.axis = replacement;
+        }
+        if puyo_set.child == Color::Purple {
+            puyo_set.child = replacement;
+        }
+    }
+
+    Ok(())
+}
+
+fn count_distinct_colors(puyo_sets: &[PuyoSet]) -> usize {
+    collect_used_colors(puyo_sets).len()
+}
+
+fn collect_used_colors(puyo_sets: &[PuyoSet]) -> Vec<Color> {
+    let mut used = Vec::with_capacity(4);
+    for puyo_set in puyo_sets {
+        for color in [puyo_set.axis, puyo_set.child] {
+            if !used.contains(&color) {
+                used.push(color);
+            }
+        }
+    }
+    used
+}
+
+fn for_each_color_permutation<F>(colors: &[Color], f: &mut F)
+where
+    F: FnMut(&[Color]),
+{
+    let mut permutation = colors.to_vec();
+    permute_recursive(0, &mut permutation, f);
+}
+
+fn permute_recursive<F>(start: usize, permutation: &mut [Color], f: &mut F)
+where
+    F: FnMut(&[Color]),
+{
+    if start == permutation.len() {
+        f(permutation);
+        return;
+    }
+
+    for index in start..permutation.len() {
+        permutation.swap(start, index);
+        permute_recursive(start + 1, permutation, f);
+        permutation.swap(start, index);
+    }
+}
+
+fn normalize_for_permutation(puyo_sets: &[PuyoSet], permutation: &[Color]) -> String {
+    let mut mapped_order = [u8::MAX; Color::COUNT];
+    for (index, color) in permutation.iter().copied().enumerate() {
+        mapped_order[color.idx()] = index as u8;
+    }
+
+    let mut relabel = [0u8; 4];
+    let mut next_label = 1u8;
+    let mut normalized = String::with_capacity(puyo_sets.len() * 2);
+
+    for puyo_set in puyo_sets {
+        let mut axis = mapped_order[puyo_set.axis.idx()];
+        let mut child = mapped_order[puyo_set.child.idx()];
+        debug_assert_ne!(axis, u8::MAX);
+        debug_assert_ne!(child, u8::MAX);
+        if axis > child {
+            std::mem::swap(&mut axis, &mut child);
+        }
+
+        for value in [axis, child] {
+            let slot = &mut relabel[value as usize];
+            if *slot == 0 {
+                *slot = next_label;
+                next_label += 1;
+            }
+            normalized.push(char::from(b'0' + *slot));
+        }
+    }
+
+    normalized
 }
 
 pub fn to_simple_hands(hands: &[Hand]) -> Result<String, HandParseError> {
