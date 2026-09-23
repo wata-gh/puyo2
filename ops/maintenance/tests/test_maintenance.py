@@ -37,6 +37,41 @@ class PolicyTests(unittest.TestCase):
         self.change(m.MANIFEST, b'"1.0"', b'"1.0.228"')
         self.assertEqual(m.validate_diff(self.base, self.new, 'dependencies'), [m.MANIFEST])
 
+    def test_real_git_archive_update_normalizes_modes(self):
+        # Exercise the same Git tar -> Docker tar -> publisher path as live updates.
+        with tempfile.TemporaryDirectory() as tmp:
+            m.command(['git', 'init', '-q', tmp])
+            files = {**self.base, 'test/pnsolve/check': (b'#!/bin/zsh\n', 0o755)}
+            for name, (data, mode) in files.items():
+                path = Path(tmp) / name
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_bytes(data)
+                path.chmod(mode)
+            m.command(['git', 'add', '.'], cwd=tmp)
+            m.command(['git', '-c', 'user.name=Test', '-c', 'user.email=test@localhost',
+                       'commit', '--no-gpg-sign', '-qm', 'Fixture'], cwd=tmp)
+            raw = m.command(['git', '-c', 'tar.umask=0002', 'archive', 'HEAD'], cwd=tmp)
+        with tarfile.open(fileobj=io.BytesIO(raw)) as tar:
+            self.assertEqual(tar.getmember(m.MANIFEST).mode, 0o664)
+            self.assertEqual(tar.getmember('test/pnsolve/check').mode, 0o775)
+        base = m.archive_files(raw, 16 * 1024 * 1024)
+        candidate = copy.deepcopy(base)
+        data, mode = candidate[m.MANIFEST]
+        candidate[m.MANIFEST] = (data.replace(b'version = "1.0"', b'version = "1.0.228"'), mode)
+        candidate = m.archive_files(m.pack(candidate), 16 * 1024 * 1024)
+        self.assertEqual(m.validate_diff(base, candidate, 'dependencies'), [m.MANIFEST])
+        self.assertEqual(base[m.MANIFEST][1], 0o644)
+        self.assertEqual(base['test/pnsolve/check'][1], 0o755)
+        self.assertNotIn(b'old mode', m.make_patch(base, candidate))
+
+    def test_archive_normalization_preserves_executable_changes(self):
+        base = m.archive_files(m.pack(self.base), 100000)
+        proposed = copy.deepcopy(base)
+        proposed[m.MANIFEST] = (proposed[m.MANIFEST][0], 0o775)
+        proposed = m.archive_files(m.pack(proposed), 100000)
+        with self.assertRaisesRegex(m.Failure, 'file mode change'):
+            m.validate_diff(base, proposed, 'dependencies')
+
     def test_metadata_features_msrv_edition_forbidden(self):
         for old, new in [(b'"1.94"', b'"1.95"'), (b'"2024"', b'"2021"'), (b'"derive"', b'"std"'), (b'"0.2.0"', b'"0.3.0"')]:
             with self.subTest(new=new):

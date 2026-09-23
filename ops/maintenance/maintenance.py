@@ -93,7 +93,11 @@ def archive_files(raw, limit):
             total += item.size
             if total > limit:
                 raise Failure('expanded archive size limit')
-            result[name] = (tar.extractfile(item).read(), item.mode & 0o777)
+            # Git tracks only the executable bit, while git archive's tar.umask
+            # may add group-write bits (0664/0775). Canonicalize both Git and
+            # Docker snapshots before comparisons and repacking.
+            mode = 0o755 if item.mode & 0o100 else 0o644
+            result[name] = (tar.extractfile(item).read(), mode)
     return result
 
 
