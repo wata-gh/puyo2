@@ -140,3 +140,10 @@ cargo run -p puyo2 --bin pnsolve2simus -- --local result.json
 ```
 
 入力は `pnsolve` の JSON object、出力は解ごとに 1 行の URL です。
+
+## Scheduled maintenance
+
+Dependency and Rust update automation, dry runs, credentials, limits, and recovery
+are documented in [docs/maintenance.md](docs/maintenance.md). Scheduled execution
+is disabled until explicitly configured. Updates create draft PRs; they never
+merge or publish releases automatically.

@@ -1,0 +1,12 @@
+{
+  "model": "gpt-6-astra",
+  "max_repairs": 2,
+  "max_seconds": 2400,
+  "turn_seconds": 600,
+  "max_observed_tokens": 100000,
+  "usage_grace_seconds": 60,
+  "command_seconds": 900,
+  "max_archive_bytes": 16777216,
+  "max_patch_bytes": 524288,
+  "image": "puyo2-maintenance:local"
+}

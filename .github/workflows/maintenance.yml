@@ -1,0 +1,119 @@
+name: Maintenance updates
+on:
+  schedule:
+    - cron: '17 2 * * 1'
+    - cron: '43 2 1 * *'
+  workflow_dispatch:
+    inputs:
+      kind:
+        description: Update category
+        type: choice
+        options: [dependencies, rust]
+        default: dependencies
+      mode:
+        description: offline (no APIs), dry-run (no publication), or publish
+        type: choice
+        options: [offline, dry-run, publish]
+        default: dry-run
+permissions:
+  contents: read
+  pull-requests: read
+# Serialize both categories and manual reruns. Never cancel a running session.
+concurrency:
+  group: puyo2-maintenance
+  cancel-in-progress: false
+jobs:
+  update:
+    if: >-
+      github.repository == 'wata-gh/puyo2' &&
+      github.ref == 'refs/heads/main' &&
+      (github.event_name == 'workflow_dispatch' || vars.MAINTENANCE_ENABLED == 'true')
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    outputs:
+      mode: ${{ steps.select.outputs.mode }}
+      base: ${{ steps.base.outputs.sha }}
+      result: ${{ steps.result.outputs.status }}
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: main
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Select operation
+        id: select
+        env:
+          INPUT_KIND: ${{ inputs.kind }}
+          INPUT_MODE: ${{ inputs.mode }}
+          SCHEDULE: ${{ github.event.schedule }}
+        run: |
+          kind="${INPUT_KIND:-dependencies}"
+          if [ "$SCHEDULE" = '43 2 1 * *' ]; then kind=rust; fi
+          echo "kind=$kind" >> "$GITHUB_OUTPUT"
+          echo "mode=${INPUT_MODE:-publish}" >> "$GITHUB_OUTPUT"
+      - id: base
+        run: echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+      - name: Controller regression tests
+        run: python3 -m unittest discover -s ops/maintenance/tests -v
+      - name: Build disposable runtime
+        run: docker build -t puyo2-maintenance:local ops/maintenance
+      - name: Detect, update and verify
+        env:
+          OPENAI_API_KEY: ${{ secrets.MAINTENANCE_OPENAI_API_KEY }}
+          OPENAI_EXECUTOR_API_KEY: ${{ secrets.MAINTENANCE_EXECUTOR_API_KEY }}
+          GITHUB_TOKEN: ${{ github.token }}
+          KIND: ${{ steps.select.outputs.kind }}
+          MODE: ${{ steps.select.outputs.mode }}
+        run: python3 ops/maintenance/maintenance.py --kind "$KIND" --mode "$MODE" --output "$RUNNER_TEMP/maintenance-output"
+      - name: Export result status
+        id: result
+        run: |
+          status=$(python3 -c 'import json, os; print(json.load(open(os.environ["RUNNER_TEMP"] + "/maintenance-output/report.json"))["status"])')
+          echo "status=$status" >> "$GITHUB_OUTPUT"
+      - name: Cleanup after cancellation or failure
+        if: always()
+        env:
+          OPENAI_API_KEY: ${{ secrets.MAINTENANCE_OPENAI_API_KEY }}
+        run: python3 ops/maintenance/cleanup.py --output "$RUNNER_TEMP/maintenance-output"
+      - name: Save bounded, redacted evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: maintenance-result
+          path: ${{ runner.temp }}/maintenance-output/
+          retention-days: 7
+          if-no-files-found: warn
+  publish:
+    needs: update
+    if: needs.update.outputs.mode == 'publish' && needs.update.outputs.result == 'verified'
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ needs.update.outputs.base }}
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - uses: actions/download-artifact@v4
+        with:
+          name: maintenance-result
+          path: ${{ runner.temp }}/maintenance-result
+      - name: Mint repository-scoped publishing token
+        id: app
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ vars.MAINTENANCE_APP_ID }}
+          private-key: ${{ secrets.MAINTENANCE_APP_PRIVATE_KEY }}
+          owner: wata-gh
+          repositories: puyo2
+          permission-contents: write
+          permission-pull-requests: write
+          permission-actions: read
+      - name: Publish draft and verify normal PR CI
+        env:
+          GH_TOKEN: ${{ steps.app.outputs.token }}
+        run: python3 ops/maintenance/publish.py --input "$RUNNER_TEMP/maintenance-result"

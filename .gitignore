@@ -12,3 +12,7 @@
 bench-results
 target/
 test/pnsolve/artifacts/
+
+# Python maintenance controller
+__pycache__/
+*.pyc
