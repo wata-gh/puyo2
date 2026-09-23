@@ -2,6 +2,8 @@
 set -euo pipefail
 # This script always comes from the trusted base, never from agent output.
 run() { printf "CHECK: "; printf "%q " "$@"; printf "\n"; "$@"; }
+RUNTIME=$(python3 -c 'import tomllib; print(tomllib.load(open("rust-toolchain.toml", "rb"))["toolchain"]["channel"])')
+run rustup toolchain install "$RUNTIME" --profile minimal --component rustfmt --component clippy
 run cargo fmt --all --check
 run cargo build --workspace --all-targets --locked
 run cargo test --workspace --locked

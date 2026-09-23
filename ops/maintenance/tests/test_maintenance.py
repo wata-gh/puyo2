@@ -259,6 +259,28 @@ class ApiContractTests(unittest.TestCase):
         self.assertEqual(calls[-1][1:4], ['rm', '-f', '-v'])
 
 
+class VerificationScriptTests(unittest.TestCase):
+    def test_candidate_toolchain_is_installed_before_first_cargo(self):
+        import subprocess
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / 'rust-toolchain.toml').write_text('[toolchain]\nchannel = "1.98.1"\n')
+            (root / 'rustup').write_text('#!/bin/sh\nprintf "%s\\n" "$*" > "$INSTALL_LOG"\n[ "$1 $2 $3" = "toolchain install 1.98.1" ] || exit 98\ntouch "$TOOLCHAIN_READY"\n')
+            (root / 'cargo').write_text('#!/bin/sh\n[ -f "$TOOLCHAIN_READY" ] || exit 99\nexit 42\n')
+            for name in ['rustup', 'cargo']:
+                (root / name).chmod(0o755)
+            env = {**os.environ, 'PATH': tmp + os.pathsep + os.environ['PATH'],
+                   'TOOLCHAIN_READY': str(root / 'ready'), 'INSTALL_LOG': str(root / 'install.log')}
+            # Stop at first Cargo to test setup ordering without running the suite.
+            result = subprocess.run(['bash', str(m.ROOT / 'ops/maintenance/verify.sh')],
+                                    cwd=root, env=env, capture_output=True)
+            self.assertEqual(result.returncode, 42, result.stderr.decode())
+            installed = (root / 'install.log').read_text()
+            self.assertIn('toolchain install 1.98.1', installed)
+            self.assertIn('--component rustfmt', installed)
+            self.assertIn('--component clippy', installed)
+
+
 class OrchestrationTests(unittest.TestCase):
     def test_repair_budget_exhaustion_never_writes_patch(self):
         from contextlib import ExitStack
