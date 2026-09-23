@@ -153,6 +153,7 @@ class LifecycleTests(unittest.TestCase):
             if method == 'POST':
                 raise m.Failure('cancel failed')
         self.agent.call = fail_cancel
+        self.agent.active = True
         with tempfile.TemporaryDirectory() as tmp:
             self.agent.report['session_file'] = str(Path(tmp) / 'session.json')
             with self.assertRaises(m.Failure):

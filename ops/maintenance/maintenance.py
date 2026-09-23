@@ -247,6 +247,7 @@ class Agents:
     def __init__(self, config, report):
         self.config, self.report = config, report
         self.session = None
+        self.active = False
 
     def call(self, method, suffix='', body=None):
         return http('https://api.openai.com/v1/agents/sessions' + suffix, method=method,
@@ -285,6 +286,7 @@ class Agents:
 
     def repair(self, message):
         before = {t['id'] for t in self.turns()}
+        self.active = True  # A lost POST response may still have started work.
         self.call('POST', '/' + self.session['id'] + '/events', {'events': [{
             'type': 'agent.session.input.message',
             'input': [{'role': 'user', 'content': [{'type': 'input_text', 'text': message}]}]}]})
@@ -308,8 +310,11 @@ class Agents:
             if any(t['status'] in ('failed', 'cancelled') for t in new):
                 raise Failure('agent turn failed or cancelled')
             if new and all(t['status'] == 'completed' for t in new) and not unknown:
+                self.active = False
                 return
             state = self.call('GET', '/' + self.session['id'])
+            self.report['last_session_state'] = {'status': state['status'], 'error': state.get('error'),
+                                                  'actions': [a['type'] for a in state.get('required_actions', [])]}
             if state['status'] == 'failed' or any(a['type'] != 'environment_connection' for a in state.get('required_actions', [])):
                 raise Failure('session failed or requires unsupported action')
             time.sleep(5)
@@ -318,7 +323,8 @@ class Agents:
     def __exit__(self, *_):
         if self.session:
             try:
-                self.call('POST', '/' + self.session['id'] + '/events', {'events': [{'type': 'agent.session.input.cancel'}]})
+                if self.active:
+                    self.call('POST', '/' + self.session['id'] + '/events', {'events': [{'type': 'agent.session.input.cancel'}]})
             finally:
                 self.call('DELETE', '/' + self.session['id'])
                 self.report['session_deleted'] = True
