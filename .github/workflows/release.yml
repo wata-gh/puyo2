@@ -26,7 +26,9 @@ jobs:
       - uses: actions/checkout@v5
 
       - name: Set up repository Rust toolchain
-        run: rustup target add "${{ matrix.target }}"
+        run: |
+          toolchain=$(python3 -c 'import tomllib; print(tomllib.load(open("rust-toolchain.toml", "rb"))["toolchain"]["channel"])')
+          rustup toolchain install "$toolchain" --profile minimal --component rustfmt --component clippy --target "${{ matrix.target }}"
 
       - name: Build release binaries
         run: cargo build -p puyo2 --release --bins --locked --target "${{ matrix.target }}"
