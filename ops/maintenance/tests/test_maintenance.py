@@ -223,5 +223,52 @@ class ApiContractTests(unittest.TestCase):
         self.assertEqual(calls[-1][1:4], ['rm', '-f', '-v'])
 
 
+class OrchestrationTests(unittest.TestCase):
+    def test_repair_budget_exhaustion_never_writes_patch(self):
+        from contextlib import ExitStack
+        config = {'max_archive_bytes': 100000, 'max_patch_bytes': 100000, 'max_repairs': 2}
+        base = fixture()
+        candidate = copy.deepcopy(base)
+        candidate[m.MANIFEST] = (base[m.MANIFEST][0].replace(b'"1.0"', b'"1.0.1"'), 0o644)
+        class Box:
+            def __init__(self, *args): pass
+            def __enter__(self): return self
+            def __exit__(self, *args): pass
+            def run(self, *args): return ''
+            def snapshot(self): return candidate
+        class Agent(Box):
+            repairs = 0
+            closed = False
+            def connect(self, *args): pass
+            def repair(self, *args): self.__class__.repairs += 1
+            def __exit__(self, *args): self.__class__.closed = True
+        with tempfile.TemporaryDirectory() as tmp, ExitStack() as stack:
+            args = type('Args', (), {'mode': 'dry-run', 'kind': 'dependencies', 'output': Path(tmp)})()
+            stack.enter_context(patch.dict(os.environ, {'GITHUB_ACTIONS': 'true', 'OPENAI_API_KEY': 'app', 'OPENAI_EXECUTOR_API_KEY': 'executor'}))
+            stack.enter_context(patch.object(m, 'command', side_effect=[b'abc', m.pack(base)]))
+            stack.enter_context(patch.object(m, 'existing_pr', return_value=[]))
+            stack.enter_context(patch.object(m, 'github_get', return_value=[]))
+            stack.enter_context(patch.object(m, 'detect', return_value=(candidate, ['serde update'])))
+            stack.enter_context(patch.object(m, 'verify', return_value='build failed'))
+            stack.enter_context(patch.object(m, 'Sandbox', Box))
+            stack.enter_context(patch.object(m, 'Agents', Agent))
+            with self.assertRaisesRegex(m.Failure, 'budget exhausted'):
+                m.execute(args, config, {})
+            self.assertEqual(Agent.repairs, 2)
+            self.assertTrue(Agent.closed)
+            self.assertFalse((Path(tmp) / 'update.patch').exists())
+
+    def test_publisher_rejects_tampered_artifact_before_remote_calls(self):
+        import publish
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / 'report.json').write_text(json.dumps({'status': 'verified', 'mode': 'publish', 'run': '123', 'patch_sha256': 'bad'}))
+            (root / 'update.patch').write_bytes(b'tampered')
+            with patch.dict(os.environ, {'GITHUB_ACTIONS': 'true', 'GITHUB_REPOSITORY': 'wata-gh/puyo2', 'GITHUB_RUN_ID': '123'}), patch.object(sys, 'argv', ['publish.py', '--input', tmp]), patch.object(publish, 'github_get') as gh:
+                with self.assertRaisesRegex(m.Failure, 'digest mismatch'):
+                    publish.main()
+                gh.assert_not_called()
+
+
 if __name__ == '__main__':
     unittest.main()

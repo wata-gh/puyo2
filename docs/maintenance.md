@@ -59,7 +59,7 @@ GitHub App は puyo2 のみへインストールし、repository permissions を
 - GitHub の schedule は遅延・間引きがあり、時刻保証ではありません。
 - 同時実行 group は両カテゴリ共通です。実行中 job をキャンセルしません。GitHub concurrency の pending は置き換わる場合があります。
 - 同種の PR が開いていればスキップします。既存 PR を自動で上書きしません。
-- ブランチは `codex/maintenance-dependencies` と `codex/maintenance-rust`。main が検証中に進んだ場合は公開せず再実行を要求します。push は force しません。
+- ブランチは `codex/maintenance-dependencies` と `codex/maintenance-rust`。main が検証中に進んだ場合は公開せず再実行を要求します。push は存在しない ref を条件にする lease を指定し、確認後の競合でも既存 branch を上書きしません。
 - PR の merge/close 後は更新ブランチを削除します（repository の自動削除設定を推奨）。PR なしの残存ブランチは安全のため失敗し、人間の確認を要求します。
 
 ```sh
@@ -121,4 +121,4 @@ usage は best effort で、遅れて増えることがあります。これは 
 
 実 API キーを設定した session 接続・修正・課金・削除、および専用 GitHub App による更新 PR の作成は未検証です。オフラインの契約/失敗系テストはアカウントの API 利用権限を保証しません。有効化前に上記の dry-run/publish 導入確認を完了してください。
 
-実装時の検証: macOS の `cargo test --workspace --locked`、22 件のコントローラ契約・失敗系テスト、actionlint 1.7.12 が成功しました。使い捨て Linux ARM64 コンテナで固定版/MSRV build・test、release build、pnsolve level1～5（247 件、diff/missing/run error/jd error すべて 0）、package 再ビルド、install と CLI smoke が成功しました。コンテナ snapshot の往復一致と cleanup も確認しています。
+実装時の検証: macOS の `cargo test --workspace --locked`、24 件のコントローラ契約・失敗系テスト、actionlint 1.7.12 が成功しました。使い捨て Linux ARM64 コンテナで固定版/MSRV build・test、release build、pnsolve level1～5（247 件、diff/missing/run error/jd error すべて 0）、package 再ビルド、install と CLI smoke が成功しました。コンテナ snapshot の往復一致と cleanup も確認しています。

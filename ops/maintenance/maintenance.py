@@ -432,6 +432,7 @@ def main():
     def stop(*_):
         raise Failure('execution interrupted or overall deadline exceeded')
     signal.signal(signal.SIGTERM, stop)
+    signal.signal(signal.SIGINT, stop)
     signal.signal(signal.SIGALRM, stop)
     signal.alarm(config['max_seconds'])
     try:

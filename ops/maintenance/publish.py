@@ -66,8 +66,10 @@ def main():
                  'commit', '--no-gpg-sign', '-qm', 'Update ' + kind], cwd=tmp)
         sha = command(['git', 'rev-parse', 'HEAD'], cwd=tmp).decode().strip()
         # gh authenticates through GH_TOKEN; no credential file or token URL.
+        # Empty expected ref means create-only, including races with human pushes.
         command(['git', '-c', 'credential.helper=', '-c', 'credential.helper=!gh auth git-credential',
-                 'push', 'https://github.com/wata-gh/puyo2.git', 'HEAD:refs/heads/' + branch], cwd=tmp)
+                 'push', '--force-with-lease=refs/heads/' + branch + ':',
+                 'https://github.com/wata-gh/puyo2.git', 'HEAD:refs/heads/' + branch], cwd=tmp)
     url = f'https://github.com/wata-gh/puyo2/actions/runs/{report["run"]}'
     body = '\n'.join([
         'Automated, verified ' + kind + ' update. Human review and merge are required.', '',
